@@ -1,0 +1,187 @@
+// Axios
+import { apiPost, apiPatch, apiDelete } from '../../../../core/apiCall';
+import { SBR, FBR } from '../../../../core/BaseResponse';
+
+// Zod
+import { z } from 'zod';
+import {
+  single_select_mandatory,
+  single_select_optional,
+  multi_select_optional,
+  numberMandatory,
+  numberOptional,
+  doubleOptional,
+  enumMandatory,
+  dateMandatory,
+} from '../../../../zod_utils/zod_utils';
+import { BaseQuerySchema } from '../../../../zod_utils/zod_base_schema';
+
+// Enums
+import { Status } from '../../../../core/Enums';
+
+// Other Models
+import { UserOrganisation } from '../../../../services/main/users/user_organisation_service';
+import { MasterVehicle } from '../../../../services/main/vehicle/master_vehicle_service';
+import { MasterDriver } from '../../../../services/main/drivers/master_driver_service';
+
+const URL = 'gps/features/trip_geofence_to_geofence';
+
+const ENDPOINTS = {
+  // TripGeofenceToGeofence APIs
+  find: `${URL}/search`,
+  create: URL,
+  update: (id: string): string => `${URL}/${id}`,
+  delete: (id: string): string => `${URL}/${id}`,
+};
+
+// TripGeofenceToGeofence Interface
+export interface TripGeofenceToGeofence extends Record<string, unknown> {
+  // Primary Fields
+  trip_geofence_to_geofence_id: string;
+
+  // Main Field Details
+  from_geofence_exit_date_time: string;
+  to_geofence_enter_date_time: string;
+  duration_seconds: number;
+  duration_seconds_f?: string;
+
+  // trip analytics
+  travel_duration_seconds?: number;
+  travel_duration_seconds_f?: string;
+  stopped_duration_seconds?: number;
+  stopped_duration_seconds_f?: string;
+  distance_meters?: number;
+  distance_km_f?: string;
+  max_speed?: number;
+  avg_speed?: number;
+
+  // Metadata
+  status: Status;
+  added_date_time: string;
+  modified_date_time: string;
+
+  // Relations - Parent
+  organisation_id: string;
+  UserOrganisation?: UserOrganisation;
+  organisation_name?: string;
+  organisation_code?: string;
+  organisation_logo_url?: string;
+
+  vehicle_id: string;
+  MasterVehicle?: MasterVehicle;
+  vehicle_number?: string;
+  vehicle_type?: string;
+
+  driver_id?: string;
+  MasterDriver?: MasterDriver;
+  driver_details?: string;
+  driver_image_url?: string;
+
+  from_geofence_id: string;
+  FromGeofence?: TripGeofenceToGeofence;
+  from_geofence_details?: string;
+
+  to_geofence_id: string;
+  ToGeofence?: TripGeofenceToGeofence;
+  to_geofence_details?: string;
+}
+
+// TripGeofenceToGeofence Create/Update Schema
+export const TripGeofenceToGeofenceSchema = z.object({
+  organisation_id: single_select_mandatory('UserOrganisation'),
+  vehicle_id: single_select_mandatory('Master Vehicle ID'),
+  driver_id: single_select_optional('Driver ID'),
+  from_geofence_id: single_select_mandatory('From Geofence ID'),
+  to_geofence_id: single_select_mandatory('To Geofence ID'),
+
+  from_geofence_exit_date_time: dateMandatory('From Geofence Exit Date Time'),
+  to_geofence_enter_date_time: dateMandatory('To Geofence Enter Date Time'),
+  duration_seconds: numberMandatory('Duration Seconds'),
+
+  // Optional analytics
+  travel_duration_seconds: numberOptional('Travel Duration Seconds'),
+  stopped_duration_seconds: numberOptional('Stopped Duration Seconds'),
+  distance_meters: doubleOptional('Distance KM'),
+  max_speed: numberOptional('Max Speed'),
+  avg_speed: numberOptional('Avg Speed'),
+
+  status: enumMandatory('Status', Status, Status.Active),
+
+  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
+});
+export type TripGeofenceToGeofenceDTO = z.infer<
+  typeof TripGeofenceToGeofenceSchema
+>;
+
+// TripGeofenceToGeofence Query Schema
+export const TripGeofenceToGeofenceQuerySchema = BaseQuerySchema.extend({
+  organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
+  driver_ids: multi_select_optional('MasterDriver'), // Multi-selection -> MasterDriver
+  from_geofence_ids: multi_select_optional('From Geofence IDs'), // Multi-selection -> From Geofence
+  to_geofence_ids: multi_select_optional('To Geofence IDs'), // Multi-selection -> To Geofence
+  from_date: dateMandatory('From Date'),
+  to_date: dateMandatory('To Date'),
+});
+export type TripGeofenceToGeofenceQueryDTO = z.infer<
+  typeof TripGeofenceToGeofenceQuerySchema
+>;
+
+// Convert TripGeofenceToGeofence Data to API Payload
+export const toTripGeofenceToGeofencePayload = (data: TripGeofenceToGeofence): TripGeofenceToGeofenceDTO => ({
+  organisation_id: data.organisation_id || '',
+  vehicle_id: data.vehicle_id || '',
+  driver_id: data.driver_id || '',
+  from_geofence_id: data.from_geofence_id || '',
+  to_geofence_id: data.to_geofence_id || '',
+  from_geofence_exit_date_time: data.from_geofence_exit_date_time || '',
+  to_geofence_enter_date_time: data.to_geofence_enter_date_time || '',
+
+  duration_seconds: data.duration_seconds || 0,
+  travel_duration_seconds: data.travel_duration_seconds || 0,
+  stopped_duration_seconds: data.stopped_duration_seconds || 0,
+  distance_meters: data.distance_meters,
+  max_speed: data.max_speed || 0,
+  avg_speed: data.avg_speed || 0,
+
+  status: data.status || Status.Active,
+  time_zone_id: '', // Needs to be provided manually
+});
+
+// Create New TripGeofenceToGeofence Payload
+export const newTripGeofenceToGeofencePayload = (): TripGeofenceToGeofenceDTO => ({
+  organisation_id: '',
+  vehicle_id: '',
+  driver_id: '',
+  from_geofence_id: '',
+  to_geofence_id: '',
+  from_geofence_exit_date_time: '',
+  to_geofence_enter_date_time: '',
+
+  duration_seconds: 0,
+  travel_duration_seconds: 0,
+  stopped_duration_seconds: 0,
+  distance_meters: 0,
+  max_speed: 0,
+  avg_speed: 0,
+  
+  status: Status.Active,
+  time_zone_id: '', // Needs to be provided manually
+});
+
+// TripGeofenceToGeofence APIs
+export const findTripGeofenceToGeofence = async (data: TripGeofenceToGeofenceQueryDTO): Promise<FBR<TripGeofenceToGeofence[]>> => {
+  return apiPost<FBR<TripGeofenceToGeofence[]>, TripGeofenceToGeofenceQueryDTO>(ENDPOINTS.find, data);
+};
+
+export const createTripGeofenceToGeofence = async (data: TripGeofenceToGeofenceDTO): Promise<SBR> => {
+  return apiPost<SBR, TripGeofenceToGeofenceDTO>(ENDPOINTS.create, data);
+};
+
+export const updateTripGeofenceToGeofence = async (id: string, data: TripGeofenceToGeofenceDTO): Promise<SBR> => {
+  return apiPatch<SBR, TripGeofenceToGeofenceDTO>(ENDPOINTS.update(id), data);
+};
+
+export const deleteTripGeofenceToGeofence = async (id: string): Promise<SBR> => {
+  return apiDelete<SBR>(ENDPOINTS.delete(id));
+};

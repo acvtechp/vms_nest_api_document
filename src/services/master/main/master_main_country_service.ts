@@ -1,0 +1,144 @@
+// Axios
+import { apiGet, apiPost, apiPatch, apiDelete } from '../../../core/apiCall';
+import { SBR, FBR } from '../../../core/BaseResponse';
+
+// Zod
+import { z } from 'zod';
+import {
+  stringMandatory,
+  enumMandatory,
+  multi_select_optional,
+} from '../../../zod_utils/zod_utils';
+import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
+
+// Enums
+import { Status } from '../../../core/Enums';
+
+// Other Models
+import { MasterMainCurrency } from '../../../services/master/main/master_main_currency_service';
+import { MasterMainTimeZone } from '../../../services/master/main/master_main_timezone_service';
+import { MasterMainState } from '../../../services/master/main/master_main_state_service';
+import { UserOrganisation } from '../../../services/main/users/user_organisation_service';
+import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
+import { MasterMainLandMark } from './master_main_landmark_service';
+
+const URL = 'master/main/country';
+
+const ENDPOINTS = {
+  // MasterMainCountry APIs
+  find: `${URL}/search`,
+  create: URL,
+  update: (id: string): string => `${URL}/${id}`,
+  delete: (id: string): string => `${URL}/${id}`,
+
+  // Cache APIs
+  cache: `${URL}/cache`,
+  cache_child: `${URL}/cache_child`,
+};
+
+// MasterMainCountry Interface
+export interface MasterMainCountry extends Record<string, unknown> {
+  // Primary Fields
+  country_id: string;
+
+  // Main Field Details
+  country_name: string;
+  country_code: string;
+  country_mobile_code: string;
+
+  // Metadata
+  status: Status;
+  added_date_time: string;
+  modified_date_time: string;
+
+  // Relations - Child
+  // Child - User
+  UserOrganisation?: UserOrganisation[];
+
+  // Relations - Child
+  MasterMainState?: MasterMainState[];
+  MasterMainCurrency?: MasterMainCurrency[];
+  MasterMainTimeZone?: MasterMainTimeZone[];
+  MasterMainLandMark?: MasterMainLandMark[]
+
+  // Child - Main
+  MasterVehicle?: MasterVehicle[];
+
+  // Relations - Child Count
+  _count?: {
+    UserOrganisation?: number;
+
+    MasterMainState?: number;
+    MasterMainCurrency?: number;
+    MasterMainTimeZone?: number;
+    MasterMainLandMark?: number;
+
+    MasterVehicle?: number;
+  };
+}
+
+// MasterMainCountry Create/Update Schema
+export const MasterMainCountrySchema = z.object({
+  // Main Field Details
+  country_name: stringMandatory('Country Name', 3, 100),
+  country_code: stringMandatory('Country Code', 1, 10),
+  country_mobile_code: stringMandatory('Country Mobile Code', 1, 10),
+
+  // Metadata
+  status: enumMandatory('Status', Status, Status.Active),
+});
+export type MasterMainCountryDTO = z.infer<typeof MasterMainCountrySchema>;
+
+// MasterMainCountry Query Schema
+export const MasterMainCountryQuerySchema = BaseQuerySchema.extend({
+  // Self Table
+  country_ids: multi_select_optional('Country'), // Multi-selection -> MasterMainCountry
+});
+export type MasterMainCountryQueryDTO = z.infer<
+  typeof MasterMainCountryQuerySchema
+>;
+
+// Convert MasterMainCountry Data to API Payload
+export const toMasterMainCountryPayload = (row: MasterMainCountry): MasterMainCountryDTO => ({
+  country_name: row.country_name || '',
+  country_code: row.country_code || '',
+  country_mobile_code: row.country_mobile_code || '',
+
+  status: row.status || Status.Active,
+});
+
+// Create New MasterMainCountry Payload
+export const newMasterMainCountryPayload = (): MasterMainCountryDTO => ({
+  country_name: '',
+  country_code: '',
+  country_mobile_code: '',
+
+  status: Status.Active,
+});
+
+// MasterMainCountry APIs
+export const findMasterMainCountries = async (data: MasterMainCountryQueryDTO): Promise<FBR<MasterMainCountry[]>> => {
+  return apiPost<FBR<MasterMainCountry[]>, MasterMainCountryQueryDTO>(ENDPOINTS.find, data);
+};
+
+export const createMasterMainCountry = async (data: MasterMainCountryDTO): Promise<SBR> => {
+  return apiPost<SBR, MasterMainCountryDTO>(ENDPOINTS.create, data);
+};
+
+export const updateMasterMainCountry = async (id: string, data: MasterMainCountryDTO): Promise<SBR> => {
+  return apiPatch<SBR, MasterMainCountryDTO>(ENDPOINTS.update(id), data);
+};
+
+export const deleteMasterMainCountry = async (id: string): Promise<SBR> => {
+  return apiDelete<SBR>(ENDPOINTS.delete(id));
+};
+
+// Cache APIs
+export const getMasterMainCountryCache = async (): Promise<FBR<MasterMainCountry[]>> => {
+  return apiGet<FBR<MasterMainCountry[]>>(ENDPOINTS.cache);
+};
+
+export const getMasterMainCountryCacheChild = async (): Promise<FBR<MasterMainCountry[]>> => {
+  return apiGet<FBR<MasterMainCountry[]>>(ENDPOINTS.cache_child);
+};
+

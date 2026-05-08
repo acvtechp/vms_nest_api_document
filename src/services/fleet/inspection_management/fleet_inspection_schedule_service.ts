@@ -1,0 +1,187 @@
+// Imports
+import { apiPost, apiPatch, apiDelete } from '../../../core/apiCall';
+import { SBR, FBR } from '../../../core/BaseResponse';
+
+// Zod
+import { z } from 'zod';
+import {
+  enumMandatory,
+  single_select_mandatory,
+  single_select_optional,
+  multi_select_optional,
+  stringMandatory,
+  stringOptional,
+  dateMandatory,
+} from '../../../zod_utils/zod_utils';
+import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
+
+// Enums
+import { InspectionScheduleStatus, Status } from '../../../core/Enums';
+
+// Other Models
+import { UserOrganisation } from 'src/services/main/users/user_organisation_service';
+import { User } from 'src/services/main/users/user_service';
+import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
+
+const URL = 'fleet/inspection_management/inspection_schedule';
+
+const ENDPOINTS = {
+  // FleetInspectionSchedule APIs
+  find: `${URL}/search`,
+  create: `${URL}`,
+  update: (id: string): string => `${URL}/${id}`,
+  delete: (id: string): string => `${URL}/${id}`,
+};
+
+// FleetInspectionSchedule Interface
+export interface FleetInspectionSchedule extends Record<string, unknown> {
+  // Primary Field
+  inspection_schedule_id: string;
+
+  // Main Field Details
+  inspection_schedule_name: string;
+  inspection_schedule_description?: string;
+  inspection_schedule_start_date: string;
+  inspection_schedule_start_date_f?: string;
+  inspection_schedule_due_date: string;
+  inspection_schedule_due_date_f?: string;
+
+  // Metadata
+  status: Status;
+  added_date_time: string;
+  modified_date_time: string;
+
+  // Relations - Parent
+  organisation_id: string;
+  UserOrganisation?: UserOrganisation;
+  organisation_name?: string;
+  organisation_code?: string;
+  organisation_logo_url?: string;
+
+  user_id?: string;
+  User?: User;
+  user_details?: string;
+  user_image_url?: string;
+
+  // Relations - Child
+  // Child - Fleet
+  FleetInspectionScheduleVehicleLink?: FleetInspectionScheduleVehicleLink[];
+
+  // Relations - Child Count
+  _count?: {
+    FleetInspectionScheduleVehicleLink?: number;
+    FleetInspectionScheduleVehicleLink_Pending?: number;
+    FleetInspectionScheduleVehicleLink_OverDue?: number;
+    FleetInspectionScheduleVehicleLink_Completed?: number;
+  };
+}
+
+// FleetInspectionScheduleVehicleLink Interface
+export interface FleetInspectionScheduleVehicleLink extends Record<string, unknown> {
+  // Primary Field
+  inspection_schedule_vehicle_link_id: string;
+
+  // Main Field Details
+  inspection_schedule_status: InspectionScheduleStatus;
+  inspection_date_time?: string;
+  inspection_date_time_f?: string;
+
+  // Metadata
+  status: Status;
+  added_date_time: string;
+  modified_date_time: string;
+
+  // Relations - Parent
+  inspection_schedule_id: string;
+  FleetInspectionSchedule?: FleetInspectionSchedule;
+
+  vehicle_id: string;
+  MasterVehicle?: MasterVehicle;
+  vehicle_number?: string;
+  vehicle_type?: string;
+
+  // Relations - Child Count
+  _count?: {};
+}
+
+// FleetInspectionSchedule Create/Update Schema
+export const FleetInspectionScheduleSchema = z.object({
+  // Relations - Parent
+  organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+  user_id: single_select_optional('User'), // Single-Selection -> User
+
+  // Main Field Details
+  inspection_schedule_name: stringMandatory('Inspection Schedule Name', 3, 100),
+  inspection_schedule_description: stringOptional('Inspection Schedule Description', 0, 2000),
+  inspection_schedule_start_date: dateMandatory('Inspection Schedule Start Date'),
+  inspection_schedule_due_date: dateMandatory('Inspection Schedule Due Date'),
+
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-Selection -> MasterVehicle
+
+  // Metadata
+  status: enumMandatory('Status', Status, Status.Active),
+
+  // Other
+  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
+});
+export type FleetInspectionScheduleDTO = z.infer<typeof FleetInspectionScheduleSchema>;
+
+// FleetInspectionSchedule Query Schema
+export const FleetInspectionScheduleQuerySchema = BaseQuerySchema.extend({
+  // Self Table
+  inspection_schedule_ids: multi_select_optional('FleetInspectionSchedule'), // Multi-Selection -> FleetInspectionSchedule
+
+  // Relations - Parent
+  organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
+  user_ids: multi_select_optional('User'), // Multi-Selection -> User
+});
+export type FleetInspectionScheduleQueryDTO = z.infer<typeof FleetInspectionScheduleQuerySchema>;
+
+// Convert FleetInspectionSchedule Data to API Payload
+export const toFleetInspectionSchedulePayload = (row: FleetInspectionSchedule): FleetInspectionScheduleDTO => ({
+  organisation_id: row.organisation_id || '',
+  user_id: row.user_id || '',
+
+  inspection_schedule_name: row.inspection_schedule_name || '',
+  inspection_schedule_description: row.inspection_schedule_description || '',
+  inspection_schedule_start_date: row.inspection_schedule_start_date || '',
+  inspection_schedule_due_date: row.inspection_schedule_due_date || '',
+
+  vehicle_ids: row.FleetInspectionScheduleVehicleLink?.map((l) => l.vehicle_id) || [],
+
+  status: row.status || Status.Active,
+  time_zone_id: '',
+});
+
+// Create New FleetInspectionSchedule Payload
+export const newFleetInspectionSchedulePayload = (): FleetInspectionScheduleDTO => ({
+  organisation_id: '',
+  user_id: '',
+
+  inspection_schedule_name: '',
+  inspection_schedule_description: '',
+  inspection_schedule_start_date: '',
+  inspection_schedule_due_date: '',
+
+  vehicle_ids: [],
+
+  status: Status.Active,
+  time_zone_id: '',
+});
+
+// FleetInspectionSchedule APIs
+export const findFleetInspectionSchedule = async (data: FleetInspectionScheduleQueryDTO): Promise<FBR<FleetInspectionSchedule[]>> => {
+  return apiPost<FBR<FleetInspectionSchedule[]>, FleetInspectionScheduleQueryDTO>(ENDPOINTS.find, data);
+};
+
+export const createFleetInspectionSchedule = async (data: FleetInspectionScheduleDTO): Promise<SBR> => {
+  return apiPost<SBR, FleetInspectionScheduleDTO>(ENDPOINTS.create, data);
+};
+
+export const updateFleetInspectionSchedule = async (id: string, data: FleetInspectionScheduleDTO): Promise<SBR> => {
+  return apiPatch<SBR, FleetInspectionScheduleDTO>(ENDPOINTS.update(id), data);
+};
+
+export const deleteFleetInspectionSchedule = async (id: string): Promise<SBR> => {
+  return apiDelete<SBR>(ENDPOINTS.delete(id));
+};
