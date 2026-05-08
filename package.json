@@ -1,6 +1,6 @@
 {
-  "name": "vms-nest-prisma-api-document",
-  "version": "1053.0.0",
+  "name": "vms-nest-api-document",
+  "version": "1.0.0",
   "description": "Reusable API SDK built with NestJS, Prisma, Axios, and Zod for VMS frontends.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -14,9 +14,9 @@
     "format": "prettier --write .",
     "prepublishOnly": "npm run build"
   },
-  "repository": "https://github.com/ramkitech/vms_nest_prisma_api_document",
-  "bugs": "https://github.com/ramkitech/vms_nest_prisma_api_document/issues",
-  "homepage": "https://github.com/ramkitech/vms_nest_prisma_api_document#readme",
+  "repository": "https://github.com/acvtechp/vms_nest_api_document",
+  "bugs": "https://github.com/acvtechp/vms_nest_api_document/issues",
+  "homepage": "https://github.com/acvtechp/vms_nest_api_document#readme",
   "keywords": [
     "nestjs",
     "prisma",
