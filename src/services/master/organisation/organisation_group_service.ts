@@ -58,7 +58,7 @@ export interface OrganisationGroup extends Record<string, unknown> {
 
   // Relations - Child
   // Child - Master
-  VehicleOrganisationGroupLink?: VehicleOrganisationGroupLink[]
+  VehicleOrganisationGroupLink?: VehicleOrganisationGroupLink[] /// @generate_child_link_schema MasterVehicle.vehicle_id
 
   // Count
   _count?: {
@@ -90,6 +90,8 @@ export interface VehicleOrganisationGroupLink extends Record<string, unknown> {
 export const OrganisationGroupSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+
+  // Relations - Child Link
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
 
   // Main Field Details
@@ -108,6 +110,8 @@ export const OrganisationGroupQuerySchema = BaseQuerySchema.extend({
 
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+
+  // Relations - Child Link
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
 });
 export type OrganisationGroupQueryDTO = z.infer<

@@ -35,10 +35,7 @@ import {
   WheelDriveType,
   VehicleLifeStatus,
   LoanInterestType,
-  DocumentValidityStatus,
-  DocumentStatus,
   OdometerSource,
-  ExpiryType,
   FuelTankType,
   GPSVehicleCategory,
 } from '../../../core/Enums';
@@ -125,6 +122,10 @@ const ENDPOINTS = {
   update_details_life_cycle: (id: string): string => `${URL}/life_cycle_details/${id}`,
   update_details_purchase: (id: string): string => `${URL}/purchase_details/${id}`,
 
+  // GPS Device & SIM Details
+  update_gps_device_details: (id: string): string => `${URL}/update_gps_device_details/${id}`,
+  update_gps_sim_details: (id: string): string => `${URL}/update_gps_sim_details/${id}`,
+
   // API Vehicle Driver Link
   vehicle_driver_link: `${URL}/vehicle_driver_link`,
   vehicle_driver_unlink: `${URL}/vehicle_driver_unlink`,
@@ -166,6 +167,10 @@ export interface MasterVehicle extends Record<string, unknown> {
   is_fleet_active: YesNo;
   is_gps_active: YesNo;
   is_trip_active: YesNo;
+
+  // GPS Device Details
+  gps_device_identifier: String;
+  gps_sim_number: String;
 
   // Metadata
   status: Status;
@@ -1562,6 +1567,20 @@ export const VehicleGPSQuerySchema = BaseQuerySchema.extend({
 });
 export type VehicleGPSQueryDTO = z.infer<typeof VehicleGPSQuerySchema>;
 
+// GPS Device Details Schema
+export const UpdateGPSDeviceDetailsSchema = z.object({
+  gps_device_identifier: stringOptional('GPS Device Identifier', 0, 100),
+});
+export type UpdateGPSDeviceDetailsDTO = z.infer<
+  typeof UpdateGPSDeviceDetailsSchema
+>;
+
+// GPS SIM Details Schema
+export const UpdateGPSSimDetailsSchema = z.object({
+  gps_sim_number: stringOptional('GPS SIM Number', 0, 100),
+});
+export type UpdateGPSSimDetailsDTO = z.infer<typeof UpdateGPSSimDetailsSchema>;
+
 
 // Convert Vehicle Data to API Payload
 export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
@@ -1965,6 +1984,15 @@ export const updateVehicleLifeCycleDetails = async (id: string, payload: Vehicle
 
 export const updateVehiclePurchaseDetails = async (id: string, payload: VehicleDetailPurchaseDTO): Promise<SBR> => {
   return apiPatch<SBR, VehicleDetailPurchaseDTO>(ENDPOINTS.update_details_purchase(id), payload);
+};
+
+// GPS Device & SIM Details
+export const updateGPSDeviceDetails = async (id: string, payload: UpdateGPSDeviceDetailsDTO): Promise<SBR> => {
+  return apiPatch<SBR, UpdateGPSDeviceDetailsDTO>(ENDPOINTS.update_gps_device_details(id), payload);
+};
+
+export const updateGPSSimDetails = async (id: string, payload: UpdateGPSSimDetailsDTO): Promise<SBR> => {
+  return apiPatch<SBR, UpdateGPSSimDetailsDTO>(ENDPOINTS.update_gps_sim_details(id), payload);
 };
 
 // API Vehicle Driver Link
