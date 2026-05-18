@@ -46,6 +46,8 @@ export interface GpsPacket extends Record<string, unknown> {
   f2_r: string;
   f1: number;
   f2: number;
+  f1_n: number;
+  f2_n: number;
   t1_r: string;
   t2_r: string;
   t1: number;
