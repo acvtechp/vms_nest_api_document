@@ -126,6 +126,10 @@ const ENDPOINTS = {
   update_gps_device_details: (id: string): string => `${URL}/update_gps_device_details/${id}`,
   update_gps_sim_details: (id: string): string => `${URL}/update_gps_sim_details/${id}`,
 
+  // Sensor Relay Lock
+  update_sensor_relay_lock_status_locked: (vehicle_id: string): string => `${URL}/update_sensor_relay_lock_status_locked/${vehicle_id}`,
+  update_sensor_relay_lock_status_unlocked: (vehicle_id: string): string => `${URL}/update_sensor_relay_lock_status_unlocked/${vehicle_id}`,
+
   // API Vehicle Driver Link
   vehicle_driver_link: `${URL}/vehicle_driver_link`,
   vehicle_driver_unlink: `${URL}/vehicle_driver_unlink`,
@@ -1993,6 +1997,15 @@ export const updateGPSDeviceDetails = async (id: string, payload: UpdateGPSDevic
 
 export const updateGPSSimDetails = async (id: string, payload: UpdateGPSSimDetailsDTO): Promise<SBR> => {
   return apiPatch<SBR, UpdateGPSSimDetailsDTO>(ENDPOINTS.update_gps_sim_details(id), payload);
+};
+
+// Sensor Relay Lock
+export const updateSensorRelayLockStatusLocked = async (vehicle_id: string,): Promise<SBR> => {
+  return apiPatch<SBR, {}>(ENDPOINTS.update_sensor_relay_lock_status_locked(vehicle_id), {});
+};
+
+export const updateSensorRelayLockStatusUnlocked = async (vehicle_id: string,): Promise<SBR> => {
+  return apiPatch<SBR, {}>(ENDPOINTS.update_sensor_relay_lock_status_unlocked(vehicle_id), {});
 };
 
 // API Vehicle Driver Link
