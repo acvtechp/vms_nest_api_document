@@ -29,7 +29,6 @@ import { UserOrganisation } from '../../main/users/user_organisation_service';
 import { User } from 'src/services/main/users/user_service';
 import { MasterVehicle } from '../../main/vehicle/master_vehicle_service';
 import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
-import { MasterDevice } from 'src/services/main/devices/master_device_service';
 import { MasterMainLandMark } from 'src/services/master/main/master_main_landmark_service';
 import { MasterVehicleFuelType } from 'src/services/master/vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from 'src/services/master/vehicle/master_vehicle_fuel_unit_service';
@@ -147,10 +146,6 @@ export interface FleetFuelRefill extends Record<string, unknown> {
   driver_details?: string;
   driver_image_url?: string;
 
-  device_id?: string;
-  MasterDevice?: MasterDevice;
-  device_identifier?: string;
-
   vendor_id?: string;
   FleetVendor?: FleetVendor;
   vendor_logo_url?: string;
@@ -217,7 +212,6 @@ export const FleetFuelRefillSchema = z.object({
   user_id: single_select_optional('User'), // Single-Selection -> User
   vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
   driver_id: single_select_optional('MasterDriver'), // Single-Selection -> MasterDriver
-  device_id: single_select_optional('MasterDevice'), // Single-Selection -> MasterDevice
   vendor_id: single_select_optional('FleetVendor'), // Single-Selection -> FleetVendor
   fuel_station_id: single_select_optional('FleetVendorFuelStation'), // Single-Selection -> FleetVendorFuelStation
   vehicle_fuel_type_id: single_select_optional('MasterVehicleFuelType'), // Single-Selection -> MasterVehicleFuelType
@@ -316,7 +310,6 @@ export const FleetFuelRefillQuerySchema = BaseQuerySchema.extend({
   user_ids: multi_select_optional('User'), // Multi-selection -> User
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
   driver_ids: multi_select_optional('MasterDriver'), // Multi-selection -> MasterDriver
-  device_ids: multi_select_optional('MasterDevice'), // Multi-selection -> MasterDevice
   vendor_ids: multi_select_optional('FleetVendor'), // Multi-selection -> FleetVendor
   fuel_station_ids: multi_select_optional('FleetVendorFuelStation'), // Multi-selection -> FleetVendorFuelStation
   vehicle_fuel_type_ids: multi_select_optional('MasterVehicleFuelType'), // Multi-selection -> MasterVehicleFuelType
@@ -376,7 +369,6 @@ export const toFleetFuelRefillPayload = (row: FleetFuelRefill): FleetFuelRefillD
   user_id: row.user_id || '',
   vehicle_id: row.vehicle_id || '',
   driver_id: row.driver_id || '',
-  device_id: row.device_id || '',
   vendor_id: row.vendor_id || '',
   fuel_station_id: row.fuel_station_id || '',
   vehicle_fuel_type_id: row.vehicle_fuel_type_id || '',
@@ -460,7 +452,6 @@ export const newFleetFuelRefillPayload = (): FleetFuelRefillDTO => ({
   user_id: '',
   vehicle_id: '',
   driver_id: '',
-  device_id: '',
   vendor_id: '',
   fuel_station_id: '',
   vehicle_fuel_type_id: '',

@@ -32,7 +32,6 @@ import { MasterMainUnitVolume } from '../../../services/master/main/master_main_
 
 // Other Models Childs
 import { DriverLoginPush, MasterDriver, MasterDriverFile } from '../../../services/main/drivers/master_driver_service';
-import { MasterDevice, MasterDeviceFile } from '../../../services/main/devices/master_device_service';
 import { User, UserLoginPush } from '../../../services/main/users/user_service';
 
 import { OrganisationBranch } from '../../../services/master/organisation/organisation_branch_service';
@@ -267,8 +266,6 @@ export interface UserOrganisation extends Record<string, unknown> {
   User?: User[];
   MasterDriver?: MasterDriver[];
   MasterDriverFile?: MasterDriverFile[];
-  MasterDevice?: MasterDevice[];
-  MasterDeviceFile?: MasterDeviceFile[];
   MasterVehicle?: MasterVehicle[];
   MasterVehicleFile?: MasterVehicleFile[];
   VehicleOdometerHistory?: VehicleOdometerHistory[];
@@ -460,8 +457,6 @@ export interface UserOrganisation extends Record<string, unknown> {
     User?: number;
     MasterDriver?: number;
     MasterDriverFile?: number;
-    MasterDevice?: number;
-    MasterDeviceFile?: number;
     MasterVehicle?: number;
     MasterVehicleFile?: number;
     VehicleOdometerHistory?: number;

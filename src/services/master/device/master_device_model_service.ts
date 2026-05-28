@@ -20,7 +20,7 @@ import { Status } from '../../../core/Enums';
 // Other Models
 import { MasterDeviceManufacturer } from '../../../services/master/device/master_device_manufacturer_service';
 import { MasterDeviceType } from '../../../services/master/device/master_device_type_service';
-import { MasterDevice } from '../../../services/main/devices/master_device_service';
+import { MasterVehicle } from '../../../services/main/vehicle/master_vehicle_service';
 
 const URL = 'master/device/model';
 
@@ -59,12 +59,12 @@ export interface MasterDeviceModel extends Record<string, unknown> {
   // Relations - Child
   // Child - Master
   MasterDeviceType?: MasterDeviceType[];
-  MasterDevice?: MasterDevice[];
+  MasterVehicle?: MasterVehicle[];
 
   // Relations - Child Count
   _count?: {
     MasterDeviceType?: number;
-    MasterDevice?: number;
+    MasterVehicle?: number;
   };
 }
 
@@ -118,7 +118,7 @@ export const newMasterDeviceModelPayload = (): MasterDeviceModelDTO => ({
   device_model_name: '',
   device_model_code: '',
   description: '',
-  
+
   status: Status.Active,
 });
 

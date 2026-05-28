@@ -14,7 +14,7 @@ import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
 // Enums
 import { Status } from '../../../core/Enums';
-import { MasterSim } from 'src/services/main/sims/master_sim_service';
+import { MasterVehicle } from '../../../services/main/vehicle/master_vehicle_service';
 
 const URL = 'master/main/sim_provider';
 
@@ -45,11 +45,11 @@ export interface MasterMainSimProvider extends Record<string, unknown> {
 
   // Relations - Child
   // Child - Main
-  MasterSim?: MasterSim[];
+  MasterVehicle?: MasterVehicle[];
 
   // Relations - Child Count
   _count?: {
-    MasterSim?: number;
+    MasterVehicle?: number;
   };
 }
 

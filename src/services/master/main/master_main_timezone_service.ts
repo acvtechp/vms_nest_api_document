@@ -19,7 +19,6 @@ import { Status } from '../../../core/Enums';
 // Other Models
 import { MasterMainCountry } from '../../../services/master/main/master_main_country_service';
 import { UserOrganisation } from '../../../services/main/users/user_organisation_service';
-import { MasterDevice } from 'src/services/main/devices/master_device_service';
 import { User } from 'src/services/main/users/user_service';
 import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
 
@@ -66,7 +65,6 @@ export interface MasterMainTimeZone extends Record<string, unknown> {
 
   // Child - Main
   MasterVehicle?: MasterVehicle[]
-  MasterDevice?: MasterDevice[]
 
   // Relations - Child Count
   _count?: {
@@ -74,7 +72,6 @@ export interface MasterMainTimeZone extends Record<string, unknown> {
     User?: number;
 
     MasterVehicle?: number;
-    MasterDevice?: number;
   };
 }
 

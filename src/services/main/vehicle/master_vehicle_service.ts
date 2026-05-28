@@ -40,69 +40,94 @@ import {
   GPSVehicleCategory,
 } from '../../../core/Enums';
 
+// Drivers
 import {
   MasterDriver,
   AssignRemoveDriverHistory,
 } from '../../../services/main/drivers/master_driver_service';
-import {
-  MasterDevice,
-  AssignRemoveDeviceHistory,
-} from '../../../services/main/devices/master_device_service';
 
+// Users
 import { UserOrganisation } from '../../../services/main/users/user_organisation_service';
+import { User, UserVehicleLink } from '../../../services/main/users/user_service';
+
+// Master - Main
 import { MasterMainCountry } from '../../../services/master/main/master_main_country_service';
 import { MasterMainTimeZone } from '../../../services/master/main/master_main_timezone_service';
+import { MasterMainLandMark } from '../../../services/master/main/master_main_landmark_service';
+import { MasterMainSimProvider } from '../../../services/master/main/master_main_sim_provider_service';
 
+// Master - Organisation
 import { OrganisationSubCompany } from '../../../services/master/organisation/organisation_sub_company_service';
 import { OrganisationBranch } from '../../../services/master/organisation/organisation_branch_service';
 import { OrganisationColor } from '../../../services/master/organisation/organisation_color_service';
 import { OrganisationTag } from '../../../services/master/organisation/organisation_tag_service';
 import { VehicleOrganisationGroupLink } from '../../../services/master/organisation/organisation_group_service';
 
+// Master - Vehicle
+import { MasterVehicleType } from '../../../services/master/vehicle/master_vehicle_type_service';
 import { MasterVehicleMake } from '../../../services/master/vehicle/master_vehicle_make_service';
 import { MasterVehicleModel } from '../../../services/master/vehicle/master_vehicle_model_service';
 import { MasterVehicleSubModel } from '../../../services/master/vehicle/master_vehicle_sub_model_service';
 import { MasterVehicleStatusType } from '../../../services/master/vehicle/master_vehicle_status_type_service';
 import { MasterVehicleOwnershipType } from '../../../services/master/vehicle/master_vehicle_ownership_type_service';
-import { MasterVehicleType } from '../../../services/master/vehicle/master_vehicle_type_service';
+import { MasterVehicleAssociatedTo } from '../../../services/master/vehicle/master_vehicle_associated_to_service';
 import { MasterVehicleFuelType } from '../../../services/master/vehicle/master_vehicle_fuel_type_service';
-import { MasterVehicleAssociatedTo } from 'src/services/master/vehicle/master_vehicle_associated_to_service';
-import { MasterVehicleFuelUnit } from 'src/services/master/vehicle/master_vehicle_fuel_unit_service';
+import { MasterVehicleFuelUnit } from '../../../services/master/vehicle/master_vehicle_fuel_unit_service';
 
-import { FleetVendor } from 'src/services/fleet/vendor_management/fleet_vendor_service';
-import { OrganisationNotificationPreferenceVehicleLink } from 'src/services/account/notification_preferences.service';
-import { OrganisationReportPreferenceVehicleLink, OrganisationReportAutomationMailVehicleLink } from 'src/services/account/report_preferences.service';
-import { FleetFuelDailySummary } from 'src/services/fleet/fuel_management/fleet_fuel_daily_summary_service';
-import { FleetFuelRefill } from 'src/services/fleet/fuel_management/fleet_fuel_refill_service';
-import { FleetFuelRemoval } from 'src/services/fleet/fuel_management/fleet_fuel_removal_service';
-import { FleetInspection } from 'src/services/fleet/inspection_management/fleet_inspection_management_service';
-import { FleetInspectionScheduleVehicleLink } from 'src/services/fleet/inspection_management/fleet_inspection_schedule_service';
-import { FleetService, FleetServiceReminder } from 'src/services/fleet/service_management/fleet_service_service';
-import { FleetServiceScheduleVehicleLink } from 'src/services/fleet/service_management/fleet_service_schedule_service';
-import { GPSGeofenceTransaction } from 'src/services/gps/features/geofence/gps_geofence_transaction_service';
-import { GPSGeofenceTransactionSummary } from 'src/services/gps/features/geofence/gps_geofence_transaction_summary_service';
-import { TripGeofenceToGeofence } from 'src/services/gps/features/geofence/trip_geofence_to_geofence_service';
-import { GPSLiveTrackShareLink } from 'src/services/gps/features/gps_live_track_share_link_service';
-import { GPSTrackHistoryShareLink } from 'src/services/gps/features/gps_track_history_share_link_service';
-import { User, UserVehicleLink } from '../users/user_service';
-import { MasterMainLandMark } from 'src/services/master/main/master_main_landmark_service';
-import { FleetIssue } from 'src/services/fleet/issue_management/issue_management_service';
-import { FleetIncident } from 'src/services/fleet/incident_management/incident_management_service';
-import { MasterDailySchedule } from 'src/services/fleet/bus_mangement/master_daily_schedule';
+// Master - Device
+import { MasterDeviceManufacturer } from '../../../services/master/device/master_device_manufacturer_service';
+import { MasterDeviceModel } from '../../../services/master/device/master_device_model_service';
+import { MasterDeviceType } from '../../../services/master/device/master_device_type_service';
+
+// Fleet - Vendor
+import { FleetVendor } from '../../../services/fleet/vendor_management/fleet_vendor_service';
+
+// Fleet - Fuel
+import { FleetFuelDailySummary } from '../../../services/fleet/fuel_management/fleet_fuel_daily_summary_service';
+import { FleetFuelRefill } from '../../../services/fleet/fuel_management/fleet_fuel_refill_service';
+import { FleetFuelRemoval } from '../../../services/fleet/fuel_management/fleet_fuel_removal_service';
+
+// Fleet - Inspection
+import { FleetInspection } from '../../../services/fleet/inspection_management/fleet_inspection_management_service';
+import { FleetInspectionScheduleVehicleLink } from '../../../services/fleet/inspection_management/fleet_inspection_schedule_service';
+
+// Fleet - Service
+import { FleetService, FleetServiceReminder } from '../../../services/fleet/service_management/fleet_service_service';
+import { FleetServiceScheduleVehicleLink } from '../../../services/fleet/service_management/fleet_service_schedule_service';
+
+// Fleet - Issue & Incident
+import { FleetIssue } from '../../../services/fleet/issue_management/issue_management_service';
+import { FleetIncident } from '../../../services/fleet/incident_management/incident_management_service';
+
+// Fleet - Bus Management
+import { MasterDailySchedule } from '../../../services/fleet/bus_mangement/master_daily_schedule';
+
+// GPS - Geofence
+import { GPSGeofenceTransaction } from '../../../services/gps/features/geofence/gps_geofence_transaction_service';
+import { GPSGeofenceTransactionSummary } from '../../../services/gps/features/geofence/gps_geofence_transaction_summary_service';
+import { TripGeofenceToGeofence } from '../../../services/gps/features/geofence/trip_geofence_to_geofence_service';
+
+// GPS - Share Links
+import { GPSLiveTrackShareLink } from '../../../services/gps/features/gps_live_track_share_link_service';
+import { GPSTrackHistoryShareLink } from '../../../services/gps/features/gps_track_history_share_link_service';
+
+// Account - Preferences
+import { OrganisationNotificationPreferenceVehicleLink } from '../../../services/account/notification_preferences.service';
+import {
+  OrganisationReportPreferenceVehicleLink,
+  OrganisationReportAutomationMailVehicleLink,
+} from '../../../services/account/report_preferences.service';
 
 const URL = 'main/master_vehicle';
 
 const ENDPOINTS = {
   // AWS S3 PRESIGNED
   vehicle_file_presigned_url: `${URL}/vehicle_file_presigned_url`,
-  device_file_presigned_url: `${URL}/device_file_presigned_url`,
   calibration_file_presigned_url: (fileName: string): string => `${URL}/calibration_file_presigned_url/${fileName}`,
 
   // File Uploads
   create_vehicle_file: `${URL}/create_vehicle_file`,
   remove_vehicle_file: (id: string): string => `${URL}/remove_vehicle_file/${id}`,
-  create_device_file: `${URL}/create_device_file`,
-  remove_device_file: (id: string): string => `${URL}/remove_device_file/${id}`,
   update_calibration_file: (id: string): string => `${URL}/update_calibration_file/${id}`,
   remove_calibration_file: (id: string): string => `${URL}/remove_calibration_file/${id}`,
 
@@ -136,18 +161,12 @@ const ENDPOINTS = {
   find_vehicle_driver_link_history_by_vehicle: (id: string): string => `${URL}/vehicle_driver_link_history_by_vehicle/${id}`,
   find_vehicle_driver_link_history_by_driver: (id: string): string => `${URL}/vehicle_driver_link_history_by_driver/${id}`,
 
-  // API Vehicle Device Link
-  vehicle_device_link: `${URL}/vehicle_device_link`,
-  vehicle_device_unlink: `${URL}/vehicle_device_unlink`,
-  vehicle_device_link_history_by_vehicle: (id: string): string => `${URL}/vehicle_device_link_history_by_vehicle/${id}`,
-  vehicle_device_link_history_by_device: (id: string): string => `${URL}/vehicle_device_link_history_by_device/${id}`,
-
   // Cache APIs
-  find_cache: `${URL}/cache/:organisation_id`,
-  find_cache_simple: `${URL}/cache_simple/:organisation_id`,
-  find_cache_parent: `${URL}/cache_parent/:organisation_id`,
-  find_cache_dropdown: `${URL}/cache_dropdown/:organisation_id`,
-  find_cache_dropdown_live_data: `${URL}/cache_dropdown_live_data/:organisation_id`,
+  find_cache: (organisation_id: string): string => `${URL}/cache/${organisation_id}`,
+  find_cache_simple: (organisation_id: string): string => `${URL}/cache_simple/${organisation_id}`,
+  find_cache_parent: (organisation_id: string): string => `${URL}/cache_parent/${organisation_id}`,
+  find_cache_dropdown: (organisation_id: string): string => `${URL}/cache_dropdown/${organisation_id}`,
+  find_cache_dropdown_live_data: (organisation_id: string): string => `${URL}/cache_dropdown_live_data/${organisation_id}`,
 };
 
 // MasterVehicle Interface
@@ -155,26 +174,57 @@ export interface MasterVehicle extends Record<string, unknown> {
   // Primary Fields
   vehicle_id: string;
 
-  // Main Field Details
-  vehicle_number: string;
-  vehicle_name?: string;
-
-  engine_number?: string;
-  chassis_number?: string;
-  vehicle_make_year?: number;
-
   // Database Details
   db_instance: string;
   db_group: string;
 
   // Admin Account Details
-  is_fleet_active: YesNo;
-  is_gps_active: YesNo;
-  is_trip_active: YesNo;
+  is_fleet_active?: YesNo;
+  is_gps_active?: YesNo;
+  is_trip_active?: YesNo;
+
+  // Main Field Details
+  vehicle_number: string;
+  vehicle_name?: string;
+
+  // Relations - Odometer
+  odometer_reading?: number;
+  odometer_last_change_date?: string;
+  odometer_last_change_date_f?: string;
+  VehicleOdometerHistory?: VehicleOdometerHistory[];
+
+  engine_number?: string;
+  chassis_number?: string;
+  vehicle_make_year?: number;
 
   // GPS Device Details
-  gps_device_identifier: String;
-  gps_sim_number: String;
+  gps_device_identifier?: string;
+
+  is_device_installed?: YesNo;
+  assign_device_date?: string;
+  assign_device_date_f?: string;
+
+  device_manufacturer_id?: string;
+  MasterDeviceManufacturer?: MasterDeviceManufacturer;
+  device_manufacturer_name?: string;
+  device_manufacturer_code?: string;
+
+  device_model_id?: string;
+  MasterDeviceModel?: MasterDeviceModel;
+  device_model_name?: string;
+  device_model_code?: string;
+
+  device_type_id?: string;
+  MasterDeviceType?: MasterDeviceType;
+  device_type_name?: string;
+  device_type_code?: string;
+
+  gps_sim_mobile_number?: string;
+  gps_sim_serial_number?: string;
+
+  sim_provider_id?: string;
+  MasterMainSimProvider?: MasterMainSimProvider;
+  provider_name?: string;
 
   // Metadata
   status: Status;
@@ -191,16 +241,6 @@ export interface MasterVehicle extends Record<string, unknown> {
   assign_driver_date_f?: string;
   AssignRemoveDriverHistory?: AssignRemoveDriverHistory[];
 
-  // Relations - Device
-  is_device_installed: YesNo;
-  device_gps_source?: GPSSource;
-  device_id?: string;
-  MasterDevice?: MasterDevice;
-  device_identifier?: string;
-  assign_device_date?: string;
-  assign_device_date_f?: string;
-  AssignRemoveDeviceHistory?: AssignRemoveDeviceHistory[];
-
   country_id?: string;
   MasterMainCountry?: MasterMainCountry;
   country_name?: string;
@@ -210,12 +250,6 @@ export interface MasterVehicle extends Record<string, unknown> {
   time_zone_code?: string;
   time_zone_identifier?: string;
   time_zone_offset?: string;
-
-  // Relations - Odometer
-  odometer_reading?: number;
-  odometer_last_change_date?: string;
-  odometer_last_change_date_f?: string;
-  VehicleOdometerHistory?: VehicleOdometerHistory[];
 
   // Relations - One to One
   vehicle_details_gps_id?: string;
@@ -295,11 +329,11 @@ export interface MasterVehicle extends Record<string, unknown> {
 
   // Relations - Fuel Details
   vehicle_fuel_type_id?: string;
-  PrimaryFuelType?: MasterVehicleFuelType;
+  MasterVehicleFuelType?: MasterVehicleFuelType;
   fuel_type?: string;
 
   vehicle_fuel_unit_id?: string;
-  PrimaryFuelUnit?: MasterVehicleFuelUnit;
+  MasterVehicleFuelUnit?: MasterVehicleFuelUnit;
   fuel_unit?: string;
 
   secondary_vehicle_fuel_type_id?: string;
@@ -322,101 +356,69 @@ export interface MasterVehicle extends Record<string, unknown> {
 
   // Relations - Child
   // Child - Main
-  MasterVehicleFile?: MasterVehicleFile[]
+  MasterVehicleFile?: MasterVehicleFile[];
+  MasterVehicleDeviceChange?: MasterVehicleDeviceChange[];
+  MasterVehicleSimChange?: MasterVehicleSimChange[];
 
   // Child - Master
-  VehicleOrganisationGroupLink?: VehicleOrganisationGroupLink[]
+  VehicleOrganisationGroupLink?: VehicleOrganisationGroupLink[];
 
   // Child - Fleet
-  FleetFuelRefill?: FleetFuelRefill[]
-  FleetFuelRemoval?: FleetFuelRemoval[]
+  FleetFuelRefill?: FleetFuelRefill[];
+  FleetFuelRemoval?: FleetFuelRemoval[];
 
-  FleetInspection?: FleetInspection[]
-  FleetInspectionScheduleVehicleLink?: FleetInspectionScheduleVehicleLink[]
+  FleetInspection?: FleetInspection[];
+  FleetInspectionScheduleVehicleLink?: FleetInspectionScheduleVehicleLink[];
 
-  FleetIncident?: FleetIncident[]
+  FleetIncident?: FleetIncident[];
 
-  FleetIssue?: FleetIssue[]
+  FleetIssue?: FleetIssue[];
 
-  FleetServiceManagement?: FleetService[]
-  FleetServiceScheduleVehicleLink?: FleetServiceScheduleVehicleLink[]
-  FleetServiceReminder?: FleetServiceReminder[]
-  // FleetServiceJobCard?: FleetServiceJobCard[]
+  FleetService?: FleetService[];
+  FleetServiceScheduleVehicleLink?: FleetServiceScheduleVehicleLink[];
+  FleetServiceReminder?: FleetServiceReminder[];
 
-  // FleetTyreUsageHistory?: FleetTyreUsageHistory[]
-  // FleetTyreInspectionScheduleVehicle?: FleetTyreInspectionScheduleVehicle[]
-  // FleetTyreInspectionScheduleTracking?: FleetTyreInspectionScheduleTracking[]
-  // FleetTyreInspection?: FleetTyreInspection[]
-  // FleetTyreDamageRepair?: FleetTyreDamageRepair[]
-  // FleetTyreRotation?: FleetTyreRotation[]
-  // FleetTyreRotationDetails?: FleetTyreRotationDetails[]
-
-  MasterDailySchedule?: MasterDailySchedule[]
-  // FixedScheduleDayRun?: FixedScheduleDayRun[]
+  MasterDailySchedule?: MasterDailySchedule[];
 
   // Child - GPS
-  // GpsLockRelayLog?: GPSLockRelayLog[]
-  // GPSLockDigitalDoorLog?: GPSLockDigitalDoorLog[]
-  TripGeofenceToGeofence?: TripGeofenceToGeofence[]
-  GPSGeofenceTransaction?: GPSGeofenceTransaction[]
-  FleetFuelDailySummary?: FleetFuelDailySummary[]
-  GPSLiveTrackShareLink?: GPSLiveTrackShareLink[]
-  GPSTrackHistoryShareLink?: GPSTrackHistoryShareLink[]
-  GPSGeofenceTransactionSummary?: GPSGeofenceTransactionSummary[]
-
-  // Child - Trip
-  // Trip?: Trip[]
+  TripGeofenceToGeofence?: TripGeofenceToGeofence[];
+  GPSGeofenceTransaction?: GPSGeofenceTransaction[];
+  FleetFuelDailySummary?: FleetFuelDailySummary[];
+  GPSLiveTrackShareLink?: GPSLiveTrackShareLink[];
+  GPSTrackHistoryShareLink?: GPSTrackHistoryShareLink[];
+  GPSGeofenceTransactionSummary?: GPSGeofenceTransactionSummary[];
 
   // Child - Account
-  UserVehicleLink?: UserVehicleLink[]
-  OrganisationNotificationPreferenceVehicleLink?: OrganisationNotificationPreferenceVehicleLink[]
-  OrganisationReportPreferenceVehicleLink?: OrganisationReportPreferenceVehicleLink[]
-  OrganisationReportAutomationMailVehicleLink?: OrganisationReportAutomationMailVehicleLink[]
+  UserVehicleLink?: UserVehicleLink[];
+  OrganisationNotificationPreferenceVehicleLink?: OrganisationNotificationPreferenceVehicleLink[];
+  OrganisationReportPreferenceVehicleLink?: OrganisationReportPreferenceVehicleLink[];
+  OrganisationReportAutomationMailVehicleLink?: OrganisationReportAutomationMailVehicleLink[];
 
   // Relations - Child Count
   _count?: {
-
     AssignRemoveDriverHistory?: number;
-    AssignRemoveDeviceHistory?: number;
     VehicleOdometerHistory?: number;
-
-    VehicleDocument?: number;
     MasterVehicleFile?: number;
-    VehicleDocumentExpiry?: number;
+    MasterVehicleDeviceChange?: number;
+    MasterVehicleSimChange?: number;
 
-    // Child - Master
     VehicleOrganisationGroupLink?: number;
 
-    // Child - Fleet
     FleetFuelRefill?: number;
     FleetFuelRemoval?: number;
 
     FleetInspection?: number;
     FleetInspectionScheduleVehicleLink?: number;
 
-    VehicleIncident?: number;
+    FleetIncident?: number;
+    FleetIssue?: number;
 
-    VehicleIssues?: number;
-
-    FleetServiceManagement?: number;
+    FleetService?: number;
     FleetServiceScheduleVehicleLink?: number;
     FleetServiceReminder?: number;
-    // FleetServiceJobCard?: FleetServiceJobCard[]
-
-    // FleetTyreUsageHistory?: FleetTyreUsageHistory[]
-    // FleetTyreInspectionScheduleVehicle?: FleetTyreInspectionScheduleVehicle[]
-    // FleetTyreInspectionScheduleTracking?: FleetTyreInspectionScheduleTracking[]
-    // FleetTyreInspection?: FleetTyreInspection[]
-    // FleetTyreDamageRepair?: FleetTyreDamageRepair[]
-    // FleetTyreRotation?: FleetTyreRotation[]
-    // FleetTyreRotationDetails?: FleetTyreRotationDetails[]
 
     MasterDailySchedule?: number;
-    // FixedScheduleDayRun?: FixedScheduleDayRun[]
 
-    // Child - GPS
-    // GpsLockRelayLog?: GPSLockRelayLog[]
-    // GPSLockDigitalDoorLog?: GPSLockDigitalDoorLog[]
     TripGeofenceToGeofence?: number;
     GPSGeofenceTransaction?: number;
     FleetFuelDailySummary?: number;
@@ -424,10 +426,6 @@ export interface MasterVehicle extends Record<string, unknown> {
     GPSTrackHistoryShareLink?: number;
     GPSGeofenceTransactionSummary?: number;
 
-    // Child - Trip
-    // Trip?: Trip[]
-
-    // Child - Account
     UserVehicleLink?: number;
     OrganisationNotificationPreferenceVehicleLink?: number;
     OrganisationReportPreferenceVehicleLink?: number;
@@ -504,22 +502,71 @@ export interface MasterVehicleFile extends BaseCommonFile {
   // Usage Type -> Number Plate, Front Image, Full Image, Side Image
 }
 
+// MasterVehicleDeviceChange Interface
+export interface MasterVehicleDeviceChange extends Record<string, unknown> {
+  // Primary Field
+  device_change_id: string;
+
+  // Main Fields
+  gps_device_identifier?: string;
+
+  // History Range
+  from_date?: string;
+  from_date_f?: string;
+  to_date?: string;
+  to_date_f?: string;
+
+  // Relations - Parent
+  vehicle_id: string;
+  MasterVehicle?: MasterVehicle;
+
+  // Metadata
+  status: Status;
+  added_date_time: string;
+  modified_date_time: string;
+}
+
+// MasterVehicleSimChange Interface
+export interface MasterVehicleSimChange extends Record<string, unknown> {
+  // Primary Field
+  sim_change_id: string;
+
+  // Main Fields
+  gps_sim_mobile_number?: string;
+
+  // History Range
+  from_date?: string;
+  from_date_f?: string;
+  to_date?: string;
+  to_date_f?: string;
+
+  // Relations - Parent
+  vehicle_id: string;
+  MasterVehicle?: MasterVehicle;
+
+  // Metadata
+  status: Status;
+  added_date_time: string;
+  modified_date_time: string;
+}
+
 // VehicleDetailGPS Interface
 export interface VehicleDetailGPS extends Record<string, unknown> {
   // Primary Fields
   vehicle_details_gps_id: string;
 
-  // GPS Input Source
-  serial_no?: number;
-  device_identifier?: string;
-  device_gps_source?: GPSSource;
-  traccar_protocol?: string;
-  custom_protocol?: string;
-  api_details?: string;
+  // Database Details
+  db_instance?: string;
+  db_group?: string;
+
+  // GPS Device Details
+  gps_device_identifier?: string;
+  gps_sim_number?: string;
+  gps_sim_mobile_number?: string;
 
   // Sensor configuration
   temperature?: YesNo;
-  duel_temperature?: YesNo;
+  dual_temperature?: YesNo;
   fuel?: YesNo;
   fuel_bluetooth?: YesNo;
   fuel_tank_type?: FuelTankType;
@@ -732,12 +779,33 @@ export interface VehicleDetailGPS extends Record<string, unknown> {
 
   // Relations - One To One
   vehicle_id?: string;
-  MasterVehicle?: MasterVehicle; // Prisma relation field name
+  MasterVehicle?: MasterVehicle;
   vehicle_number?: string;
   vehicle_type?: string;
 
+  // Relations - Parent
+  organisation_id?: string;
+  UserOrganisation?: UserOrganisation;
+  organisation_name?: string;
+  organisation_code?: string;
+  organisation_logo_url?: string;
+
+  time_zone_id?: string;
+  MasterMainTimeZone?: MasterMainTimeZone;
+  time_zone_code?: string;
+  time_zone_identifier?: string;
+  time_zone_offset?: string;
+
+  driver_id?: string;
+  MasterDriver?: MasterDriver;
+  driver_details?: string;
+  driver_image_url?: string;
+
   landmark_id?: string;
-  MasterMainLandMark?: MasterMainLandMark; // add if you expose it
+  MasterMainLandMark?: MasterMainLandMark;
+  landmark_name?: string;
+  landmark_location?: string;
+  landmark_distance?: number;
 }
 
 // VehicleDetailTrip Interface
@@ -1081,7 +1149,7 @@ export const VehicleSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 
-  // Additional Files
+  // Files
   MasterVehicleFileSchema: nestedArrayOfObjectsOptional(
     'MasterVehicleFileSchema',
     MasterVehicleFileSchema,
@@ -1089,123 +1157,6 @@ export const VehicleSchema = z.object({
   ),
 });
 export type VehicleDTO = z.infer<typeof VehicleSchema>;
-
-// Vehicle Create/Update Schema
-export const VehicleBulkSchema = z.object({
-  // Relations - Parent
-  organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-
-  vehicle_type_id: single_select_mandatory('MasterVehicleType'), // Single-Selection -> MasterVehicleType
-
-  device_manufacturer_id: single_select_optional('MasterDeviceManufacturer'), // Single-Selection -> MasterDeviceManufacturer
-  device_model_id: single_select_optional('MasterDeviceModel'), // Single-Selection -> MasterDeviceModel
-  device_type_id: single_select_optional('MasterDeviceType'), // Single-Selection -> MasterDeviceType
-
-  country_id: single_select_optional('MasterMainCountry'), // Single-Selection -> MasterMainCountry
-  time_zone_id: single_select_optional('MasterMainTimeZone'), // Single-Selection -> MasterMainTimeZone
-
-  fuel_tank_type: enumOptional(
-    'Fuel Tank Type',
-    FuelTankType,
-    FuelTankType.SingleTank,
-  ),
-  fuel_tank_size: numberOptional('Fuel Tank Quantity'),
-  fuel_tank_1_size: numberOptional('Tank 1 Fuel Quantity'),
-  fuel_tank_2_size: numberOptional('Tank 2 Fuel Quantity'),
-  fuel_tank_total_size: numberOptional('Fuel Tank Full Quantity'),
-
-  // Main Field Details
-  vehicle_number: stringMandatory('Vehicle Number', 2, 50),
-  vehicle_name: stringOptional('Vehicle Name', 0, 50),
-  odometer_reading: numberOptional('Odometer Reading'),
-
-  engine_number: stringOptional('Engine Number', 0, 20),
-  chassis_number: stringOptional('Chassis Number', 0, 20),
-  vehicle_make_year: numberOptional('Vehicle Make Year'),
-
-  is_fleet_active: enumMandatory('Is Fleet Active', YesNo, YesNo.Yes),
-  is_gps_active: enumMandatory('Is GPS Active', YesNo, YesNo.No),
-  is_trip_active: enumMandatory('Is Trip Active', YesNo, YesNo.No),
-
-  // Bus Seats
-  vehicle_passenger_capacity: numberOptional('Vehicle Passenger Capacity'),
-  standing_passenger_capacity: numberOptional('Standing Passenger Capacity'),
-
-  // Metadata
-  status: enumMandatory('Status', Status, Status.Active),
-});
-export type VehicleBulkDTO = z.infer<typeof VehicleBulkSchema>;
-
-// MasterDeviceFile Schema -> DeviceImage/VehicleImage/SimImage/Other
-export const MasterDeviceFileSchema = BaseFileSchema.extend({
-  organisation_id: single_select_optional('UserOrganisation'), // Single-Selection -> UserOrganisation
-  user_id: single_select_optional('User'), // Single-Selection -> User
-  device_id: single_select_optional('MasterDevice'), // Single-Selection -> MasterDevice
-});
-export type MasterDeviceFileDTO = z.infer<typeof MasterDeviceFileSchema>;
-
-// Vehicle Device Link Schema
-export const VehicleDeviceLinkSchema = z.object({
-  // Relations - Parent
-  device_id: single_select_mandatory('MasterDevice'), // Single-Selection -> MasterDevice
-  device_manufacturer_id: single_select_mandatory('MasterDeviceManufacturer'), // Single-Selection -> MasterDeviceManufacturer
-  device_model_id: single_select_mandatory('MasterDeviceModel'), // Single-Selection -> MasterDeviceModel
-  device_type_id: single_select_mandatory('MasterDeviceType'), // Single-Selection -> MasterDeviceType
-
-  organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-  user_id: single_select_optional('User'), // Single-Selection -> User
-  country_id: single_select_mandatory('MasterMainCountry'), // Single-Selection -> MasterMainCountry
-  time_zone_id: single_select_mandatory('MasterMainTimeZone'), // Single-Selection -> MasterMainTimeZone
-  vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
-
-  // Main Field Details
-  temperature: enumOptional('Temperature', YesNo, YesNo.No),
-  duel_temperature: enumOptional('Dual Temperature', YesNo, YesNo.No),
-  fuel: enumOptional('Fuel', YesNo, YesNo.No),
-  fuel_bluetooth: enumOptional('Fuel Bluetooth', YesNo, YesNo.No),
-  fuel_tank_type: enumOptional(
-    'Fuel Tank Type',
-    FuelTankType,
-    FuelTankType.SingleTank,
-  ),
-  fuel_tank_size: numberOptional('Fuel Tank Quantity'),
-  fuel_tank_1_size: numberOptional('Tank 1 Fuel Quantity'),
-  fuel_tank_2_size: numberOptional('Tank 2 Fuel Quantity'),
-  fuel_tank_total_size: numberOptional('Fuel Tank Full Quantity'),
-  over_speed_kmph: numberOptional('Over Speed KMPH'),
-  is_obd: enumOptional('Is OBD', YesNo, YesNo.No),
-  gps_lock_relay: enumOptional('GPS Lock Relay', YesNo, YesNo.No),
-  gps_door_locker: enumOptional('GPS Door Locker', YesNo, YesNo.No),
-  door_sensor: enumOptional('Door Sensor', YesNo, YesNo.No),
-  genset_sensor: enumOptional('Genset Sensor', YesNo, YesNo.No),
-  dashcam_sensor: enumOptional('Dashcam Sensor', YesNo, YesNo.No),
-  is_rear_cam: enumOptional('Is Rear Cam', YesNo, YesNo.No),
-  is_front_cam: enumOptional('Is Front Cam', YesNo, YesNo.No),
-  camera_extra_count: numberOptional('Camera Extra Count'),
-  fuel_mapping: dynamicJsonSchema('Fuel Mapping'),
-
-  // Profile Image/Logo
-  calibration_file_url: stringOptional('Calibration File URL', 0, 300),
-  calibration_file_key: stringOptional('Calibration File Key', 0, 300),
-  calibration_file_name: stringOptional('Calibration File Name', 0, 300),
-
-  // Metadata
-  MasterDeviceFileSchema: nestedArrayOfObjectsOptional(
-    'MasterDeviceFileSchema',
-    MasterDeviceFileSchema,
-    [],
-  ),
-});
-export type VehicleDeviceLinkDTO = z.infer<typeof VehicleDeviceLinkSchema>;
-
-// Vehicle Device Unlink Schema
-export const VehicleDeviceUnlinkSchema = z.object({
-  // Relations - Parent
-  organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-  vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
-  device_id: single_select_mandatory('MasterDevice'), // Single-Selection -> MasterDevice
-});
-export type VehicleDeviceUnlinkDTO = z.infer<typeof VehicleDeviceUnlinkSchema>;
 
 // Vehicle Driver Link Schema
 export const VehicleDriverLinkSchema = z.object({
@@ -1220,7 +1171,7 @@ export type VehicleDriverLinkDTO = z.infer<typeof VehicleDriverLinkSchema>;
 export const VehicleDetailGPSSensorSchema = z.object({
   // Main Field Details
   temperature: enumOptional('Temperature', YesNo, YesNo.No),
-  duel_temperature: enumOptional('Dual Temperature', YesNo, YesNo.No),
+  dual_temperature: enumOptional('Dual Temperature', YesNo, YesNo.No),
   fuel: enumOptional('Fuel', YesNo, YesNo.No),
   fuel_bluetooth: enumOptional('Fuel Bluetooth', YesNo, YesNo.No),
   fuel_tank_type: enumOptional(
@@ -1270,6 +1221,8 @@ export const VehicleDetailTripSchema = z.object({
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
+
+  // Other
   time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type VehicleDetailTripDTO = z.infer<typeof VehicleDetailTripSchema>;
@@ -1440,7 +1393,10 @@ export const VehicleDetailLifeCycleSchema = z.object({
   life_expiry_message: stringOptional('Life Expiry Message', 0, 300),
   life_expiry_note: stringOptional('Life Expiry Note', 0, 2000),
 
+  // Metadata
   status: enumMandatory('Status', Status, Status.Active),
+
+  // Other
   time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type VehicleDetailLifeCycleDTO = z.infer<
@@ -1502,6 +1458,8 @@ export const VehicleDetailPurchaseSchema = z.object({
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
+
+  // Other
   time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type VehicleDetailPurchaseDTO = z.infer<
@@ -1517,7 +1475,6 @@ export const VehicleQuerySchema = BaseQuerySchema.extend({
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
   user_ids: multi_select_optional('User'), // Multi-Selection -> User
   driver_ids: multi_select_optional('MasterDriver'), // Multi-Selection -> MasterDriver
-  device_ids: multi_select_optional('MasterDevice'), // Multi-Selection -> MasterDevice
 
   organisation_sub_company_ids: multi_select_optional('OrganisationSubCompany'), // Multi-Selection -> OrganisationSubCompany
   organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
@@ -1574,6 +1531,10 @@ export type VehicleGPSQueryDTO = z.infer<typeof VehicleGPSQuerySchema>;
 // GPS Device Details Schema
 export const UpdateGPSDeviceDetailsSchema = z.object({
   gps_device_identifier: stringOptional('GPS Device Identifier', 0, 100),
+
+  device_manufacturer_id: single_select_optional('MasterDeviceManufacturer'),
+  device_model_id: single_select_optional('MasterDeviceModel'),
+  device_type_id: single_select_optional('MasterDeviceType'),
 });
 export type UpdateGPSDeviceDetailsDTO = z.infer<
   typeof UpdateGPSDeviceDetailsSchema
@@ -1581,7 +1542,10 @@ export type UpdateGPSDeviceDetailsDTO = z.infer<
 
 // GPS SIM Details Schema
 export const UpdateGPSSimDetailsSchema = z.object({
-  gps_sim_number: stringOptional('GPS SIM Number', 0, 100),
+  gps_sim_mobile_number: stringOptional('GPS SIM Mobile Number', 0, 100),
+  gps_sim_serial_number: stringOptional('GPS SIM Serial Number', 0, 50),
+
+  sim_provider_id: single_select_optional('MasterMainSimProvider'),
 });
 export type UpdateGPSSimDetailsDTO = z.infer<typeof UpdateGPSSimDetailsSchema>;
 
@@ -1713,7 +1677,7 @@ export const newVehiclePayload = (): VehicleDTO => ({
 // Convert VehicleDetailGPS Data to API Payload
 export const toVehicleDetailsGPSPayload = (vehicleGPS?: VehicleDetailGPS): VehicleDetailGPSSensorDTO => ({
   temperature: vehicleGPS?.temperature || YesNo.No,
-  duel_temperature: vehicleGPS?.duel_temperature || YesNo.No,
+  dual_temperature: vehicleGPS?.dual_temperature || YesNo.No,
   fuel: vehicleGPS?.fuel || YesNo.No,
   fuel_bluetooth: vehicleGPS?.fuel_bluetooth || YesNo.No,
   fuel_tank_type: vehicleGPS?.fuel_tank_type || FuelTankType.SingleTank,
@@ -1907,10 +1871,6 @@ export const get_vehicle_file_presigned_url = async (data: FilePresignedUrlDTO):
   return apiPost<BR<AWSPresignedUrl>, FilePresignedUrlDTO>(ENDPOINTS.vehicle_file_presigned_url, data);
 };
 
-export const get_device_file_presigned_url = async (data: FilePresignedUrlDTO): Promise<BR<AWSPresignedUrl>> => {
-  return apiPost<BR<AWSPresignedUrl>, FilePresignedUrlDTO>(ENDPOINTS.device_file_presigned_url, data);
-};
-
 export const get_calibration_file_presigned_url = async (file_name: string): Promise<BR<AWSPresignedUrl>> => {
   return apiGet<BR<AWSPresignedUrl>>(ENDPOINTS.calibration_file_presigned_url(file_name));
 };
@@ -1922,14 +1882,6 @@ export const create_vehicle_file = async (payload: MasterVehicleFileDTO): Promis
 
 export const remove_vehicle_file = async (id: string): Promise<SBR> => {
   return apiDelete<SBR>(ENDPOINTS.remove_vehicle_file(id));
-};
-
-export const create_device_file = async (payload: MasterDeviceFileDTO): Promise<SBR> => {
-  return apiPost<SBR, MasterDeviceFileDTO>(ENDPOINTS.create_device_file, payload);
-};
-
-export const remove_device_file = async (id: string): Promise<SBR> => {
-  return apiDelete<SBR>(ENDPOINTS.remove_device_file(id));
 };
 
 export const update_calibration_file = async (id: string, data: CalibrationFileDTO): Promise<SBR> => {
@@ -2025,41 +1977,24 @@ export const getDriverLinkHistoryByDriver = async (id: string, params: BaseQuery
   return apiGet<FBR<AssignRemoveDriverHistory[]>>(ENDPOINTS.find_vehicle_driver_link_history_by_driver(id), params);
 };
 
-// API Vehicle Device Link
-export const linkDeviceToVehicle = async (payload: VehicleDeviceLinkDTO): Promise<SBR> => {
-  return apiPost<SBR, VehicleDeviceLinkDTO>(ENDPOINTS.vehicle_device_link, payload);
-};
-
-export const unlinkDeviceFromVehicle = async (payload: VehicleDeviceUnlinkDTO): Promise<SBR> => {
-  return apiPost<SBR, VehicleDeviceUnlinkDTO>(ENDPOINTS.vehicle_device_unlink, payload);
-};
-
-export const getDeviceLinkHistoryByVehicle = async (id: string, params: BaseQueryDTO): Promise<FBR<AssignRemoveDeviceHistory[]>> => {
-  return apiGet<FBR<AssignRemoveDeviceHistory[]>>(ENDPOINTS.vehicle_device_link_history_by_vehicle(id), params);
-};
-
-export const getDeviceLinkHistoryByDevice = async (id: string, params: BaseQueryDTO): Promise<FBR<AssignRemoveDeviceHistory[]>> => {
-  return apiGet<FBR<AssignRemoveDeviceHistory[]>>(ENDPOINTS.vehicle_device_link_history_by_device(id), params);
-};
-
 // Cache APIs
 export const getVehicleCache = async (organisationId: string): Promise<FBR<MasterVehicle[]>> => {
-  return apiGet<FBR<MasterVehicle[]>>(ENDPOINTS.find_cache.replace(':organisation_id', organisationId));
+  return apiGet<FBR<MasterVehicle[]>>(ENDPOINTS.find_cache(organisationId));
 };
 
 export const getVehicleSimpleCache = async (organisationId: string): Promise<FBR<MasterVehicle[]>> => {
-  return apiGet<FBR<MasterVehicle[]>>(ENDPOINTS.find_cache_simple.replace(':organisation_id', organisationId));
+  return apiGet<FBR<MasterVehicle[]>>(ENDPOINTS.find_cache_simple(organisationId));
 };
 
 export const getVehicleParentCache = async (organisationId: string): Promise<FBR<MasterVehicle[]>> => {
-  return apiGet<FBR<MasterVehicle[]>>(ENDPOINTS.find_cache_parent.replace(':organisation_id', organisationId));
+  return apiGet<FBR<MasterVehicle[]>>(ENDPOINTS.find_cache_parent(organisationId));
 };
 
 export const getVehicleSimpleDropdownCustom = async (organisationId: string): Promise<FBR<MasterVehicleDropdown[]>> => {
-  return apiGet<FBR<MasterVehicleDropdown[]>>(ENDPOINTS.find_cache_dropdown.replace(':organisation_id', organisationId));
+  return apiGet<FBR<MasterVehicleDropdown[]>>(ENDPOINTS.find_cache_dropdown(organisationId));
 };
 
 export const getVehicleSimpleDropdownCacheLiveData = async (organisationId: string): Promise<FBR<MasterVehicleDropdown[]>> => {
-  return apiGet<FBR<MasterVehicleDropdown[]>>(ENDPOINTS.find_cache_dropdown_live_data.replace(':organisation_id', organisationId));
+  return apiGet<FBR<MasterVehicleDropdown[]>>(ENDPOINTS.find_cache_dropdown_live_data(organisationId));
 };
 

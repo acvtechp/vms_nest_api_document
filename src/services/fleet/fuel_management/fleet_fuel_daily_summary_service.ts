@@ -25,7 +25,6 @@ import { UserOrganisation } from '../../main/users/user_organisation_service';
 import { User } from 'src/services/main/users/user_service';
 import { MasterVehicle } from '../../main/vehicle/master_vehicle_service';
 import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
-import { MasterDevice } from 'src/services/main/devices/master_device_service';
 import { FuelConsumptionMonthly } from 'src/services/gps/reports/gps_models/FuelConsumptionMonthly';
 
 const URL = 'fleet/fuel_management/fleet_fuel_daily_summary';
@@ -88,10 +87,6 @@ export interface FleetFuelDailySummary extends Record<string, unknown> {
   MasterDriver?: MasterDriver;
   driver_details?: string;
   driver_image_url?: string;
-
-  device_id?: string;
-  MasterDevice?: MasterDevice;
-  device_identifier?: string;
 }
 
 // FleetFuelDailySummary Create/Update Schema
@@ -101,7 +96,6 @@ export const FleetFuelDailySummarySchema = z.object({
   user_id: single_select_optional('User'), // Single-Selection -> User
   vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
   driver_id: single_select_optional('MasterDriver'), // Single-Selection -> MasterDriver
-  device_id: single_select_optional('MasterDevice'), // Single-Selection -> MasterDevice
 
   // Main Field Details
   date: dateMandatory('Date'),
@@ -137,7 +131,6 @@ export const FleetFuelDailySummaryQuerySchema = BaseQuerySchema.extend({
   user_ids: multi_select_optional('User'), // Multi-selection -> User
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
   driver_ids: multi_select_optional('MasterDriver'), // Multi-selection -> MasterDriver
-  device_ids: multi_select_optional('MasterDevice'), // Multi-selection -> MasterDevice
 
   // Enums
   vehicle_summary: enumOptional('Vehicle Summary', YesNo, YesNo.No),
@@ -205,7 +198,6 @@ export const toFleetFuelDailySummaryPayload = (row: FleetFuelDailySummary): Flee
   user_id: row.user_id || '',
   vehicle_id: row.vehicle_id || '',
   driver_id: row.driver_id || '',
-  device_id: row.device_id || '',
 
   date: row.date || '',
 
@@ -231,7 +223,6 @@ export const newFleetFuelDailySummaryPayload = (): FleetFuelDailySummaryDTO => (
   user_id: '',
   vehicle_id: '',
   driver_id: '',
-  device_id: '',
 
   date: '',
 

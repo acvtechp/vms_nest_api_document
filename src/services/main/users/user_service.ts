@@ -49,7 +49,6 @@ import { FleetInspectionForm } from 'src/services/fleet/inspection_management/fl
 import { FleetVendorFuelStation } from 'src/services/fleet/vendor_management/fleet_vendor_fuel_station';
 import { FleetVendorServiceCenter } from 'src/services/fleet/vendor_management/fleet_vendor_service_center';
 import { FleetWorkshop } from 'src/services/fleet/workshop_management/fleet_workshop_service';
-import { MasterDevice, MasterDeviceFile } from '../devices/master_device_service';
 
 const URL = 'user/user';
 
@@ -150,8 +149,6 @@ export interface User extends Record<string, unknown> {
   MasterVehicleFile?: MasterVehicleFile[];
   MasterDriver?: MasterDriver[];
   MasterDriverFile?: MasterDriverFile[];
-  MasterDevice?: MasterDevice[];
-  MasterDeviceFile?: MasterDeviceFile[];
 
   // Child - Account
   Invoice?: Invoice[];
@@ -244,8 +241,6 @@ export interface User extends Record<string, unknown> {
     MasterVehicleFile?: number;
     MasterDriver?: number;
     MasterDriverFile?: number;
-    MasterDevice?: number;
-    MasterDeviceFile?: number;
 
     Invoice?: number;
     InvoiceFile?: number;
