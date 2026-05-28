@@ -150,6 +150,8 @@ const ENDPOINTS = {
   // GPS Device & SIM Details
   update_gps_device_details: (id: string): string => `${URL}/update_gps_device_details/${id}`,
   update_gps_sim_details: (id: string): string => `${URL}/update_gps_sim_details/${id}`,
+  find_device_change_history_by_vehicle: (id: string): string => `${URL}/device_change_history_by_vehicle/${id}`,
+  find_sim_change_history_by_vehicle: (id: string): string => `${URL}/sim_change_history_by_vehicle/${id}`,
 
   // Sensor Relay Lock
   update_sensor_relay_lock_status_locked: (vehicle_id: string): string => `${URL}/update_sensor_relay_lock_status_locked/${vehicle_id}`,
@@ -447,7 +449,7 @@ export interface MasterVehicleDropdown extends Record<string, unknown> {
   imei: string;
 
   temperature: YesNo;
-  duel_temperature: YesNo;
+  dual_temperature: YesNo;
   fuel: YesNo;
   fuel_bluetooth: YesNo;
   fuel_tank_size: number;
@@ -561,7 +563,6 @@ export interface VehicleDetailGPS extends Record<string, unknown> {
 
   // GPS Device Details
   gps_device_identifier?: string;
-  gps_sim_number?: string;
   gps_sim_mobile_number?: string;
 
   // Sensor configuration
@@ -1306,7 +1307,7 @@ export const VehicleDetailBodySchema = z.object({
   ),
   ground_clearance_mm: doubleOptional('Ground Clearance MM'),
   tire_size: stringOptional('Tire Size', 0, 50),
-  has_spare_tire: enumMandatory('Has Spare Tire', YesNo, YesNo.Yes),
+  has_spare_tire: enumMandatory('Has Spare Tire', YesNo, YesNo.No),
   has_all_terrain_tires: enumMandatory(
     'Has All Terrain Tires',
     YesNo,
@@ -1316,7 +1317,7 @@ export const VehicleDetailBodySchema = z.object({
   steering_type: enumMandatory(
     'Steering Type',
     SteeringType,
-    SteeringType.Power,
+    SteeringType.Manual,
   ),
   wheel_drive_type: enumMandatory(
     'Wheel Drive Type',
@@ -1813,7 +1814,7 @@ export const toVehicleDetailLifeCyclePayload = (vehicleLifeCycle?: VehicleDetail
   // Lifecycle Status
   life_expiry: vehicleLifeCycle?.life_expiry || LifeExpiry.No,
   is_extended_life_approved: vehicleLifeCycle?.is_extended_life_approved || YesNo.No,
-  life_status: VehicleLifeStatus.Active,
+  life_status: vehicleLifeCycle?.life_status || VehicleLifeStatus.Active,
   life_expiry_message: vehicleLifeCycle?.life_expiry_message || '',
   life_expiry_note: vehicleLifeCycle?.life_expiry_note || '',
 
@@ -1865,6 +1866,20 @@ export const toVehicleDetailPurchasePayload = (vehiclePurchase?: VehicleDetailPu
   time_zone_id: '',
 });
 
+// Convert GPS Device Details to API Payload
+export const toGPSDeviceDetailsPayload = (row?: MasterVehicle): UpdateGPSDeviceDetailsDTO => ({
+  gps_device_identifier: row?.gps_device_identifier || '',
+  device_manufacturer_id: row?.device_manufacturer_id || '',
+  device_model_id: row?.device_model_id || '',
+  device_type_id: row?.device_type_id || '',
+});
+
+// Convert GPS SIM Details to API Payload
+export const toGPSSimDetailsPayload = (row?: MasterVehicle): UpdateGPSSimDetailsDTO => ({
+  gps_sim_mobile_number: row?.gps_sim_mobile_number || '',
+  gps_sim_serial_number: row?.gps_sim_serial_number || '',
+  sim_provider_id: row?.sim_provider_id || '',
+});
 
 // AWS S3 PRESIGNED
 export const get_vehicle_file_presigned_url = async (data: FilePresignedUrlDTO): Promise<BR<AWSPresignedUrl>> => {
@@ -1949,6 +1964,14 @@ export const updateGPSDeviceDetails = async (id: string, payload: UpdateGPSDevic
 
 export const updateGPSSimDetails = async (id: string, payload: UpdateGPSSimDetailsDTO): Promise<SBR> => {
   return apiPatch<SBR, UpdateGPSSimDetailsDTO>(ENDPOINTS.update_gps_sim_details(id), payload);
+};
+
+export const getDeviceChangeHistoryByVehicle = async (id: string): Promise<FBR<MasterVehicleDeviceChange[]>> => {
+  return apiGet<FBR<MasterVehicleDeviceChange[]>>(ENDPOINTS.find_device_change_history_by_vehicle(id));
+};
+
+export const getSimChangeHistoryByVehicle = async (id: string): Promise<FBR<MasterVehicleSimChange[]>> => {
+  return apiGet<FBR<MasterVehicleSimChange[]>>(ENDPOINTS.find_sim_change_history_by_vehicle(id));
 };
 
 // Sensor Relay Lock
