@@ -224,6 +224,10 @@ export interface MasterVehicle extends Record<string, unknown> {
   gps_sim_mobile_number?: string;
   gps_sim_serial_number?: string;
 
+  is_sim_installed?: YesNo;
+  assign_sim_date?: string;
+  assign_sim_date_f?: string;
+
   sim_provider_id?: string;
   MasterMainSimProvider?: MasterMainSimProvider;
   provider_name?: string;
