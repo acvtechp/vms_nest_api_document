@@ -150,8 +150,8 @@ const ENDPOINTS = {
   // GPS Device & SIM Details
   update_gps_device_details: (id: string): string => `${URL}/update_gps_device_details/${id}`,
   update_gps_sim_details: (id: string): string => `${URL}/update_gps_sim_details/${id}`,
-  find_device_change_history_by_vehicle: (id: string): string => `${URL}/device_change_history_by_vehicle/${id}`,
-  find_sim_change_history_by_vehicle: (id: string): string => `${URL}/sim_change_history_by_vehicle/${id}`,
+  find_device_change_history_by_vehicle: `${URL}/device_change_history_by_vehicle/search`,
+  find_sim_change_history_by_vehicle: `${URL}/sim_change_history_by_vehicle/search`,
 
   // Sensor Relay Lock
   update_sensor_relay_lock_status_locked: (vehicle_id: string): string => `${URL}/update_sensor_relay_lock_status_locked/${vehicle_id}`,
@@ -1554,6 +1554,30 @@ export const UpdateGPSSimDetailsSchema = z.object({
 });
 export type UpdateGPSSimDetailsDTO = z.infer<typeof UpdateGPSSimDetailsSchema>;
 
+// MasterVehicleDeviceChange Query Schema
+export const MasterVehicleDeviceChangeQuerySchema = BaseQuerySchema.extend({
+  // Self Table
+  device_change_ids: multi_select_optional('MasterVehicleDeviceChange'), // Multi-selection -> MasterVehicleDeviceChange
+
+  // Relations - Parent
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
+});
+export type MasterVehicleDeviceChangeQueryDTO = z.infer<
+  typeof MasterVehicleDeviceChangeQuerySchema
+>;
+
+// MasterVehicleSimChange Query Schema
+export const MasterVehicleSimChangeQuerySchema = BaseQuerySchema.extend({
+  // Self Table
+  sim_change_ids: multi_select_optional('MasterVehicleSimChange'), // Multi-selection -> MasterVehicleSimChange
+
+  // Relations - Parent
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
+});
+export type MasterVehicleSimChangeQueryDTO = z.infer<
+  typeof MasterVehicleSimChangeQuerySchema
+>;
+
 
 // Convert Vehicle Data to API Payload
 export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
@@ -1970,12 +1994,12 @@ export const updateGPSSimDetails = async (id: string, payload: UpdateGPSSimDetai
   return apiPatch<SBR, UpdateGPSSimDetailsDTO>(ENDPOINTS.update_gps_sim_details(id), payload);
 };
 
-export const getDeviceChangeHistoryByVehicle = async (id: string): Promise<FBR<MasterVehicleDeviceChange[]>> => {
-  return apiGet<FBR<MasterVehicleDeviceChange[]>>(ENDPOINTS.find_device_change_history_by_vehicle(id));
+export const getDeviceChangeHistoryByVehicle = async (payload: MasterVehicleDeviceChangeQueryDTO,): Promise<FBR<MasterVehicleDeviceChange[]>> => {
+  return apiPost<FBR<MasterVehicleDeviceChange[]>, MasterVehicleDeviceChangeQueryDTO>(ENDPOINTS.find_device_change_history_by_vehicle, payload,);
 };
 
-export const getSimChangeHistoryByVehicle = async (id: string): Promise<FBR<MasterVehicleSimChange[]>> => {
-  return apiGet<FBR<MasterVehicleSimChange[]>>(ENDPOINTS.find_sim_change_history_by_vehicle(id));
+export const getSimChangeHistoryByVehicle = async (payload: MasterVehicleSimChangeQueryDTO,): Promise<FBR<MasterVehicleSimChange[]>> => {
+  return apiPost<FBR<MasterVehicleSimChange[]>, MasterVehicleSimChangeQueryDTO>(ENDPOINTS.find_sim_change_history_by_vehicle, payload,);
 };
 
 // Sensor Relay Lock
