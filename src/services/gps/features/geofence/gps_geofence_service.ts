@@ -57,7 +57,7 @@ export interface GPSGeofence extends Record<string, unknown> {
   radius_km?: number;
   latitude?: number;
   longitude?: number;
-  poliline_data?: GPSGeofencePolilineData[];
+  polygon_data?: GPSGeofencePolilineData[];
 
   // Address
   address_line1?: string;
@@ -150,8 +150,8 @@ export const GPSGeofenceSchema = z.object({
   radius_m: doubleOptional('radius_m'),
   latitude: doubleOptionalLatLng('latitude'),
   longitude: doubleOptionalLatLng('longitude'),
-  poliline_data: nestedArrayOfObjectsOptional(
-    'Polyline Data',
+  polygon_data: nestedArrayOfObjectsOptional(
+    'Polygon Data',
     GPSGeofencePolilineDataSchema,
     [],
   ),
@@ -210,7 +210,7 @@ export const toGPSGeofencePayload = (row: GPSGeofence): GPSGeofenceDTO => ({
   radius_km: row.radius_km || 0,
   latitude: row.latitude || 0,
   longitude: row.longitude || 0,
-  poliline_data: row.poliline_data || [],
+  polygon_data: row.polygon_data || [],
 
   address_line1: row.address_line1 || '',
   address_line2: row.address_line2 || '',
@@ -240,7 +240,7 @@ export const newGPSGeofencePayload = (): GPSGeofenceDTO => ({
   radius_km: 0,
   latitude: 0,
   longitude: 0,
-  poliline_data: [],
+  polygon_data: [],
 
   address_line1: '',
   address_line2: '',

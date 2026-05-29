@@ -63,7 +63,7 @@ export interface BusStop extends Record<string, unknown> {
   radius_km?: number;
   latitude?: number;
   longitude?: number;
-  poliline_data?: BusStopPolygonData[];
+  polygon_data?: BusStopPolygonData[];
 
   // Address
   address_line1?: string;
@@ -148,8 +148,8 @@ export const BusStopSchema = z.object({
   radius_m: doubleOptional('radius_m'),
   latitude: doubleOptionalLatLng('latitude'),
   longitude: doubleOptionalLatLng('longitude'),
-  poliline_data: nestedArrayOfObjectsOptional(
-    'Polyline Data',
+  polygon_data: nestedArrayOfObjectsOptional(
+    'Polygon Data',
     BusStopPolygonDataSchema,
     [],
   ),
@@ -217,7 +217,7 @@ export const toBusStopPayload = (row: BusStop): BusStopDTO => ({
   radius_km: row.radius_km || 0,
   latitude: row.latitude || 0,
   longitude: row.longitude || 0,
-  poliline_data: row.poliline_data || [],
+  polygon_data: row.polygon_data || [],
 
   address_line1: row.address_line1 || '',
   address_line2: row.address_line2 || '',
@@ -249,7 +249,7 @@ export const newBusStopPayload = (): BusStopDTO => ({
   longitude: 0,
   radius_m: 0,
   radius_km: 0,
-  poliline_data: [],
+  polygon_data: [],
 
   address_line1: '',
   address_line2: '',

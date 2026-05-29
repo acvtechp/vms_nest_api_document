@@ -135,7 +135,7 @@ export interface MasterRouteStop extends Record<string, unknown> {
     radius_km?: number;
     latitude?: number;
     longitude?: number;
-    poliline_data?: unknown[];
+    polygon_data?: unknown[];
 
     // Metadata
     status: Status;

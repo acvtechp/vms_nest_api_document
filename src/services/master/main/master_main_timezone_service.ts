@@ -44,7 +44,7 @@ export interface MasterMainTimeZone extends Record<string, unknown> {
   // Main Field Details
   time_zone_code: string;
   time_zone_identifier?: string;
-  time_zone_abbrevation: string;
+  time_zone_abbreviation: string;
   time_zone_offset: string;
   time_zone_offset_seconds: number;
 
@@ -83,7 +83,7 @@ export const MasterMainTimeZoneSchema = z.object({
   // Main Field Details
   time_zone_code: stringMandatory('Time Zone Code', 2, 50),
   time_zone_identifier: stringMandatory('Time Zone Identifier', 2, 100),
-  time_zone_abbrevation: stringMandatory('Time Zone Abbreviation', 2, 100),
+  time_zone_abbreviation: stringMandatory('Time Zone Abbreviation', 2, 100),
   time_zone_offset: stringMandatory('Time Zone Offset', 2, 100),
   time_zone_offset_seconds: numberMandatory(
     'Time Zone Offset Seconds',
@@ -114,7 +114,7 @@ export const toMasterMainTimeZonePayload = (row: MasterMainTimeZone): MasterMain
 
   time_zone_identifier: row.time_zone_identifier || '',
   time_zone_code: row.time_zone_code || '',
-  time_zone_abbrevation: row.time_zone_abbrevation || '',
+  time_zone_abbreviation: row.time_zone_abbreviation || '',
   time_zone_offset: row.time_zone_offset || '',
   time_zone_offset_seconds: row.time_zone_offset_seconds || 0,
 
@@ -127,7 +127,7 @@ export const newMasterMainTimeZonePayload = (): MasterMainTimeZoneDTO => ({
 
   time_zone_identifier: '',
   time_zone_code: '',
-  time_zone_abbrevation: '',
+  time_zone_abbreviation: '',
   time_zone_offset: '',
   time_zone_offset_seconds: 0,
 

@@ -216,8 +216,7 @@ export interface SpecialScheduleDayRunStop extends Record<string, unknown> {
     radius_km?: number;
     latitude?: number;
     longitude?: number;
-    poliline_data?: unknown;
-    polyline_data?: unknown;
+    polygon_data?: unknown;
 
     // Relations - Child
     SSDRS_Planned_SpecialScheduleDayRunStop?: SpecialScheduleDayRunStudent[];
