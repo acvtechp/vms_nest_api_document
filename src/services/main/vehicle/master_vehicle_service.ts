@@ -355,6 +355,7 @@ export interface MasterVehicle extends Record<string, unknown> {
   fuel_tank_1_size?: number;
   fuel_tank_2_size?: number;
   fuel_tank_total_size?: number;
+  over_speed_kmph?: number;
 
   // Bus management
   vehicle_passenger_capacity?: number;
@@ -1133,6 +1134,7 @@ export const VehicleSchema = z.object({
   fuel_tank_1_size: numberOptional('Tank 1 Fuel Quantity'),
   fuel_tank_2_size: numberOptional('Tank 2 Fuel Quantity'),
   fuel_tank_total_size: numberOptional('Fuel Tank Full Quantity'),
+  over_speed_kmph: numberOptional('Over Speed KMPH'),
 
   // Main Field Details
   vehicle_number: stringMandatory('Vehicle Number', 2, 50),
@@ -1622,6 +1624,7 @@ export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
   fuel_tank_1_size: row.fuel_tank_1_size || 0,
   fuel_tank_2_size: row.fuel_tank_2_size || 0,
   fuel_tank_total_size: row.fuel_tank_total_size || 0,
+  over_speed_kmph: row.over_speed_kmph || 0,
 
   vehicle_passenger_capacity: row.vehicle_passenger_capacity || 0,
   standing_passenger_capacity: row.standing_passenger_capacity || 0,
@@ -1693,6 +1696,7 @@ export const newVehiclePayload = (): VehicleDTO => ({
   fuel_tank_1_size: 0,
   fuel_tank_2_size: 0,
   fuel_tank_total_size: 0,
+  over_speed_kmph: 0,
 
   vehicle_passenger_capacity: 0,
   standing_passenger_capacity: 0,
