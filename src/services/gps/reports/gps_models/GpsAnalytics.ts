@@ -1,12 +1,37 @@
 export interface GpsAnalytics extends Record<string, unknown> {
   org_id: string;
+  db_i: string;
+  db_g: string;
+
   v_id: string;
-  d_id: string;
-  db_group: string;
-  db_instance: string;
   vn: string;
+  vnn: string;
+  vn_f: string;
+  vt: string;
+
+  sub_company_name?: string;
+  branch_name?: string;
+  color_name?: string;
+  tag_name?: string;
+
+  vehicle_type?: string;
+  vehicle_make?: string;
+  vehicle_model?: string;
+  vehicle_sub_model?: string;
+  status_type?: string;
+  ownership_type?: string;
+  associated_to?: string;
+  fuel_type?: string;
+  fuel_unit?: string;
+
+  d_id: string;
+  dr_f?: string;
+  dr_url?: string;
+
   date: string;
   day: string;
+  date_f: string;
+
   device: Device;
   driver: Driver;
   gps_count: number;
@@ -15,15 +40,11 @@ export interface GpsAnalytics extends Record<string, unknown> {
   analytics_full: AnalyticsFull;
   hourly_analysis: HourlyAnalysis[];
   night_driving: NightDriving;
+  night_driving_final: NightDrivingData;
 
   // processed fields
   si: number;
-  date_f: string;
-  vn_f: string;
-  vt: string;
-  dr_f?: string;
-  dr_url?: string;
-  night_driving_final: NightDrivingData;
+
 }
 
 export interface Device extends Record<string, unknown> {

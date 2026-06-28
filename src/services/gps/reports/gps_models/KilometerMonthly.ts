@@ -56,6 +56,7 @@ export interface KilometerMonthly extends Record<string, unknown> {
   ownership_type?: string;
   associated_to?: string;
   fuel_type?: string;
+  fuel_unit?: string;
 
   d_id: string;
   dr_f?: string;
