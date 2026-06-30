@@ -1497,13 +1497,22 @@ export const VehicleQuerySchema = BaseQuerySchema.extend({
     'MasterVehicleOwnershipType',
   ), // Multi-Selection -> MasterVehicleOwnershipType
   vehicle_associated_to_ids: multi_select_optional('MasterVehicleAssociatedTo'), // Multi-Selection -> MasterVehicleAssociatedTo
-
   vehicle_fuel_type_ids: multi_select_optional('MasterVehicleFuelType'), // Multi-Selection -> MasterVehicleFuelType
   vehicle_fuel_unit_ids: multi_select_optional('MasterVehicleFuelUnit'), // Multi-Selection -> MasterVehicleFuelUnit
+
+  device_manufacturer_ids: multi_select_optional('MasterDeviceManufacturer'), // Multi-Selection -> MasterDeviceManufacturer
+  device_model_ids: multi_select_optional('MasterDeviceModel'), // Multi-Selection -> MasterDeviceModel
+  device_type_ids: multi_select_optional('MasterDeviceType'), // Multi-Selection -> MasterDeviceType
+  sim_provider_ids: multi_select_optional('MasterMainSimProvider'), // Multi-Selection -> MasterMainSimProvider
 
   // Enums
   is_device_installed: enumArrayOptional(
     'Is Device Installed',
+    YesNo,
+    getAllEnums(YesNo),
+  ),
+  is_sim_installed: enumArrayOptional(
+    'Is SIM Installed',
     YesNo,
     getAllEnums(YesNo),
   ),
