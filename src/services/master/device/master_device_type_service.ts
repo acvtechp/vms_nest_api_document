@@ -32,9 +32,9 @@ const ENDPOINTS = {
   delete: (id: string): string => `${URL}/${id}`,
 
   // Cache APIs
-  cache: (device_model_id?: string): string => `${URL}/cache?device_model_id=${device_model_id || '0'}`,
-  cache_count: (device_model_id?: string): string => `${URL}/cache_count?device_model_id=${device_model_id || '0'}`,
-  cache_child: (device_model_id?: string): string => `${URL}/cache_child?device_model_id=${device_model_id || '0'}`,
+  cache: `${URL}/cache`,
+  cache_count: `${URL}/cache_count`,
+  cache_child: `${URL}/cache_child`,
 };
 
 // MasterDeviceType Interface
@@ -52,13 +52,6 @@ export interface MasterDeviceType extends Record<string, unknown> {
   added_date_time: string;
   modified_date_time: string;
 
-  // Relations - Parent
-  device_manufacturer_id: string;
-  MasterDeviceManufacturer?: MasterDeviceManufacturer;
-
-  device_model_id: string;
-  MasterDeviceModel?: MasterDeviceModel;
-
   // Relations - Child
   // Child - Master
   MasterVehicle?: MasterVehicle[];
@@ -71,10 +64,6 @@ export interface MasterDeviceType extends Record<string, unknown> {
 
 // MasterDeviceType Create/Update Schema
 export const MasterDeviceTypeSchema = z.object({
-  // Relations - Parent
-  device_manufacturer_id: single_select_mandatory('MasterDeviceManufacturer'), // Single-Selection -> MasterDeviceManufacturer
-  device_model_id: single_select_mandatory('MasterDeviceModel'), // Single-Selection -> MasterDeviceModel
-
   // Main Field Details
   device_type_name: stringMandatory('Device Type Name', 3, 100),
   device_type_code: stringOptional('Device Type Code', 0, 100),
@@ -89,25 +78,13 @@ export type MasterDeviceTypeDTO = z.infer<typeof MasterDeviceTypeSchema>;
 export const MasterDeviceTypeQuerySchema = BaseQuerySchema.extend({
   // Self Table
   device_type_ids: multi_select_optional('MasterDeviceType'), // Multi-Selection -> MasterDeviceType
-
-  // Relations - Parent
-  device_manufacturer_ids: multi_select_optional('MasterDeviceManufacturer'), // Multi-Selection -> MasterDeviceManufacturer
-  device_model_ids: multi_select_optional('MasterDeviceModel'), // Multi-Selection -> MasterDeviceModel
 });
 export type MasterDeviceTypeQueryDTO = z.infer<
   typeof MasterDeviceTypeQuerySchema
 >;
 
-export const FindCacheSchema = z.object({
-  device_model_id: stringUUIDMandatory('device_model_id'),
-});
-export type FindCacheDTO = z.infer<typeof FindCacheSchema>;
-
 // Convert MasterDeviceType Data to API Payload
 export const toMasterDeviceTypePayload = (row: MasterDeviceType): MasterDeviceTypeDTO => ({
-  device_manufacturer_id: row.device_manufacturer_id || '',
-  device_model_id: row.device_model_id || '',
-
   device_type_name: row.device_type_name || '',
   device_type_code: row.device_type_code || '',
   description: row.description || '',
@@ -117,9 +94,6 @@ export const toMasterDeviceTypePayload = (row: MasterDeviceType): MasterDeviceTy
 
 // Create New MasterDeviceType Payload
 export const newMasterDeviceTypePayload = (): MasterDeviceTypeDTO => ({
-  device_manufacturer_id: '',
-  device_model_id: '',
-
   device_type_name: '',
   device_type_code: '',
   description: '',
@@ -145,15 +119,15 @@ export const deleteMasterDeviceType = async (id: string): Promise<SBR> => {
 };
 
 // Cache APIs
-export const getMasterDeviceTypeCache = async (device_model_id?: string): Promise<FBR<MasterDeviceType[]>> => {
-  return apiGet<FBR<MasterDeviceType[]>>(ENDPOINTS.cache(device_model_id));
+export const getMasterDeviceTypeCache = async (): Promise<FBR<MasterDeviceType[]>> => {
+  return apiGet<FBR<MasterDeviceType[]>>(ENDPOINTS.cache);
 };
 
-export const getMasterDeviceTypeCacheCount = async (device_model_id?: string): Promise<FBR<MasterDeviceType[]>> => {
-  return apiGet<FBR<MasterDeviceType[]>>(ENDPOINTS.cache_count(device_model_id));
+export const getMasterDeviceTypeCacheCount = async (): Promise<FBR<MasterDeviceType[]>> => {
+  return apiGet<FBR<MasterDeviceType[]>>(ENDPOINTS.cache_count);
 };
 
-export const getMasterDeviceTypeCacheChild = async (device_model_id?: string): Promise<FBR<MasterDeviceType[]>> => {
-  return apiGet<FBR<MasterDeviceType[]>>(ENDPOINTS.cache_child(device_model_id));
+export const getMasterDeviceTypeCacheChild = async (): Promise<FBR<MasterDeviceType[]>> => {
+  return apiGet<FBR<MasterDeviceType[]>>(ENDPOINTS.cache_child);
 };
 
