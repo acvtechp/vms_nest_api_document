@@ -108,7 +108,7 @@ export const GPSLockDigitalDoorLogQuerySchema = BaseQuerySchema.extend({
   // Relations - Parent
   organisation_ids: multi_select_mandatory('UserOrganisation'), // Multi-Selection -> UserOrganisation
   user_ids: multi_select_optional('User'), // Multi-Selection -> User
-  vehicle_ids: multi_select_mandatory('MasterVehicle'), // Multi-Selection -> MasterVehicle
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-Selection -> MasterVehicle
   driver_ids: multi_select_optional('MasterDriver'), // Multi-Selection -> MasterDriver
 
   // Main Field Details
