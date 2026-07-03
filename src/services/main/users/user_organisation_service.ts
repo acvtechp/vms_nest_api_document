@@ -660,6 +660,7 @@ export interface UserOrganisationSimple extends Record<string, unknown> {
   l_id: string;
   df_id: string;
   tz_id: string;
+  tz_name: string;
 
   bus_college: string
 }
