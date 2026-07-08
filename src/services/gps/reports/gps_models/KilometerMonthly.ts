@@ -35,6 +35,8 @@ export interface KilometerMonthly extends Record<string, unknown> {
   year_month: string; // 2024-06-
   total_km: string;
 
+  slot: string;
+
   org_id: string;
   db_i: string;
   db_g: string;
