@@ -2,6 +2,7 @@ export interface GpsAnalytics extends Record<string, unknown> {
   org_id: string;
   db_i: string;
   db_g: string;
+  slot: string;
 
   v_id: string;
   vn: string;
