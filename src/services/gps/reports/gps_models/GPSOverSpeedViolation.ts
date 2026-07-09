@@ -19,6 +19,8 @@ export interface GPSOverSpeedViolation extends Record<string, unknown> {
   date_f: string;
   day: string;
   org_id: string;
+  db_i: string;
+  db_g: string;
   vn_f: string;
   vt: string;
   dr_f?: string;
