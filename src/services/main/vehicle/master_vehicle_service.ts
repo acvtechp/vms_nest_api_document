@@ -1095,6 +1095,8 @@ export type CalibrationFileDTO = z.infer<typeof CalibrationFileSchema>;
 export const VehicleSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+  country_id: single_select_optional('MasterMainCountry'), // Single-Selection -> MasterMainCountry
+  time_zone_id: single_select_optional('MasterMainTimeZone'), // Single-Selection -> MasterMainTimeZone
 
   user_id: single_select_optional('User'), // Single-Selection -> User
 
@@ -1593,6 +1595,8 @@ export type MasterVehicleSimChangeQueryDTO = z.infer<
 // Convert Vehicle Data to API Payload
 export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
   organisation_id: row.organisation_id || '',
+  country_id: row.country_id || '',
+  time_zone_id: row.time_zone_id || '',
   user_id: row.user_id || '',
 
   vehicle_number: row.vehicle_number || '',
@@ -1666,6 +1670,8 @@ export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
 // Create New Vehicle Payload
 export const newVehiclePayload = (): VehicleDTO => ({
   organisation_id: '',
+  country_id: '',
+  time_zone_id: '',
   user_id: '',
 
   vehicle_number: '',
