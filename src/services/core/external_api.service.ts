@@ -4,11 +4,26 @@ import { FBR, SBR } from 'src/core/BaseResponse';
 
 // Zod
 import { z } from 'zod';
-import { stringMandatory, stringOptional, enumOptional, numberMandatory, stringArrayMandatory, enumMandatory, multi_select_optional, enumArrayOptional, dateMandatory, getAllEnums } from 'src/zod_utils/zod_utils';
+import {
+    stringMandatory,
+    stringOptional,
+    enumOptional,
+    numberMandatory,
+    stringArrayMandatory,
+    enumMandatory,
+    multi_select_optional,
+    enumArrayOptional,
+    dateMandatory,
+    getAllEnums,
+} from 'src/zod_utils/zod_utils';
 import { BaseQuerySchema } from 'src/zod_utils/zod_base_schema';
 
 // Enums
 import { YesNo, Status, APIAuthType } from 'src/core/Enums';
+
+// Other Models
+import { UserOrganisation } from '../main/users/user_organisation_service';
+import { MasterVehicle } from '../main/vehicle/master_vehicle_service';
 
 const URL = 'external_api';
 
@@ -37,11 +52,13 @@ export interface ApiDataShareManagement extends Record<string, unknown> {
     // Main Field Details
     api_name: string;
     vendor_name: string;
-    purpose?: string;
     description?: string;
 
     // Control
     is_enabled: YesNo;
+
+    // Vehicles
+    all_vehicles: YesNo;
 
     // Authentication
     auth_type: APIAuthType;
@@ -62,10 +79,55 @@ export interface ApiDataShareManagement extends Record<string, unknown> {
 
     // Relations - Child
     ApiDataShareHitLog?: ApiDataShareHitLog[];
+    ApiDataShareManagementUserOrganisationLink?: ApiDataShareManagementUserOrganisationLink[];
+    ApiDataShareManagementVehicleLink?: ApiDataShareManagementVehicleLink[];
 
     _count?: {
         ApiDataShareHitLog?: number;
+        ApiDataShareManagementUserOrganisationLink?: number;
+        ApiDataShareManagementVehicleLink?: number;
     };
+}
+
+// ApiDataShareManagementUserOrganisationLink Interface
+export interface ApiDataShareManagementUserOrganisationLink extends Record<string, unknown> {
+    // Primary Field
+    api_data_share_user_organisation_link_id: string;
+
+    // Metadata
+    status: Status;
+    added_date_time: string;
+    modified_date_time: string;
+
+    // Relations - Parent
+    api_data_share_id: string;
+    ApiDataShareManagement?: ApiDataShareManagement;
+
+    organisation_id: string;
+    UserOrganisation?: UserOrganisation;
+    organisation_name?: string;
+    organisation_code?: string;
+    organisation_logo_url?: string;
+}
+
+// ApiDataShareManagementVehicleLink Interface
+export interface ApiDataShareManagementVehicleLink extends Record<string, unknown> {
+    // Primary Field
+    api_data_share_vehicle_link_id: string;
+
+    // Metadata
+    status: Status;
+    added_date_time: string;
+    modified_date_time: string;
+
+    // Relations - Parent
+    api_data_share_id: string;
+    ApiDataShareManagement?: ApiDataShareManagement;
+
+    vehicle_id: string;
+    MasterVehicle?: MasterVehicle;
+    vehicle_number?: string;
+    vehicle_type?: string;
 }
 
 // ApiDataShareHitLog Interface
@@ -111,11 +173,15 @@ export const ApiDataShareManagementSchema = z.object({
     // Main Field Details
     api_name: stringMandatory('API Name', 3, 100),
     vendor_name: stringMandatory('Vendor Name', 3, 100),
-    purpose: stringOptional('Purpose', 0, 200),
     description: stringOptional('Description', 0, 500),
 
     // Control
     is_enabled: enumOptional('Is Enabled', YesNo, YesNo.Yes),
+
+    // Vehicles
+    all_vehicles: enumMandatory('All Vehicles', YesNo, YesNo.No),
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi selection -> UserOrganisation
+    vehicle_ids: multi_select_optional('MasterVehicle'), // Multi selection -> MasterVehicle
 
     // Authentication
     auth_type: enumOptional('Auth Type', APIAuthType, APIAuthType.API_KEY),
@@ -182,10 +248,14 @@ export type ExternalApiReportDTO = z.infer<typeof ExternalApiReportSchema>;
 export const toApiDataShareManagementPayload = (row: ApiDataShareManagement): ApiDataShareManagementDTO => ({
     api_name: row.api_name || '',
     vendor_name: row.vendor_name || '',
-    purpose: row.purpose || '',
     description: row.description || '',
 
     is_enabled: row.is_enabled || YesNo.Yes,
+
+    all_vehicles: row.all_vehicles || YesNo.No,
+    organisation_ids: row.ApiDataShareManagementUserOrganisationLink?.map((link) => link.organisation_id) || [],
+    vehicle_ids: row.ApiDataShareManagementVehicleLink?.map((link) => link.vehicle_id) || [],
+
     auth_type: row.auth_type || APIAuthType.API_KEY,
 
     api_key: row.api_key || '',
@@ -202,10 +272,14 @@ export const toApiDataShareManagementPayload = (row: ApiDataShareManagement): Ap
 export const newApiDataShareManagementPayload = (): ApiDataShareManagementDTO => ({
     api_name: '',
     vendor_name: '',
-    purpose: '',
     description: '',
 
     is_enabled: YesNo.Yes,
+
+    all_vehicles: YesNo.No,
+    organisation_ids: [],
+    vehicle_ids: [],
+
     auth_type: APIAuthType.API_KEY,
 
     api_key: '',

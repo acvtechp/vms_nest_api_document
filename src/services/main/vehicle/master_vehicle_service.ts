@@ -169,6 +169,7 @@ const ENDPOINTS = {
   find_cache_parent: (organisation_id: string): string => `${URL}/cache_parent/${organisation_id}`,
   find_cache_dropdown: (organisation_id: string): string => `${URL}/cache_dropdown/${organisation_id}`,
   find_cache_dropdown_live_data: (organisation_id: string): string => `${URL}/cache_dropdown_live_data/${organisation_id}`,
+  find_cache_vehicles_data_multiple_organisations: `${URL}/cache_vehicles_data_multiple_organisations/search`,
 };
 
 // MasterVehicle Interface
@@ -482,6 +483,15 @@ export interface MasterVehicleDropdown extends Record<string, unknown> {
   longitude: number;
 
   organisation_branch_id: string
+}
+
+export interface MasterVehicleMultiOrgDropdown extends Record<string, unknown> {
+  v_id: string;
+  vn: string;
+  vnn: string;
+  vt: string;
+  organisation_id: string;
+  organisation_name: string;
 }
 
 // MasterVehicleFile Interface
@@ -1591,6 +1601,15 @@ export type MasterVehicleSimChangeQueryDTO = z.infer<
   typeof MasterVehicleSimChangeQuerySchema
 >;
 
+// VehicleCaheMultiOrganisation Query Schema
+export const VehicleCaheMultiOrganisationQuerySchema = BaseQuerySchema.extend({
+  // Relations - Parent
+  organisation_ids: multi_select_optional('UserOrganisation'), // Multi selection -> UserOrganisation
+});
+export type VehicleCaheMultiOrganisationQueryDTO = z.infer<
+  typeof VehicleCaheMultiOrganisationQuerySchema
+>;
+
 
 // Convert Vehicle Data to API Payload
 export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
@@ -2068,3 +2087,6 @@ export const getVehicleSimpleDropdownCacheLiveData = async (organisationId: stri
   return apiGet<FBR<MasterVehicleDropdown[]>>(ENDPOINTS.find_cache_dropdown_live_data(organisationId));
 };
 
+export const getVehicleSimpleDropdownMultipleOrganiations = async (payload: VehicleCaheMultiOrganisationQueryDTO,): Promise<FBR<MasterVehicleMultiOrgDropdown[]>> => {
+  return apiPost<FBR<MasterVehicleMultiOrgDropdown[]>, VehicleCaheMultiOrganisationQueryDTO>(ENDPOINTS.find_cache_vehicles_data_multiple_organisations, payload,);
+};
