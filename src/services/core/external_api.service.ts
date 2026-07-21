@@ -63,9 +63,9 @@ export interface ApiDataShareManagement extends Record<string, unknown> {
     // Authentication
     auth_type: APIAuthType;
 
-    api_key?: string;
-    username?: string;
-    password?: string;
+    api_keys: string[];
+    usernames: string[];
+    passwords: string[];
 
     // Rate limit
     rate_limit_rpm: number;
@@ -170,36 +170,35 @@ export interface ExternalApiReport extends Record<string, unknown> {
 
 // ApiDataShareManagement Create/Update Schema
 export const ApiDataShareManagementSchema = z.object({
-    // Main Field Details
-    api_name: stringMandatory('API Name', 3, 100),
-    vendor_name: stringMandatory('Vendor Name', 3, 100),
-    description: stringOptional('Description', 0, 500),
+  // Main Field Details
+  api_name: stringMandatory('API Name', 3, 100),
+  vendor_name: stringMandatory('Vendor Name', 3, 100),
+  description: stringOptional('Description', 0, 500),
 
-    // Control
-    is_enabled: enumOptional('Is Enabled', YesNo, YesNo.Yes),
+  // Control
+  is_enabled: enumOptional('Is Enabled', YesNo, YesNo.Yes),
 
-    // Vehicles
-    all_vehicles: enumMandatory('All Vehicles', YesNo, YesNo.No),
-    organisation_ids: multi_select_optional('UserOrganisation'), // Multi selection -> UserOrganisation
-    vehicle_ids: multi_select_optional('MasterVehicle'), // Multi selection -> MasterVehicle
+  // Vehicles
+  all_vehicles: enumMandatory('All Vehicles', YesNo, YesNo.No),
+  organisation_ids: multi_select_optional('UserOrganisation'), // Multi selection -> UserOrganisation
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi selection -> MasterVehicle
 
-    // Authentication
-    auth_type: enumOptional('Auth Type', APIAuthType, APIAuthType.API_KEY),
+  // Authentication
+  auth_type: enumOptional('Auth Type', APIAuthType, APIAuthType.API_KEY),
 
-    api_key: stringOptional('API Key', 0, 100),
+  api_keys: stringArrayMandatory('API Keys', 0, 100),
+  usernames: stringArrayMandatory('Usernames', 0, 100),
+  passwords: stringArrayMandatory('Passwords', 0, 100),
 
-    username: stringOptional('Username', 0, 100),
-    password: stringOptional('Password', 0, 100),
+  // Rate limit
+  rate_limit_rpm: numberMandatory('Rate Limit rpm'),
+  allowed_ips: stringArrayMandatory('Allowed IPs', 0, 100),
 
-    // Rate limit
-    rate_limit_rpm: numberMandatory('Rate Limit rpm'),
-    allowed_ips: stringArrayMandatory('Allowed IPs', 0, 100),
-
-    // Metadata
-    status: enumMandatory('Status', Status, Status.Active),
+  // Metadata
+  status: enumMandatory('Status', Status, Status.Active),
 });
 export type ApiDataShareManagementDTO = z.infer<
-    typeof ApiDataShareManagementSchema
+  typeof ApiDataShareManagementSchema
 >;
 
 // ApiDataShareManagement Query Schema
@@ -258,9 +257,9 @@ export const toApiDataShareManagementPayload = (row: ApiDataShareManagement): Ap
 
     auth_type: row.auth_type || APIAuthType.API_KEY,
 
-    api_key: row.api_key || '',
-    username: row.username || '',
-    password: row.password || '',
+    api_keys: row.api_keys || [],
+    usernames: row.usernames || [],
+    passwords: row.passwords || [],
 
     rate_limit_rpm: row.rate_limit_rpm || 0,
     allowed_ips: row.allowed_ips || [],
@@ -282,9 +281,9 @@ export const newApiDataShareManagementPayload = (): ApiDataShareManagementDTO =>
 
     auth_type: APIAuthType.API_KEY,
 
-    api_key: '',
-    username: '',
-    password: '',
+    api_keys: [],
+    usernames: [],
+    passwords: [],
 
     rate_limit_rpm: 10,
     allowed_ips: [],
