@@ -11,13 +11,14 @@ import {
     booleanOptional,
     enumMandatory,
     multi_select_optional,
+    enumOptional,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
 // Enums
-import { Status } from '../../../core/Enums';
+import { Status, YesNo } from '../../../core/Enums';
 
-const URL = 'traccar_server';
+const URL = 'main/traccar_server';
 
 const ENDPOINTS = {
     // MasterTraccarServer APIs
@@ -44,7 +45,7 @@ export interface MasterTraccarServer extends Record<string, unknown> {
     db_name?: string;
     db_user?: string;
     db_password?: string;
-    db_ssl_enabled?: boolean;
+    db_ssl_enabled?: YesNo;
     db_connection_string?: string;
     datacheck_api?: string;
 
@@ -61,26 +62,26 @@ export interface MasterTraccarServer extends Record<string, unknown> {
 
 // MasterTraccarServer Create/Update Schema
 export const MasterTraccarServerSchema = z.object({
-    // Main Field Details
-    server_code: stringMandatory('Server Code', 3, 100),
+  // Main Field Details
+  server_code: stringMandatory('Server Code', 3, 100),
 
-    // Postgres connection
-    db_host: stringOptional('DB Host', 0, 100),
-    db_port: numberOptional('DB Port', 0, 100000, 5432),
-    db_name: stringOptional('DB Name', 0, 100),
-    db_user: stringOptional('DB User', 0, 100),
-    db_password: stringOptional('DB Password', 0, 100),
-    db_ssl_enabled: booleanOptional('DB SSL Enabled', false),
-    db_connection_string: stringOptional('DB Connection String', 0, 500),
-    datacheck_api: stringOptional('Data Check API', 0, 500),
+  // Postgres connection
+  db_host: stringOptional('DB Host', 0, 100),
+  db_port: numberOptional('DB Port', 0, 100000, 5432),
+  db_name: stringOptional('DB Name', 0, 100),
+  db_user: stringOptional('DB User', 0, 100),
+  db_password: stringOptional('DB Password', 0, 100),
+  db_ssl_enabled: enumOptional('DB SSL Enabled', YesNo, YesNo.No),
+  db_connection_string: stringOptional('DB Connection String', 0, 500),
+  datacheck_api: stringOptional('Data Check API', 0, 500),
 
-    // Traccar REST API
-    api_base_url: stringOptional('API Base URL', 0, 100),
-    api_admin_email: stringOptional('API Admin Email', 0, 100),
-    api_admin_password: stringOptional('API Admin Password', 0, 100),
+  // Traccar REST API
+  api_base_url: stringOptional('API Base URL', 0, 100),
+  api_admin_email: stringOptional('API Admin Email', 0, 100),
+  api_admin_password: stringOptional('API Admin Password', 0, 100),
 
-    // Metadata
-    status: enumMandatory('Status', Status, Status.Active),
+  // Metadata
+  status: enumMandatory('Status', Status, Status.Active),
 });
 export type MasterTraccarServerDTO = z.infer<typeof MasterTraccarServerSchema>;
 
@@ -102,7 +103,7 @@ export const toMasterTraccarServerPayload = (row: MasterTraccarServer): MasterTr
     db_name: row.db_name || '',
     db_user: row.db_user || '',
     db_password: row.db_password || '',
-    db_ssl_enabled: row.db_ssl_enabled || false,
+    db_ssl_enabled: row.db_ssl_enabled || YesNo.No,
     db_connection_string: row.db_connection_string || '',
     datacheck_api: row.datacheck_api || '',
 
@@ -122,7 +123,7 @@ export const newMasterTraccarServerPayload = (): MasterTraccarServerDTO => ({
     db_name: '',
     db_user: '',
     db_password: '',
-    db_ssl_enabled: false,
+    db_ssl_enabled: YesNo.No,
     db_connection_string: '',
     datacheck_api: '',
 

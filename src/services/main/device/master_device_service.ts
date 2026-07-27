@@ -10,7 +10,7 @@ import {
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
-const URL = 'master_device';
+const URL = 'main/master_device';
 
 const ENDPOINTS = {
     // MasterDevice APIs

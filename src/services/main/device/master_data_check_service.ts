@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { stringMandatory } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
-const URL = 'data_check';
+const URL = 'main/data_check';
 
 const ENDPOINTS = {
     check: `${URL}/search`,
