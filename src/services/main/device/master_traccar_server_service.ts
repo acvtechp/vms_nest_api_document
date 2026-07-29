@@ -8,7 +8,6 @@ import {
     stringMandatory,
     stringOptional,
     numberOptional,
-    booleanOptional,
     enumMandatory,
     multi_select_optional,
     enumOptional,

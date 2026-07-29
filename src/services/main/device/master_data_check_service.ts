@@ -45,12 +45,46 @@ export interface DataCheckApiRow extends Record<string, unknown> {
     gps_data_json: unknown;
 }
 
-// DataCheck Result Interface
-export interface DataCheckResult extends Record<string, unknown> {
+// DataCheck Vehicle Info Interface
+// Present when the searched value (IMEI / device unique id) resolves to a
+// known vehicle/device record (vehicle_found = true).
+export interface DataCheckVehicleInfo extends Record<string, unknown> {
+    organisation_id: string;
+    organisation_name: string;
+    organisation_code: string;
+    organisation_logo_url: string;
+    vehicle_id: string;
+    vehicle_number: string;
+    vehicle_name: string;
+    vehicle_type: string;
+    gps_device_identifier: string;
+    assign_device_date: string | null;
+    assign_device_date_f: string | null;
+    device_manufacturer_name: string | null;
+    device_manufacturer_code: string | null;
+    device_model_name: string | null;
+    device_model_code: string | null;
+    device_type_name: string | null;
+    device_type_code: string | null;
+}
+
+// DataCheck API Response Interface
+// This is the nested object actually returned under `data.api_response` -
+// it holds the three raw-data arrays, keyed by source.
+export interface DataCheckApiResponse extends Record<string, unknown> {
     search: string;
     data_traccar_array: DataCheckTraccarRow[];
     data_protocol_array: DataCheckProtocolRow[];
     data_api_array: DataCheckApiRow[];
+}
+
+// DataCheck Result Interface
+export interface DataCheckResult extends Record<string, unknown> {
+    search: string;
+    api_search: string;
+    api_response: DataCheckApiResponse;
+    vehicle_found: boolean;
+    vehicle_info: DataCheckVehicleInfo | null;
 }
 
 // MasterDataCheck Query Schema
