@@ -4,7 +4,7 @@ import { BR } from '../../../core/BaseResponse';
 
 // Zod
 import { z } from 'zod';
-import { stringMandatory } from '../../../zod_utils/zod_utils';
+import { single_select_mandatory, stringMandatory } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
 const URL = 'main/data_check';
@@ -53,18 +53,19 @@ export interface DataCheckResult extends Record<string, unknown> {
     data_api_array: DataCheckApiRow[];
 }
 
-export const DataCheckQuerySchema = BaseQuerySchema.extend({
-    search: stringMandatory('Search', 1, 100),
-});
-export type DataCheckQueryDTO = z.infer<typeof DataCheckQuerySchema>;
+// MasterDataCheck Query Schema
+export const MasterDataCheckQuerySchema = BaseQuerySchema.extend({
+  // Relations - Parent
+  master_traccar_server_id: single_select_mandatory('MasterTraccarServer'), // Single-Selection -> MasterTraccarServer
 
-// Create New DataCheck Query Payload
-export const newDataCheckQueryPayload = (): DataCheckQueryDTO => ({
-    ...BaseQuerySchema.parse({}),
-    search: '',
+  // Search value - vehicle number or IMEI
+  search: stringMandatory('Search', 1, 100),
 });
+export type MasterDataCheckQueryDTO = z.infer<
+  typeof MasterDataCheckQuerySchema
+>;
 
 // DataCheck APIs
-export const checkDataCheck = async (data: DataCheckQueryDTO,): Promise<BR<DataCheckResult>> => {
-    return apiPost<BR<DataCheckResult>, DataCheckQueryDTO>(ENDPOINTS.check, data);
+export const checkDataCheck = async (data: MasterDataCheckQueryDTO,): Promise<BR<DataCheckResult>> => {
+    return apiPost<BR<DataCheckResult>, MasterDataCheckQueryDTO>(ENDPOINTS.check, data);
 };
