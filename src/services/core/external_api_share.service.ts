@@ -238,10 +238,12 @@ export type ApiDataShareHitLogQueryDTO = z.infer<
 >;
 
 // External API Report Schema
-export const ExternalApiReportSchema = z.object({
-    date: dateMandatory('Date'),
+export const ExternalApiShareReportSchema = z.object({
+  date: dateMandatory('Date'),
 });
-export type ExternalApiReportDTO = z.infer<typeof ExternalApiReportSchema>;
+export type ExternalApiShareReportDTO = z.infer<
+  typeof ExternalApiShareReportSchema
+>;
 
 // Convert ApiDataShareManagement Data to API Payload
 export const toApiDataShareManagementPayload = (row: ApiDataShareManagement): ApiDataShareManagementDTO => ({
@@ -315,12 +317,12 @@ export const findApiDataShareHitLog = async (data: ApiDataShareHitLogQueryDTO): 
 };
 
 // Reports
-export const getExternalApiDailyReport = async (data: ExternalApiReportDTO): Promise<FBR<ExternalApiReport[]>> => {
-    return apiPost<FBR<ExternalApiReport[]>, ExternalApiReportDTO>(ENDPOINTS.daily_report, data);
+export const getExternalApiDailyReport = async (data: ExternalApiShareReportDTO): Promise<FBR<ExternalApiReport[]>> => {
+    return apiPost<FBR<ExternalApiReport[]>, ExternalApiShareReportDTO>(ENDPOINTS.daily_report, data);
 };
 
-export const getExternalApiMonthlyReport = async (data: ExternalApiReportDTO): Promise<FBR<ExternalApiReport[]>> => {
-    return apiPost<FBR<ExternalApiReport[]>, ExternalApiReportDTO>(ENDPOINTS.monthly_report, data);
+export const getExternalApiMonthlyReport = async (data: ExternalApiShareReportDTO): Promise<FBR<ExternalApiReport[]>> => {
+    return apiPost<FBR<ExternalApiReport[]>, ExternalApiShareReportDTO>(ENDPOINTS.monthly_report, data);
 };
 
 // Cache APIs
