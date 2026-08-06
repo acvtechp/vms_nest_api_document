@@ -141,6 +141,9 @@ const ENDPOINTS = {
   update: (id: string): string => `${URL}/${id}`,
   delete: (id: string): string => `${URL}/${id}`,
 
+  update_show_filter: (id: string): string => `${URL}/update_show_filter/${id}`,
+  get_next_organisation_utrack_id: (): string => `${URL}/get_next_organisation_utrack_id`,
+
   // Cache APIs
   cache: (): string => `${URL}/cache`,
   cache_simple: (): string => `${URL}/cache_simple`,
@@ -665,6 +668,15 @@ export interface UserOrganisationSimple extends Record<string, unknown> {
   bus_college: string
 }
 
+// Next Organisation UTrack ID Interface
+export interface NextOrganisationUTrackId extends Record<string, unknown> {
+  prefix: string;
+  latest_number: number;
+  next_number: number;
+  latest_organisation_utrack_id: string;
+  next_organisation_utrack_id: string;
+}
+
 // UserOrganisation Create/Update Schema
 export const UserOrganisationSchema = z.object({
   // Relations - Parent
@@ -963,6 +975,14 @@ export const updateUserOrganisation = async (id: string, data: UserOrganisationD
 
 export const deleteUserOrganisation = async (id: string): Promise<SBR> => {
   return apiDelete<SBR>(ENDPOINTS.delete(id));
+};
+
+export const updateUserOrganisationShowFilter = async (id: string, data: UserOrganisationShowFilterDTO): Promise<SBR> => {
+  return apiPatch<SBR, UserOrganisationShowFilterDTO>(ENDPOINTS.update_show_filter(id), data);
+};
+
+export const getNextOrganisationUTrackId = async (): Promise<BR<NextOrganisationUTrackId>> => {
+  return apiGet<BR<NextOrganisationUTrackId>>(ENDPOINTS.get_next_organisation_utrack_id());
 };
 
 // Cache APIs
