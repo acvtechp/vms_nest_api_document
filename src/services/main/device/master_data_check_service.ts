@@ -22,6 +22,8 @@ export interface DataCheckTraccarRow extends Record<string, unknown> {
     fix_time: string | null;
     server_time: string | null;
     nearest_location_f: string | null;
+    t1: string | null;
+    t2: string | null;
     payload: unknown;
 }
 
