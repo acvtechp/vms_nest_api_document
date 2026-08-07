@@ -66,6 +66,9 @@ export interface DataCheckVehicleInfo extends Record<string, unknown> {
     device_model_code: string | null;
     device_type_name: string | null;
     device_type_code: string | null;
+    gps_sim_mobile_number: string | null;
+    gps_sim_serial_number: string | null;
+    provider_name: string | null;
 }
 
 // DataCheck API Response Interface
@@ -89,14 +92,14 @@ export interface DataCheckResult extends Record<string, unknown> {
 
 // MasterDataCheck Query Schema
 export const MasterDataCheckQuerySchema = BaseQuerySchema.extend({
-  // Relations - Parent
-  master_traccar_server_id: single_select_mandatory('MasterTraccarServer'), // Single-Selection -> MasterTraccarServer
+    // Relations - Parent
+    master_traccar_server_id: single_select_mandatory('MasterTraccarServer'), // Single-Selection -> MasterTraccarServer
 
-  // Search value - vehicle number or IMEI
-  search: stringMandatory('Search', 1, 100),
+    // Search value - vehicle number or IMEI
+    search: stringMandatory('Search', 1, 100),
 });
 export type MasterDataCheckQueryDTO = z.infer<
-  typeof MasterDataCheckQuerySchema
+    typeof MasterDataCheckQuerySchema
 >;
 
 // DataCheck APIs
