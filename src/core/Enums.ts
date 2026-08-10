@@ -46,6 +46,11 @@ export enum Status {
   Inactive = 'Inactive',
 }
 
+export enum APISyncRunType {
+  Scheduled = 'Scheduled',
+  Manual = 'Manual',
+}
+
 export enum InvoiceStatus {
   InvoiceGenerated = 'InvoiceGenerated',
   InvoiceDue = 'InvoiceDue',
