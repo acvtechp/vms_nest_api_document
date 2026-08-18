@@ -18,7 +18,8 @@ import { Status } from '../../core/Enums';
 // Other Models
 import { UserOrganisation } from '../main/users/user_organisation_service';
 import { User } from '../main/users/user_service';
-import { MasterMainFasttagBank } from '../master/main/master_main_fasttag_bank_service';
+import { MasterMainFASTagBank } from '../master/main/master_main_fasttag_bank_service';
+import { FASTagTransaction } from './fasttag_transactions';
 
 // URL and Endpoints
 const URL = 'account/fasttag_details';
@@ -34,10 +35,12 @@ const ENDPOINTS = {
 export interface FASTagDetails extends Record<string, unknown> {
   // Primary Fields
   fasttag_details_id: string;
-  api_client_id: string;
-  api_key: string; 
-  api_secret: string; 
-  description: string;
+
+  // Main Field Details
+  customer_id: string;
+  client_id: string; 
+  client_secret: string; 
+  api_key: string;
 
   // Metadata
   status: Status;
@@ -46,7 +49,7 @@ export interface FASTagDetails extends Record<string, unknown> {
 
   // Relations - Parent
   fasttag_bank_id: string;
-  MasterMainFASTagBank?: MasterMainFasttagBank;
+  MasterMainFASTagBank?: MasterMainFASTagBank;
   bank_name?: string;
   bank_code?: string;
 
@@ -60,6 +63,14 @@ export interface FASTagDetails extends Record<string, unknown> {
   User?: User;
   user_details?: string;
   user_image_url?: string;
+
+    // Relations - Child
+  FASTagTransaction?: FASTagTransaction[];
+
+  // Relations - Child Count
+  _count?: {
+    FASTagTransaction?: number;
+  };
 }
 
 // FASTagDetails Create/Update Schema
@@ -70,10 +81,10 @@ export const FASTagDetailsSchema = z.object({
   fasttag_bank_id: single_select_mandatory('MasterMainFASTagBank'), // Single-Selection -> MasterMainFASTagBank
 
   // Main Field Details
-  api_client_id: stringOptional('API Client ID', 0, 100),
-  api_key: stringOptional('API Key', 0, 100),
-  api_secret: stringOptional('API Secret', 0, 100),
-  description: stringOptional('Description', 0, 500),
+  customer_id: stringOptional('Customer ID', 0, 100),
+  client_id: stringOptional('Client ID', 0, 100),
+  client_secret: stringOptional('Client Secret', 0, 100),
+  api_key: stringOptional('Api Key', 0, 500),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -98,10 +109,10 @@ export const toFASTagDetailsPayload = (row: FASTagDetails): FASTagDetailsDTO => 
   user_id: row.user_id,
   fasttag_bank_id: row.fasttag_bank_id,
 
-  api_client_id: row.api_client_id ?? '',
+  customer_id: row.customer_id ?? '',
+  client_id: row.client_id ?? '',
+  client_secret: row.client_secret ?? '',
   api_key: row.api_key ?? '',
-  api_secret: row.api_secret ?? '',
-  description: row.description ?? '',
 
   status: row.status || Status.Active,
 });
@@ -112,10 +123,10 @@ export const newFASTagDetailsPayload = (): FASTagDetailsDTO => ({
   user_id: '',
   fasttag_bank_id: '',
 
-  api_client_id: '',
+  customer_id: '',
+  client_id: '',
+  client_secret: '',
   api_key: '',
-  api_secret: '',
-  description: '',
 
   status: Status.Active
 });

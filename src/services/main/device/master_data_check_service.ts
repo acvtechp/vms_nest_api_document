@@ -72,6 +72,34 @@ export interface DataCheckVehicleInfo extends Record<string, unknown> {
     gps_sim_mobile_number: string | null;
     gps_sim_serial_number: string | null;
     provider_name: string | null;
+
+    vehicle_detail_gps: DataCheckVehicleDetailGPS | null;
+}
+
+export interface DataCheckVehicleDetailGPS extends Record<string, unknown> {
+    st: string;
+    dt: string;
+    ft: string;
+
+    sts: number;
+    dts: number;
+    fts: number;
+
+    la: number;
+    lo: number;
+    al: number;
+
+    s: number;
+    c: number;
+
+    i: boolean;
+    m: boolean;
+    os: boolean;
+    p: boolean;
+    v: boolean;
+
+    b: number;
+    b_r: string;
 }
 
 // DataCheck API Response Interface

@@ -30,7 +30,7 @@ import { MasterMainLanguage } from '../main/master_main_language_service';
 import { MasterMainUnitDistance } from '../main/master_main_unit_distance_service';
 import { MasterMainUnitMileage } from '../main/master_main_unit_mileage_service';
 import { MasterMainUnitVolume } from '../main/master_main_unit_volume_service';
-import { MasterMainFasttagBank } from '../main/master_main_fasttag_bank_service';
+import { MasterMainFASTagBank } from '../main/master_main_fasttag_bank_service';
 import { MasterMainEwayBillProvider } from '../main/master_main_eway_bill_provider_service';
 import { MasterMainSimProvider } from '../main/master_main_sim_provider_service';
 import { MasterFleetIncidentType } from '../fleet/master_fleet_incident_type_service';
@@ -150,7 +150,7 @@ export interface MainAllCache extends Record<string, unknown> {
   MasterMainUnitDistance: MasterMainUnitDistance[];
   MasterMainUnitMileage: MasterMainUnitMileage[];
   MasterMainUnitVolume: MasterMainUnitVolume[];
-  MasterMainFasttagBank: MasterMainFasttagBank[];
+  MasterMainFasttagBank: MasterMainFASTagBank[];
   MasterMainEwayBillProvider: MasterMainEwayBillProvider[];
   MasterMainSimProvider: MasterMainSimProvider[];
 }

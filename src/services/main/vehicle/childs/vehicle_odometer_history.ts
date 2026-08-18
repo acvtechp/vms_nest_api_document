@@ -114,9 +114,7 @@ export type OdometerHistoryQueryDTO = z.infer<
 >;
 
 // Convert existing data to a payload structure
-export const toVehicleOdometerHistoryPayload = (
-  history: VehicleOdometerHistory
-): VehicleOdometerHistoryDTO => ({
+export const toVehicleOdometerHistoryPayload = (history: VehicleOdometerHistory): VehicleOdometerHistoryDTO => ({
   organisation_id: history.organisation_id,
   vehicle_id: history.vehicle_id,
 
@@ -129,51 +127,36 @@ export const toVehicleOdometerHistoryPayload = (
 });
 
 // Generate a new payload with default values
-export const newVehicleOdometerHistoryPayload =
-  (): VehicleOdometerHistoryDTO => ({
-    organisation_id: '',
-    vehicle_id: '',
+export const newVehicleOdometerHistoryPayload = (): VehicleOdometerHistoryDTO => ({
+  organisation_id: '',
+  vehicle_id: '',
 
-    odometer_reading: 0,
-    odometer_date: new Date().toISOString(),
-    odometer_source: OdometerSource.Other,
+  odometer_reading: 0,
+  odometer_date: new Date().toISOString(),
+  odometer_source: OdometerSource.Other,
 
-    status: Status.Active,
-    time_zone_id: ''
-  });
+  status: Status.Active,
+  time_zone_id: ''
+});
 
 // API Methods
-export const findVehicleOdometerHistories = async (
-  data: OdometerHistoryQueryDTO
-): Promise<FBR<VehicleOdometerHistory[]>> => {
-  return apiPost<FBR<VehicleOdometerHistory[]>, OdometerHistoryQueryDTO>(
-    ENDPOINTS.find,
-    data
-  );
+export const findVehicleOdometerHistories = async (data: OdometerHistoryQueryDTO): Promise<FBR<VehicleOdometerHistory[]>> => {
+  return apiPost<FBR<VehicleOdometerHistory[]>, OdometerHistoryQueryDTO>(ENDPOINTS.find, data);
 };
 
-export const createVehicleOdometerHistory = async (
-  data: VehicleOdometerHistoryDTO
-): Promise<SBR> => {
+export const createVehicleOdometerHistory = async (data: VehicleOdometerHistoryDTO): Promise<SBR> => {
   return apiPost<SBR, VehicleOdometerHistoryDTO>(ENDPOINTS.create, data);
 };
 
-export const updateVehicleOdometerHistory = async (
-  id: string,
-  data: VehicleOdometerHistoryDTO
-): Promise<SBR> => {
+export const updateVehicleOdometerHistory = async (id: string, data: VehicleOdometerHistoryDTO): Promise<SBR> => {
   return apiPatch<SBR, VehicleOdometerHistoryDTO>(ENDPOINTS.update(id), data);
 };
 
-export const deleteVehicleOdometerHistory = async (
-  id: string
-): Promise<SBR> => {
+export const deleteVehicleOdometerHistory = async (id: string): Promise<SBR> => {
   return apiDelete<SBR>(ENDPOINTS.delete(id));
 };
 
 // API Cache Method
-export const getVehicleOdometerHistoryCache = async (): Promise<
-  FBR<VehicleOdometerHistory[]>
-> => {
+export const getVehicleOdometerHistoryCache = async (): Promise<FBR<VehicleOdometerHistory[]>> => {
   return apiGet<FBR<VehicleOdometerHistory[]>>(ENDPOINTS.cache);
 };

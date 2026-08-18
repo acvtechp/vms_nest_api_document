@@ -14,11 +14,13 @@ import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
 // Enums
 import { Status } from '../../../core/Enums';
+import { FASTagTransaction } from 'src/services/account/fasttag_transactions';
+import { FASTagDetails } from 'src/services/account/fasttag_details';
 
 const URL = 'master/main/fasttag_bank';
 
 const ENDPOINTS = {
-  // MasterMainFasttagBank APIs
+  // MasterMainFASTagBank APIs
   find: `${URL}/search`,
   create: URL,
   update: (id: string): string => `${URL}/${id}`,
@@ -28,8 +30,8 @@ const ENDPOINTS = {
   cache: `${URL}/cache`,
 };
 
-// MasterMainFasttagBank Interface
-export interface MasterMainFasttagBank extends Record<string, unknown> {
+// MasterMainFASTagBank Interface
+export interface MasterMainFASTagBank extends Record<string, unknown> {
   // Primary Fields
   fasttag_bank_id: string;
 
@@ -43,17 +45,18 @@ export interface MasterMainFasttagBank extends Record<string, unknown> {
   modified_date_time: string;
 
   // Relations - Child
-  // Child - Main
-  // FasttagDetails?: FasttagDetails[];
+  FASTagDetails?: FASTagDetails[];
+  FASTagTransaction?: FASTagTransaction[];
 
   // Relations - Child Count
   _count?: {
-    FasttagDetails?: number;
+    FASTagDetails?: number;
+    FASTagTransaction?: number;
   };
 }
 
-// MasterMainFasttagBank Create/Update Schema
-export const MasterMainFasttagBankSchema = z.object({
+// MasterMainFASTagBank Create/Update Schema
+export const MasterMainFASTagBankSchema = z.object({
   // Main Field Details
   bank_name: stringMandatory('Bank Name', 3, 100),
   bank_code: stringOptional('Bank Code', 0, 10),
@@ -61,21 +64,21 @@ export const MasterMainFasttagBankSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type MasterMainFasttagBankDTO = z.infer<
-  typeof MasterMainFasttagBankSchema
+export type MasterMainFASTagBankDTO = z.infer<
+  typeof MasterMainFASTagBankSchema
 >;
 
-// MasterMainFasttagBank Query Schema
-export const MasterMainFasttagBankQuerySchema = BaseQuerySchema.extend({
+// MasterMainFASTagBank Query Schema
+export const MasterMainFASTagBankQuerySchema = BaseQuerySchema.extend({
   // Self Table
-  fasttag_bank_ids: multi_select_optional('MasterMainFasttagBank'), // Multi-selection -> MasterMainFasttagBank
+  fasttag_bank_ids: multi_select_optional('MasterMainFASTagBank'), // Multi-selection -> MasterMainFASTagBank
 });
-export type MasterMainFasttagBankQueryDTO = z.infer<
-  typeof MasterMainFasttagBankQuerySchema
+export type MasterMainFASTagBankQueryDTO = z.infer<
+  typeof MasterMainFASTagBankQuerySchema
 >;
 
 // Convert MasterMainFasttagBank Data to API Payload
-export const toMasterMainFasttagPayload = (row: MasterMainFasttagBank): MasterMainFasttagBankDTO => ({
+export const toMasterMainFasttagPayload = (row: MasterMainFASTagBank): MasterMainFASTagBankDTO => ({
   bank_name: row.bank_name || '',
   bank_code: row.bank_code || '',
 
@@ -83,24 +86,24 @@ export const toMasterMainFasttagPayload = (row: MasterMainFasttagBank): MasterMa
 });
 
 // Create New MasterMainFasttagBank Payload
-export const newMasterMainFasttagPayload = (): MasterMainFasttagBankDTO => ({
+export const newMasterMainFasttagPayload = (): MasterMainFASTagBankDTO => ({
   bank_name: '',
   bank_code: '',
-  
+
   status: Status.Active,
 });
 
 // MasterMainFasttagBank APIs
-export const findMasterMainFasttagBanks = async (data: MasterMainFasttagBankQueryDTO): Promise<FBR<MasterMainFasttagBank[]>> => {
-  return apiPost<FBR<MasterMainFasttagBank[]>, MasterMainFasttagBankQueryDTO>(ENDPOINTS.find, data);
+export const findMasterMainFasttagBanks = async (data: MasterMainFASTagBankQueryDTO): Promise<FBR<MasterMainFASTagBank[]>> => {
+  return apiPost<FBR<MasterMainFASTagBank[]>, MasterMainFASTagBankQueryDTO>(ENDPOINTS.find, data);
 };
 
-export const createMasterMainFasttagBank = async (data: MasterMainFasttagBankDTO): Promise<SBR> => {
-  return apiPost<SBR, MasterMainFasttagBankDTO>(ENDPOINTS.create, data);
+export const createMasterMainFasttagBank = async (data: MasterMainFASTagBankDTO): Promise<SBR> => {
+  return apiPost<SBR, MasterMainFASTagBankDTO>(ENDPOINTS.create, data);
 };
 
-export const updateMasterMainFasttagBank = async (id: string, data: MasterMainFasttagBankDTO): Promise<SBR> => {
-  return apiPatch<SBR, MasterMainFasttagBankDTO>(ENDPOINTS.update(id), data);
+export const updateMasterMainFasttagBank = async (id: string, data: MasterMainFASTagBankDTO): Promise<SBR> => {
+  return apiPatch<SBR, MasterMainFASTagBankDTO>(ENDPOINTS.update(id), data);
 };
 
 export const deleteMasterMainFasttagBank = async (id: string): Promise<SBR> => {
@@ -108,7 +111,7 @@ export const deleteMasterMainFasttagBank = async (id: string): Promise<SBR> => {
 };
 
 // Cache APIs
-export const getMasterMainFasttagBankCache = async (): Promise<FBR<MasterMainFasttagBank[]>> => {
-  return apiGet<FBR<MasterMainFasttagBank[]>>(ENDPOINTS.cache);
+export const getMasterMainFasttagBankCache = async (): Promise<FBR<MasterMainFASTagBank[]>> => {
+  return apiGet<FBR<MasterMainFASTagBank[]>>(ENDPOINTS.cache);
 };
 
