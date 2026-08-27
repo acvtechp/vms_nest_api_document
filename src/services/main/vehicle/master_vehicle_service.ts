@@ -117,7 +117,7 @@ import {
   OrganisationReportPreferenceVehicleLink,
   OrganisationReportAutomationMailVehicleLink,
 } from '../../../services/account/report_preferences.service';
-import { OrganisationShare } from 'src/services/master/organisation/organisation_share_service';
+import { OrganisationFleet } from 'src/services/master/organisation/organisation_fleet_service';
 
 const URL = 'main/master_vehicle';
 
@@ -302,9 +302,9 @@ export interface MasterVehicle extends Record<string, unknown> {
   color_name?: string;
   color_code?: string;
 
-  organisation_share_id?: string;
-  OrganisationShare?: OrganisationShare;
-  share_name?: string;
+  organisation_fleet_id?: string;
+  OrganisationFleet?: OrganisationFleet;
+  fleet_name?: string;
 
   organisation_tag_id?: string;
   OrganisationTag?: OrganisationTag;
