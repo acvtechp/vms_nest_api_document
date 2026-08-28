@@ -143,6 +143,7 @@ const ENDPOINTS = {
 
   update_show_filter: (id: string): string => `${URL}/update_show_filter/${id}`,
   get_next_organisation_utrack_id: (): string => `${URL}/get_next_organisation_utrack_id`,
+  get_organisation_details: (identifier: string): string => `${URL}/get_organisation_details/${identifier}`,
 
   // Cache APIs
   cache: (): string => `${URL}/cache`,
@@ -983,6 +984,10 @@ export const updateUserOrganisationShowFilter = async (id: string, data: UserOrg
 
 export const getNextOrganisationUTrackId = async (): Promise<BR<NextOrganisationUTrackId>> => {
   return apiGet<BR<NextOrganisationUTrackId>>(ENDPOINTS.get_next_organisation_utrack_id());
+};
+
+export const get_organisation_details = async (id: string): Promise<FBR<UserOrganisation[]>> => {
+  return apiGet<FBR<UserOrganisation[]>>(ENDPOINTS.get_organisation_details(id));
 };
 
 // Cache APIs
