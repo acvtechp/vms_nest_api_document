@@ -23,8 +23,9 @@ const URL = 'main/vehicle/shared_vehicles';
 const ENDPOINTS = {
     // SharedVehicles APIs
     create_update: URL,
-    shared_with_me: (organisation_id: string): string =>   `${URL}/shared_with_me/${organisation_id}`,
-    shared_by_me: (organisation_id: string): string =>  `${URL}/shared_by_me/${organisation_id}`,
+    shared_with_me: (organisation_id: string): string => `${URL}/shared_with_me/${organisation_id}`,
+    shared_by_me: (organisation_id: string): string => `${URL}/shared_by_me/${organisation_id}`,
+    delete_all: `${URL}/delete_all`,
     delete: (id: string): string => `${URL}/${id}`,
 };
 
@@ -134,11 +135,20 @@ export type SharedVehiclesQueryDTO = z.infer<
     typeof SharedVehiclesQuerySchema
 >;
 
+// SharedVehicles Delete All Schema
+export const SharedVehiclesDeleteAllSchema = z.object({
+    // Relations - From Organisation
+    from_organisation_id: single_select_mandatory('UserOrganisation'),
+
+    // Relations - To Organisation
+    to_organisation_id: single_select_mandatory('UserOrganisation'),
+});
+export type SharedVehiclesDeleteAllDTO = z.infer<
+    typeof SharedVehiclesDeleteAllSchema
+>;
+
 // Convert SharedVehicles Data to API Payload
-export const toSharedVehiclesPayload = (
-    row: SharedVehiclesByMe,
-    from_organisation_id: string,
-): SharedVehiclesDTO => ({
+export const toSharedVehiclesPayload = (row: SharedVehiclesByMe, from_organisation_id: string): SharedVehiclesDTO => ({
     from_organisation_id: from_organisation_id,
     to_organisation_id: row.to_organisation_id,
     vehicle_ids: row.vehicles.map((vehicle) => vehicle.vehicle_id),
@@ -170,4 +180,8 @@ export const findSharedVehiclesByMe = async (organisation_id: string, data: Shar
 
 export const deleteSharedVehicle = async (id: string): Promise<SBR> => {
     return apiDelete<SBR>(ENDPOINTS.delete(id));
+};
+
+export const deleteAllSharedVehicles = async (data: SharedVehiclesDeleteAllDTO,): Promise<SBR> => {
+    return apiPost<SBR, SharedVehiclesDeleteAllDTO>(ENDPOINTS.delete_all, data);
 };
