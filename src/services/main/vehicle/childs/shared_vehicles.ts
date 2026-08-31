@@ -18,7 +18,7 @@ import { Status } from '../../../../core/Enums';
 import { UserOrganisation } from '../../../../services/main/users/user_organisation_service';
 import { MasterVehicle } from '../../../../services/main/vehicle/master_vehicle_service';
 
-const URL = 'main/vehicle/shared_vehicles';
+const URL = 'main/shared_vehicles';
 
 const ENDPOINTS = {
     // SharedVehicles APIs
