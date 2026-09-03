@@ -1,104 +1,154 @@
 // Axios
-import { apiPost, apiDelete } from '../../../core/apiCall';
+import { apiPost } from '../../../core/apiCall';
 import { SBR, FBR } from '../../../core/BaseResponse';
 
 // Zod
 import { z } from 'zod';
 import {
-  stringMandatory,
-  multi_select_optional,
+  dateMandatory,
+  enumArrayOptional,
   enumMandatory,
-  dynamicJsonSchema,
+  getAllEnums,
+  multi_select_optional,
+  single_select_mandatory,
 } from '../../../zod_utils/zod_utils';
-import { MongoBaseQuerySchema } from '../../../zod_utils/zod_base_schema';
+import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
 // Enums
-import { LoginFrom } from '../../../core/Enums';
+import { LoginFrom, Status } from '../../../core/Enums';
 
 // URL and Endpoints
 const URL = 'analytics/user_login_analytics';
 
 const ENDPOINTS = {
+  // UserLoginAnalytics APIs
   find: `${URL}/search`,
   create: URL,
-  delete: (id: string): string => `${URL}/${id}`,
+
+  // UserLoginAnalytics Report APIs
+  report_login_count: `${URL}/report_login_count`,
+  report_daily_login: `${URL}/report_daily_login`,
 };
 
-// User Login Analytics Interface
-export interface UserLoginAnalytics extends Record<string, unknown> {
-  // Primary Fields
-  id: string;
-  user_id: string; // Min: 3, Max: 100
-  organisation_id: string; // Min: 3, Max: 100
-  country_id: string; // Min: 3, Max: 100
+// Interfaces
+export interface UserLoginAnalytics {
+  user_login_analytics_id: string;
 
-  login_from: LoginFrom;
-  os_details: Record<string, unknown>;
-  ip_details: Record<string, unknown>;
+  // Main Field Details
+  platform: LoginFrom;
 
   // Metadata
-  added_date_time?: string;
+  status: Status;
+  added_date_time: string;
+  modified_date_time: string;
+
+  // Relations - Parent
+  organisation_id: string;
+  organisation_name: string;
+  organisation_code: string;
+  organisation_logo_url: string;
+  user_id: string;
+  user_details: string;
+  user_image_url: string;
 }
 
-// ✅ User Login Analytics Create Schema
-export const UserLoginAnalyticsSchema = z.object({
-  user_id: stringMandatory('User', 3, 100),
-  organisation_id: stringMandatory('Organisation', 3, 100),
-  login_from: enumMandatory('Status', LoginFrom, LoginFrom.Web),
-  os_details: dynamicJsonSchema('OS Details', {}),
-  ip_details: dynamicJsonSchema('IP Details', {}),
-  country_id: stringMandatory('Country', 2, 100), // ✅ Country ID
-});
-export type UserLoginAnalyticsDTO = z.infer<typeof UserLoginAnalyticsSchema>;
+// UserLoginAnalytics Login Count Report Return
+export interface UserLoginAnalyticsLoginCountReportReturn {
+  organisation_id: string;
+  organisation_name: string;
+  organisation_code: string;
+  organisation_logo_url: string;
+  login_count: number;
+}
 
-// ✅ User Login Analytics Query Schema
-export const UserLoginAnalyticsQuerySchema = MongoBaseQuerySchema.extend({
+// UserLoginAnalytics Daily Login Report Return
+export interface UserLoginAnalyticsDailyLoginReportReturn {
+  date: string;
+  login_count: number;
+}
+
+// Create Schema
+export const UserLoginAnalyticsCreateSchema = z.object({
+  // Relations - Parent
+  organisation_id: single_select_mandatory('UserOrganisation'),
+  user_id: single_select_mandatory('User'),
+
+  // Main Field Details
+  platform: enumMandatory('Platform', LoginFrom, LoginFrom.Web),
+
+  // Metadata
+  status: enumMandatory('Status', Status, Status.Active),
+});
+export type UserLoginAnalyticsCreateDTO = z.infer<
+  typeof UserLoginAnalyticsCreateSchema
+>;
+
+// Query Schema
+export const UserLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
+  // Self Table
+  user_login_analytics_ids: multi_select_optional('UserLoginAnalytics'),
+
+  // Relations - Parent
+  organisation_ids: multi_select_optional('UserOrganisation'),
   user_ids: multi_select_optional('User'),
-  organisation_ids: multi_select_optional('Organisation'),
-  country_ids: multi_select_optional('Country'),
+
+  // Enums
+  platform: enumArrayOptional('Platform', LoginFrom, getAllEnums(LoginFrom)),
+
+  // Date Range Filter
+  from_date: dateMandatory('From Date'),
+  to_date: dateMandatory('To Date'),
 });
 export type UserLoginAnalyticsQueryDTO = z.infer<
   typeof UserLoginAnalyticsQuerySchema
 >;
 
-// Convert existing data to a payload structure
-export const toUserLoginAnalyticsPayload = (
-  analytics: UserLoginAnalytics
-): UserLoginAnalyticsDTO => ({
-  user_id: analytics.user_id,
-  organisation_id: analytics.organisation_id,
-  login_from: analytics.login_from,
-  os_details: analytics.os_details,
-  ip_details: analytics.ip_details,
-  country_id: analytics.country_id,
+// UserLoginAnalytics Login Count Report Schema
+export const UserLoginAnalyticsLoginCountReportSchema =
+  BaseQuerySchema.extend({
+    // Date Filter
+    date: dateMandatory('Date'),
+  });
+export type UserLoginAnalyticsLoginCountReportDTO = z.infer<
+  typeof UserLoginAnalyticsLoginCountReportSchema
+>;
+
+// UserLoginAnalytics Daily Login Report Schema
+export const UserLoginAnalyticsDailyLoginReportSchema =
+  BaseQuerySchema.extend({
+    // Relations - Parent
+    organisation_id: single_select_mandatory('UserOrganisation'),
+
+    // Date Range Filter
+    from_date: dateMandatory('From Date'),
+    to_date: dateMandatory('To Date'),
+  });
+export type UserLoginAnalyticsDailyLoginReportDTO = z.infer<
+  typeof UserLoginAnalyticsDailyLoginReportSchema
+>;
+
+// Payload Converters
+export const userLoginAnalyticsCreatePayload = (
+  payload: UserLoginAnalyticsCreateDTO,
+): UserLoginAnalyticsCreateDTO => ({
+  organisation_id: payload.organisation_id,
+  user_id: payload.user_id,
+  platform: payload.platform,
+  status: payload.status,
 });
 
-// Generate a new payload with default values
-export const newUserLoginAnalyticsPayload = (): UserLoginAnalyticsDTO => ({
-  user_id: '',
-  organisation_id: '',
-  login_from: LoginFrom.Web,
-  os_details: {},
-  ip_details: {},
-  country_id: '',
+export const userLoginAnalyticsQueryPayload = (
+  payload: UserLoginAnalyticsQueryDTO,
+): UserLoginAnalyticsQueryDTO => ({
+  ...payload,
 });
 
-// API Methods
-export const findUserLoginAnalytics = async (
-  data: UserLoginAnalyticsQueryDTO
-): Promise<FBR<UserLoginAnalytics[]>> => {
-  return apiPost<FBR<UserLoginAnalytics[]>, UserLoginAnalyticsQueryDTO>(
-    ENDPOINTS.find,
-    data
-  );
-};
+// UserLoginAnalytics APIs
+export const findUserLoginAnalytics = (payload: UserLoginAnalyticsQueryDTO): Promise<FBR<UserLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
 
-export const createUserLoginAnalytics = async (
-  data: UserLoginAnalyticsDTO
-): Promise<SBR> => {
-  return apiPost<SBR, UserLoginAnalyticsDTO>(ENDPOINTS.create, data);
-};
+export const createUserLoginAnalytics = (payload: UserLoginAnalyticsCreateDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
-export const deleteUserLoginAnalytics = async (id: string): Promise<SBR> => {
-  return apiDelete<SBR>(ENDPOINTS.delete(id));
-};
+// UserLoginAnalytics Report APIs
+export const getUserLoginAnalyticsLoginCountReport = (payload: UserLoginAnalyticsLoginCountReportDTO): Promise<FBR<UserLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);
+
+export const getUserLoginAnalyticsDailyLoginReport = (payload: UserLoginAnalyticsDailyLoginReportDTO): Promise<FBR<UserLoginAnalyticsDailyLoginReportReturn[]>> => apiPost(ENDPOINTS.report_daily_login, payload);

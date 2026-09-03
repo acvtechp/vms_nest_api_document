@@ -1080,3 +1080,9 @@ export enum APIAuthType {
   API_KEY = 'API_KEY',
   BASIC_AUTH = 'BASIC_AUTH',
 }
+
+// Analytics APIS
+export enum DownloadReportType {
+  PDF = 'PDF',
+  Excel = 'Excel',
+}
