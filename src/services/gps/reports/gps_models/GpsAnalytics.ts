@@ -10,6 +10,7 @@ export interface GpsAnalytics extends Record<string, unknown> {
   vn_f: string;
   vt: string;
 
+  fleet_name?: string;
   sub_company_name?: string;
   branch_name?: string;
   color_name?: string;
