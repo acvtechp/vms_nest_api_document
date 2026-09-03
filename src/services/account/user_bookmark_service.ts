@@ -26,6 +26,7 @@ const URL = 'account/user_bookmarks';
 const ENDPOINTS = {
   selection_list: `${URL}/selection_list`,
   save_selection: `${URL}/save_selection`,
+  selected_list: `${URL}/selected_list`,
 };
 
 // UserBookmark Interface
@@ -33,6 +34,7 @@ export interface UserBookmark {
   user_bookmark_id: string;
 
   sort_order: number;
+  is_selected: boolean;
 
   // Metadata
   status: Status;
@@ -86,25 +88,15 @@ export const UserBookmarkSaveSelectionSchema = z.object({
 });
 export type UserBookmarkSaveSelectionDTO = z.infer<typeof UserBookmarkSaveSelectionSchema>;
 
-// Convert existing data to a payload structure
-export const toBookMarkPayload = (row: UserBookmark): UserBookmarkSaveSelectionDTO => ({
-  organisation_id: row.organisation_id,
-  user_id: row.user_id,
-  pages: []
-});
-
-// Generate a new payload with default values
-export const newBookMarkPayload = (): UserBookmarkSaveSelectionDTO => ({
-  organisation_id: '',
-  user_id: '',
-  pages: []
-});
-
 // API Methods
-export const getUserBookmarks = async (data: UserBookmarkSelectionQueryDTO): Promise<FBR<UserBookmark[]>> => {
+export const user_bookmark_get_selection_list = async (data: UserBookmarkSelectionQueryDTO): Promise<FBR<UserBookmark[]>> => {
   return apiPost<FBR<UserBookmark[]>, UserBookmarkSelectionQueryDTO>(ENDPOINTS.selection_list, data);
 };
 
-export const saveUserBookmarks = async (data: UserBookmarkSaveSelectionDTO): Promise<SBR> => {
+export const user_bookmark_save_selection = async (data: UserBookmarkSaveSelectionDTO): Promise<SBR> => {
   return apiPost<SBR, UserBookmarkSaveSelectionDTO>(ENDPOINTS.save_selection, data);
+};
+
+export const user_bookmark_get_selected_list = async (data: UserBookmarkSelectionQueryDTO): Promise<FBR<UserBookmark[]>> => {
+  return apiPost<FBR<UserBookmark[]>, UserBookmarkSelectionQueryDTO>(ENDPOINTS.selected_list, data);
 };
