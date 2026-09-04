@@ -9,8 +9,6 @@ import {
   enumMandatory,
   single_select_mandatory,
   multi_select_optional,
-  enumArrayOptional,
-  getAllEnums,
   numberMandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
@@ -64,7 +62,7 @@ export interface MasterBookmarkSubModule extends Record<string, unknown> {
   };
 }
 
-// MasterBookmarkSubModule Create/Update Schema
+// MasterBookmarkSubModule Create Schema
 export const MasterBookmarkSubModuleSchema = z.object({
   // Relations - Parent
   bookmark_module_id: single_select_mandatory('MasterBookmarkModule'),
@@ -76,7 +74,9 @@ export const MasterBookmarkSubModuleSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type MasterBookmarkSubModuleDTO = z.infer<typeof MasterBookmarkSubModuleSchema>;
+export type MasterBookmarkSubModuleDTO = z.infer<
+  typeof MasterBookmarkSubModuleSchema
+>;
 
 // MasterBookmarkSubModule Query Schema
 export const MasterBookmarkSubModuleQuerySchema = BaseQuerySchema.extend({
@@ -85,11 +85,10 @@ export const MasterBookmarkSubModuleQuerySchema = BaseQuerySchema.extend({
 
   // Relations - Parent
   bookmark_module_ids: multi_select_optional('MasterBookmarkModule'),
-
-  // Enums
-  status: enumArrayOptional('Status', Status, getAllEnums(Status)),
 });
-export type MasterBookmarkSubModuleQueryDTO = z.infer<typeof MasterBookmarkSubModuleQuerySchema>;
+export type MasterBookmarkSubModuleQueryDTO = z.infer<
+  typeof MasterBookmarkSubModuleQuerySchema
+>;
 
 // Convert MasterBookmarkSubModule Data to API Payload
 export const toMasterBookmarkSubModulePayload = (row: MasterBookmarkSubModule): MasterBookmarkSubModuleDTO => ({

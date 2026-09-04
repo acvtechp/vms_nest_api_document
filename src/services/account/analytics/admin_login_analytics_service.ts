@@ -61,8 +61,8 @@ export interface UserAdminLoginAnalyticsDailyLoginReportReturn {
   login_count: number;
 }
 
-// Create Schema
-export const UserAdminLoginAnalyticsCreateSchema = z.object({
+// UserAdminLoginAnalytics Create Schema
+export const UserAdminLoginAnalyticsSchema = z.object({
   // Relations - Parent
   admin_id: single_select_mandatory('UserAdmin'),
 
@@ -72,11 +72,11 @@ export const UserAdminLoginAnalyticsCreateSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type UserAdminLoginAnalyticsCreateDTO = z.infer<
-  typeof UserAdminLoginAnalyticsCreateSchema
+export type UserAdminLoginAnalyticsDTO = z.infer<
+  typeof UserAdminLoginAnalyticsSchema
 >;
 
-// Query Schema
+// UserAdminLoginAnalytics Query Schema
 export const UserAdminLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
   // Self Table
   user_admin_login_analytics_ids: multi_select_optional(
@@ -121,25 +121,10 @@ export type UserAdminLoginAnalyticsDailyLoginReportDTO = z.infer<
   typeof UserAdminLoginAnalyticsDailyLoginReportSchema
 >;
 
-// Payload Converters
-export const userAdminLoginAnalyticsCreatePayload = (
-  payload: UserAdminLoginAnalyticsCreateDTO,
-): UserAdminLoginAnalyticsCreateDTO => ({
-  admin_id: payload.admin_id,
-  platform: payload.platform,
-  status: payload.status,
-});
-
-export const userAdminLoginAnalyticsQueryPayload = (
-  payload: UserAdminLoginAnalyticsQueryDTO,
-): UserAdminLoginAnalyticsQueryDTO => ({
-  ...payload,
-});
-
 // UserAdminLoginAnalytics APIs
 export const findUserAdminLoginAnalytics = (payload: UserAdminLoginAnalyticsQueryDTO): Promise<FBR<UserAdminLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
 
-export const createUserAdminLoginAnalytics = (payload: UserAdminLoginAnalyticsCreateDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
+export const createUserAdminLoginAnalytics = (payload: UserAdminLoginAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // UserAdminLoginAnalytics Report APIs
 export const getUserAdminLoginAnalyticsLoginCountReport = (payload: UserAdminLoginAnalyticsLoginCountReportDTO): Promise<FBR<UserAdminLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);

@@ -4,9 +4,7 @@ import { SBR, FBR } from '../../core/BaseResponse';
 
 // Zod
 import { z } from 'zod';
-import {
-  single_select_mandatory,
-} from '../../zod_utils/zod_utils';
+import { single_select_mandatory } from '../../zod_utils/zod_utils';
 
 // Enums
 import { Status } from '../../core/Enums';
@@ -14,11 +12,9 @@ import { Status } from '../../core/Enums';
 // Other Models
 import { UserOrganisation } from '../main/users/user_organisation_service';
 import { User } from '../main/users/user_service';
-import {
-  MasterBookmarkModule,
-  MasterBookmarkPage,
-  MasterBookmarkSubModule,
-} from './master_bookmark_service';
+import { MasterBookmarkModule } from '../master/bookmark/master_bookmark_module_service';
+import { MasterBookmarkSubModule } from '../master/bookmark/master_bookmark_sub_module_service';
+import { MasterBookmarkPage } from '../master/bookmark/master_bookmark_page_service';
 
 // URL and Endpoints
 const URL = 'account/user_bookmarks';

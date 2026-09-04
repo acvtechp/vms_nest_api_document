@@ -61,8 +61,8 @@ export interface UserPageAnalyticsMonthlyPageAnalysisReturn {
   count: number;
 }
 
-// Create Schema
-export const UserPageAnalyticsCreateSchema = z.object({
+// UserPageAnalytics Create Schema
+export const UserPageAnalyticsSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'),
   user_id: single_select_mandatory('User'),
@@ -75,11 +75,9 @@ export const UserPageAnalyticsCreateSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type UserPageAnalyticsCreateDTO = z.infer<
-  typeof UserPageAnalyticsCreateSchema
->;
+export type UserPageAnalyticsDTO = z.infer<typeof UserPageAnalyticsSchema>;
 
-// Query Schema
+// UserPageAnalytics Query Schema
 export const UserPageAnalyticsQuerySchema = BaseQuerySchema.extend({
   // Self Table
   user_page_analytics_ids: multi_select_optional('UserPageAnalytics'),
@@ -109,28 +107,10 @@ export type UserPageAnalyticsMonthlyPageAnalysisDTO = z.infer<
   typeof UserPageAnalyticsMonthlyPageAnalysisSchema
 >;
 
-// Payload Converters
-export const userPageAnalyticsCreatePayload = (
-  payload: UserPageAnalyticsCreateDTO,
-): UserPageAnalyticsCreateDTO => ({
-  organisation_id: payload.organisation_id,
-  user_id: payload.user_id,
-  page_name: payload.page_name,
-  module_name: payload.module_name,
-  platform: payload.platform,
-  status: payload.status,
-});
-
-export const userPageAnalyticsQueryPayload = (
-  payload: UserPageAnalyticsQueryDTO,
-): UserPageAnalyticsQueryDTO => ({
-  ...payload,
-});
-
 // UserPageAnalytics APIs
 export const findUserPageAnalytics = (payload: UserPageAnalyticsQueryDTO): Promise<FBR<UserPageAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
 
-export const createUserPageAnalytics = (payload: UserPageAnalyticsCreateDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
+export const createUserPageAnalytics = (payload: UserPageAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // UserPageAnalytics Report APIs
 export const getUserPageAnalyticsMonthlyPageAnalysis = (payload: UserPageAnalyticsMonthlyPageAnalysisDTO): Promise<FBR<UserPageAnalyticsMonthlyPageAnalysisReturn[]>> => apiPost(ENDPOINTS.monthly_page_analysis, payload);

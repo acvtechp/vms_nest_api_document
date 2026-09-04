@@ -70,8 +70,8 @@ export interface StudentLoginAnalyticsDailyLoginReportReturn {
   login_count: number;
 }
 
-// Create Schema
-export const StudentLoginAnalyticsCreateSchema = z.object({
+// StudentLoginAnalytics Create Schema
+export const StudentLoginAnalyticsSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'),
   organisation_branch_id: single_select_optional('OrganisationBranch'),
@@ -83,11 +83,11 @@ export const StudentLoginAnalyticsCreateSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type StudentLoginAnalyticsCreateDTO = z.infer<
-  typeof StudentLoginAnalyticsCreateSchema
+export type StudentLoginAnalyticsDTO = z.infer<
+  typeof StudentLoginAnalyticsSchema
 >;
 
-// Query Schema
+// StudentLoginAnalytics Query Schema
 export const StudentLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
   // Self Table
   student_login_analytics_ids: multi_select_optional('StudentLoginAnalytics'),
@@ -138,27 +138,10 @@ export type StudentLoginAnalyticsDailyLoginReportDTO = z.infer<
   typeof StudentLoginAnalyticsDailyLoginReportSchema
 >;
 
-// Payload Converters
-export const studentLoginAnalyticsCreatePayload = (
-  payload: StudentLoginAnalyticsCreateDTO,
-): StudentLoginAnalyticsCreateDTO => ({
-  organisation_id: payload.organisation_id,
-  organisation_branch_id: payload.organisation_branch_id,
-  student_id: payload.student_id,
-  platform: payload.platform,
-  status: payload.status,
-});
-
-export const studentLoginAnalyticsQueryPayload = (
-  payload: StudentLoginAnalyticsQueryDTO,
-): StudentLoginAnalyticsQueryDTO => ({
-  ...payload,
-});
-
 // StudentLoginAnalytics APIs
 export const findStudentLoginAnalytics = (payload: StudentLoginAnalyticsQueryDTO): Promise<FBR<StudentLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
 
-export const createStudentLoginAnalytics = (payload: StudentLoginAnalyticsCreateDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
+export const createStudentLoginAnalytics = (payload: StudentLoginAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // StudentLoginAnalytics Report APIs
 export const getStudentLoginAnalyticsLoginCountReport = (payload: StudentLoginAnalyticsLoginCountReportDTO): Promise<FBR<StudentLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);

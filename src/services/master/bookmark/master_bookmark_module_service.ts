@@ -8,8 +8,6 @@ import {
   stringMandatory,
   enumMandatory,
   multi_select_optional,
-  enumArrayOptional,
-  getAllEnums,
   numberMandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
@@ -60,12 +58,11 @@ export interface MasterBookmarkModule extends Record<string, unknown> {
   };
 }
 
-// MasterBookmarkModule Create/Update Schema
+// MasterBookmarkModule Create Schema
 export const MasterBookmarkModuleSchema = z.object({
   // Main Field Details
   module_name: stringMandatory('Module Name', 1, 100),
   sort_order: numberMandatory('Sort Order'),
-
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
@@ -76,10 +73,7 @@ export type MasterBookmarkModuleDTO = z.infer<
 // MasterBookmarkModule Query Schema
 export const MasterBookmarkModuleQuerySchema = BaseQuerySchema.extend({
   // Self Table
-  bookmark_module_ids: multi_select_optional('MasterBookmarkModule',),
-
-  // Enums
-  status: enumArrayOptional('Status',Status,getAllEnums(Status)),
+  bookmark_module_ids: multi_select_optional('MasterBookmarkModule'),
 });
 export type MasterBookmarkModuleQueryDTO = z.infer<
   typeof MasterBookmarkModuleQuerySchema

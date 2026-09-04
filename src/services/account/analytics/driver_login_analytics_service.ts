@@ -69,8 +69,8 @@ export interface MasterDriverLoginAnalyticsDailyLoginReportReturn {
   login_count: number;
 }
 
-// Create Schema
-export const MasterDriverLoginAnalyticsCreateSchema = z.object({
+// MasterDriverLoginAnalytics Create Schema
+export const MasterDriverLoginAnalyticsSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'),
   organisation_branch_id: single_select_mandatory('OrganisationBranch'),
@@ -82,11 +82,11 @@ export const MasterDriverLoginAnalyticsCreateSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type MasterDriverLoginAnalyticsCreateDTO = z.infer<
-  typeof MasterDriverLoginAnalyticsCreateSchema
+export type MasterDriverLoginAnalyticsDTO = z.infer<
+  typeof MasterDriverLoginAnalyticsSchema
 >;
 
-// Query Schema
+// MasterDriverLoginAnalytics Query Schema
 export const MasterDriverLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
   // Self Table
   master_driver_login_analytics_ids: multi_select_optional(
@@ -139,27 +139,10 @@ export type MasterDriverLoginAnalyticsDailyLoginReportDTO = z.infer<
   typeof MasterDriverLoginAnalyticsDailyLoginReportSchema
 >;
 
-// Payload Converters
-export const masterDriverLoginAnalyticsCreatePayload = (
-  payload: MasterDriverLoginAnalyticsCreateDTO,
-): MasterDriverLoginAnalyticsCreateDTO => ({
-  organisation_id: payload.organisation_id,
-  organisation_branch_id: payload.organisation_branch_id,
-  driver_id: payload.driver_id,
-  platform: payload.platform,
-  status: payload.status,
-});
-
-export const masterDriverLoginAnalyticsQueryPayload = (
-  payload: MasterDriverLoginAnalyticsQueryDTO,
-): MasterDriverLoginAnalyticsQueryDTO => ({
-  ...payload,
-});
-
 // MasterDriverLoginAnalytics APIs
 export const findMasterDriverLoginAnalytics = (payload: MasterDriverLoginAnalyticsQueryDTO): Promise<FBR<MasterDriverLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
 
-export const createMasterDriverLoginAnalytics = (payload: MasterDriverLoginAnalyticsCreateDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
+export const createMasterDriverLoginAnalytics = (payload: MasterDriverLoginAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // MasterDriverLoginAnalytics Report APIs
 export const getMasterDriverLoginAnalyticsLoginCountReport = (payload: MasterDriverLoginAnalyticsLoginCountReportDTO): Promise<FBR<MasterDriverLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);

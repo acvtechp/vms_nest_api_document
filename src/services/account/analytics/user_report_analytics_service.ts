@@ -64,8 +64,8 @@ export interface UserReportAnalyticsMonthlyReportAnalysisReturn {
   count: number;
 }
 
-// Create Schema
-export const UserReportAnalyticsCreateSchema = z.object({
+// UserReportAnalytics Create Schema
+export const UserReportAnalyticsSchema = z.object({
   // Main Field Details
   page_name: stringMandatory('Page Name', 1, 100),
   module_name: stringMandatory('Module Name', 1, 100),
@@ -84,11 +84,9 @@ export const UserReportAnalyticsCreateSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type UserReportAnalyticsCreateDTO = z.infer<
-  typeof UserReportAnalyticsCreateSchema
->;
+export type UserReportAnalyticsDTO = z.infer<typeof UserReportAnalyticsSchema>;
 
-// Query Schema
+// UserReportAnalytics Query Schema
 export const UserReportAnalyticsQuerySchema = BaseQuerySchema.extend({
   // Self Table
   user_report_analytics_ids: multi_select_optional('UserReportAnalytics'),
@@ -123,30 +121,10 @@ export type UserReportAnalyticsMonthlyReportAnalysisDTO = z.infer<
   typeof UserReportAnalyticsMonthlyReportAnalysisSchema
 >;
 
-// Payload Converters
-export const userReportAnalyticsCreatePayload = (
-  payload: UserReportAnalyticsCreateDTO,
-): UserReportAnalyticsCreateDTO => ({
-  page_name: payload.page_name,
-  module_name: payload.module_name,
-  report_name: payload.report_name,
-  report_type: payload.report_type,
-  platform: payload.platform,
-  organisation_id: payload.organisation_id,
-  user_id: payload.user_id,
-  status: payload.status,
-});
-
-export const userReportAnalyticsQueryPayload = (
-  payload: UserReportAnalyticsQueryDTO,
-): UserReportAnalyticsQueryDTO => ({
-  ...payload,
-});
-
 // UserReportAnalytics APIs
 export const findUserReportAnalytics = (payload: UserReportAnalyticsQueryDTO): Promise<FBR<UserReportAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
 
-export const createUserReportAnalytics = (payload: UserReportAnalyticsCreateDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
+export const createUserReportAnalytics = (payload: UserReportAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // UserReportAnalytics Report APIs
 export const getUserReportAnalyticsMonthlyReportAnalysis = (payload: UserReportAnalyticsMonthlyReportAnalysisDTO): Promise<FBR<UserReportAnalyticsMonthlyReportAnalysisReturn[]>> => apiPost(ENDPOINTS.monthly_report_analysis, payload);

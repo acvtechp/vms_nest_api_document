@@ -67,8 +67,8 @@ export interface UserLoginAnalyticsDailyLoginReportReturn {
   login_count: number;
 }
 
-// Create Schema
-export const UserLoginAnalyticsCreateSchema = z.object({
+// UserLoginAnalytics Create Schema
+export const UserLoginAnalyticsSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'),
   user_id: single_select_mandatory('User'),
@@ -79,11 +79,9 @@ export const UserLoginAnalyticsCreateSchema = z.object({
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type UserLoginAnalyticsCreateDTO = z.infer<
-  typeof UserLoginAnalyticsCreateSchema
->;
+export type UserLoginAnalyticsDTO = z.infer<typeof UserLoginAnalyticsSchema>;
 
-// Query Schema
+// UserLoginAnalytics Query Schema
 export const UserLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
   // Self Table
   user_login_analytics_ids: multi_select_optional('UserLoginAnalytics'),
@@ -104,49 +102,31 @@ export type UserLoginAnalyticsQueryDTO = z.infer<
 >;
 
 // UserLoginAnalytics Login Count Report Schema
-export const UserLoginAnalyticsLoginCountReportSchema =
-  BaseQuerySchema.extend({
-    // Date Filter
-    date: dateMandatory('Date'),
-  });
+export const UserLoginAnalyticsLoginCountReportSchema = BaseQuerySchema.extend({
+  // Date Filter
+  date: dateMandatory('Date'),
+});
 export type UserLoginAnalyticsLoginCountReportDTO = z.infer<
   typeof UserLoginAnalyticsLoginCountReportSchema
 >;
 
 // UserLoginAnalytics Daily Login Report Schema
-export const UserLoginAnalyticsDailyLoginReportSchema =
-  BaseQuerySchema.extend({
-    // Relations - Parent
-    organisation_id: single_select_mandatory('UserOrganisation'),
+export const UserLoginAnalyticsDailyLoginReportSchema = BaseQuerySchema.extend({
+  // Relations - Parent
+  organisation_id: single_select_mandatory('UserOrganisation'),
 
-    // Date Range Filter
-    from_date: dateMandatory('From Date'),
-    to_date: dateMandatory('To Date'),
-  });
+  // Date Range Filter
+  from_date: dateMandatory('From Date'),
+  to_date: dateMandatory('To Date'),
+});
 export type UserLoginAnalyticsDailyLoginReportDTO = z.infer<
   typeof UserLoginAnalyticsDailyLoginReportSchema
 >;
 
-// Payload Converters
-export const userLoginAnalyticsCreatePayload = (
-  payload: UserLoginAnalyticsCreateDTO,
-): UserLoginAnalyticsCreateDTO => ({
-  organisation_id: payload.organisation_id,
-  user_id: payload.user_id,
-  platform: payload.platform,
-  status: payload.status,
-});
-
-export const userLoginAnalyticsQueryPayload = (
-  payload: UserLoginAnalyticsQueryDTO,
-): UserLoginAnalyticsQueryDTO => ({
-  ...payload,
-});
-
 // UserLoginAnalytics APIs
 export const findUserLoginAnalytics = (payload: UserLoginAnalyticsQueryDTO): Promise<FBR<UserLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
 
-export const createUserLoginAnalytics = (payload: UserLoginAnalyticsCreateDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
+export const createUserLoginAnalytics = (payload: UserLoginAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // UserLoginAnalytics Report APIs
 export const getUserLoginAnalyticsLoginCountReport = (payload: UserLoginAnalyticsLoginCountReportDTO): Promise<FBR<UserLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);

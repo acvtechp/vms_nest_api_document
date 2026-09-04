@@ -10,8 +10,6 @@ import {
   enumMandatory,
   single_select_mandatory,
   multi_select_optional,
-  enumArrayOptional,
-  getAllEnums,
   numberMandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
@@ -69,7 +67,7 @@ export interface MasterBookmarkPage extends Record<string, unknown> {
   };
 }
 
-// MasterBookmarkPage Create/Update Schema
+// MasterBookmarkPage Create Schema
 export const MasterBookmarkPageSchema = z.object({
   // Relations - Parent
   bookmark_module_id: single_select_mandatory('MasterBookmarkModule'),
@@ -94,11 +92,10 @@ export const MasterBookmarkPageQuerySchema = BaseQuerySchema.extend({
   // Relations - Parent
   bookmark_module_ids: multi_select_optional('MasterBookmarkModule'),
   bookmark_sub_module_ids: multi_select_optional('MasterBookmarkSubModule'),
-
-  // Enums
-  status: enumArrayOptional('Status', Status, getAllEnums(Status)),
 });
-export type MasterBookmarkPageQueryDTO = z.infer<typeof MasterBookmarkPageQuerySchema>;
+export type MasterBookmarkPageQueryDTO = z.infer<
+  typeof MasterBookmarkPageQuerySchema
+>;
 
 // Convert MasterBookmarkPage Data to API Payload
 export const toMasterBookmarkPagePayload = (row: MasterBookmarkPage): MasterBookmarkPageDTO => ({
