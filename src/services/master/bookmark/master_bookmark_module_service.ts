@@ -1,5 +1,5 @@
 // Axios
-import { apiPost, apiPatch, apiDelete } from '../../../core/apiCall';
+import { apiPost, apiPatch, apiDelete, apiGet } from '../../../core/apiCall';
 import { SBR, FBR } from '../../../core/BaseResponse';
 
 // Zod
@@ -29,6 +29,11 @@ const ENDPOINTS = {
   create: URL,
   update: (id: string): string => `${URL}/${id}`,
   delete: (id: string): string => `${URL}/${id}`,
+
+  // Cache APIs
+  cache: `${URL}/cache`,
+  cache_count: `${URL}/cache_count`,
+  cache_child: `${URL}/cache_child`,
 };
 
 // MasterBookmarkModule Interface
@@ -88,7 +93,7 @@ export const toMasterBookmarkModulePayload = (row: MasterBookmarkModule): Master
 });
 
 // Create New MasterBookmarkModule Payload
-export const newMasterBookmarkModulePayload =(): MasterBookmarkModuleDTO => ({
+export const newMasterBookmarkModulePayload = (): MasterBookmarkModuleDTO => ({
   module_name: '',
   sort_order: 0,
 
@@ -97,7 +102,7 @@ export const newMasterBookmarkModulePayload =(): MasterBookmarkModuleDTO => ({
 
 // MasterBookmarkModule APIs
 export const findMasterBookmarkModules = async (data: MasterBookmarkModuleQueryDTO): Promise<FBR<MasterBookmarkModule[]>> => {
-  return apiPost<FBR<MasterBookmarkModule[]>,MasterBookmarkModuleQueryDTO>(ENDPOINTS.find, data);
+  return apiPost<FBR<MasterBookmarkModule[]>, MasterBookmarkModuleQueryDTO>(ENDPOINTS.find, data);
 };
 
 export const createMasterBookmarkModule = async (data: MasterBookmarkModuleDTO): Promise<SBR> => {
@@ -110,4 +115,17 @@ export const updateMasterBookmarkModule = async (id: string, data: MasterBookmar
 
 export const deleteMasterBookmarkModule = async (id: string): Promise<SBR> => {
   return apiDelete<SBR>(ENDPOINTS.delete(id));
+};
+
+// Cache APIs
+export const getMasterBookmarkModuleCache = async (): Promise<FBR<MasterBookmarkModule[]>> => {
+  return apiGet<FBR<MasterBookmarkModule[]>>(ENDPOINTS.cache);
+};
+
+export const getMasterBookmarkModuleCacheCount = async (): Promise<FBR<MasterBookmarkModule[]>> => {
+  return apiGet<FBR<MasterBookmarkModule[]>>(ENDPOINTS.cache_count);
+};
+
+export const getMasterBookmarkModuleCacheChild = async (): Promise<FBR<MasterBookmarkModule[]>> => {
+  return apiGet<FBR<MasterBookmarkModule[]>>(ENDPOINTS.cache_child);
 };

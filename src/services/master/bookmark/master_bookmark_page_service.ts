@@ -1,5 +1,5 @@
 // Axios
-import { apiPost, apiPatch, apiDelete } from '../../../core/apiCall';
+import { apiPost, apiPatch, apiDelete, apiGet } from '../../../core/apiCall';
 import { SBR, FBR } from '../../../core/BaseResponse';
 
 // Zod
@@ -11,6 +11,7 @@ import {
   single_select_mandatory,
   multi_select_optional,
   numberMandatory,
+  stringUUIDMandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -31,6 +32,11 @@ const ENDPOINTS = {
   create: URL,
   update: (id: string): string => `${URL}/${id}`,
   delete: (id: string): string => `${URL}/${id}`,
+
+  // Cache APIs
+  cache: (bookmark_sub_module_id: string): string => `${URL}/cache?bookmark_sub_module_id=${bookmark_sub_module_id}`,
+  cache_count: (bookmark_sub_module_id: string): string => `${URL}/cache_count?bookmark_sub_module_id=${bookmark_sub_module_id}`,
+  cache_child: (bookmark_sub_module_id: string): string => `${URL}/cache_child?bookmark_sub_module_id=${bookmark_sub_module_id}`,
 };
 
 // MasterBookmarkPage Interface
@@ -97,6 +103,11 @@ export type MasterBookmarkPageQueryDTO = z.infer<
   typeof MasterBookmarkPageQuerySchema
 >;
 
+export const FindCacheSchema = z.object({
+  bookmark_sub_module_id: stringUUIDMandatory('bookmark_sub_module_id'),
+});
+export type FindCacheDTO = z.infer<typeof FindCacheSchema>;
+
 // Convert MasterBookmarkPage Data to API Payload
 export const toMasterBookmarkPagePayload = (row: MasterBookmarkPage): MasterBookmarkPageDTO => ({
   bookmark_module_id: row.bookmark_module_id || '',
@@ -125,7 +136,7 @@ export const newMasterBookmarkPagePayload = (): MasterBookmarkPageDTO => ({
 
 // MasterBookmarkPage APIs
 export const findMasterBookmarkPages = async (data: MasterBookmarkPageQueryDTO): Promise<FBR<MasterBookmarkPage[]>> => {
-  return apiPost<FBR<MasterBookmarkPage[]>,MasterBookmarkPageQueryDTO>(ENDPOINTS.find, data);
+  return apiPost<FBR<MasterBookmarkPage[]>, MasterBookmarkPageQueryDTO>(ENDPOINTS.find, data);
 };
 
 export const createMasterBookmarkPage = async (data: MasterBookmarkPageDTO): Promise<SBR> => {
@@ -138,4 +149,17 @@ export const updateMasterBookmarkPage = async (id: string, data: MasterBookmarkP
 
 export const deleteMasterBookmarkPage = async (id: string): Promise<SBR> => {
   return apiDelete<SBR>(ENDPOINTS.delete(id));
+};
+
+// Cache APIs
+export const getMasterBookmarkPageCache = async (bookmark_sub_module_id: string): Promise<FBR<MasterBookmarkPage[]>> => {
+  return apiGet<FBR<MasterBookmarkPage[]>>(ENDPOINTS.cache(bookmark_sub_module_id));
+};
+
+export const getMasterBookmarkPageCacheCount = async (bookmark_sub_module_id: string): Promise<FBR<MasterBookmarkPage[]>> => {
+  return apiGet<FBR<MasterBookmarkPage[]>>(ENDPOINTS.cache_count(bookmark_sub_module_id));
+};
+
+export const getMasterBookmarkPageCacheChild = async (bookmark_sub_module_id: string): Promise<FBR<MasterBookmarkPage[]>> => {
+  return apiGet<FBR<MasterBookmarkPage[]>>(ENDPOINTS.cache_child(bookmark_sub_module_id));
 };
