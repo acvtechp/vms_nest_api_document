@@ -24,7 +24,6 @@ const URL = 'analytics/student_login_analytics';
 const ENDPOINTS = {
   // StudentLoginAnalytics APIs
   find: `${URL}/search`,
-  create: URL,
 
   // StudentLoginAnalytics Report APIs
   report_login_count: `${URL}/report_login_count`,
@@ -69,23 +68,6 @@ export interface StudentLoginAnalyticsDailyLoginReportReturn {
   date: string;
   login_count: number;
 }
-
-// StudentLoginAnalytics Create Schema
-export const StudentLoginAnalyticsSchema = z.object({
-  // Relations - Parent
-  organisation_id: single_select_mandatory('UserOrganisation'),
-  organisation_branch_id: single_select_optional('OrganisationBranch'),
-  student_id: single_select_mandatory('Student'),
-
-  // Main Field Details
-  platform: enumMandatory('Platform', LoginFrom, LoginFrom.Web),
-
-  // Metadata
-  status: enumMandatory('Status', Status, Status.Active),
-});
-export type StudentLoginAnalyticsDTO = z.infer<
-  typeof StudentLoginAnalyticsSchema
->;
 
 // StudentLoginAnalytics Query Schema
 export const StudentLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
@@ -140,8 +122,6 @@ export type StudentLoginAnalyticsDailyLoginReportDTO = z.infer<
 
 // StudentLoginAnalytics APIs
 export const findStudentLoginAnalytics = (payload: StudentLoginAnalyticsQueryDTO): Promise<FBR<StudentLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
-
-export const createStudentLoginAnalytics = (payload: StudentLoginAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // StudentLoginAnalytics Report APIs
 export const getStudentLoginAnalyticsLoginCountReport = (payload: StudentLoginAnalyticsLoginCountReportDTO): Promise<FBR<StudentLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);

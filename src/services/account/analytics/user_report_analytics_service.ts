@@ -27,6 +27,8 @@ const ENDPOINTS = {
   create: URL,
 
   // UserReportAnalytics Report APIs
+  report_count: `${URL}/report_count`,
+  report_daily_count: `${URL}/report_daily_count`,
   monthly_report_analysis: `${URL}/monthly_report_analysis`,
 };
 
@@ -54,6 +56,21 @@ export interface UserReportAnalytics {
   user_id: string;
   user_details: string;
   user_image_url: string;
+}
+
+// UserReportAnalytics Report Count Report Return
+export interface UserReportAnalyticsReportCountReportReturn {
+  organisation_id: string;
+  organisation_name: string;
+  organisation_code: string;
+  organisation_logo_url: string;
+  report_count: number;
+}
+
+// UserReportAnalytics Daily Report Count Report Return
+export interface UserReportAnalyticsDailyReportCountReportReturn {
+  date: string;
+  report_count: number;
 }
 
 // UserReportAnalytics Monthly Report Analysis Return
@@ -111,6 +128,30 @@ export type UserReportAnalyticsQueryDTO = z.infer<
   typeof UserReportAnalyticsQuerySchema
 >;
 
+// UserReportAnalytics Report Count Report Schema
+export const UserReportAnalyticsReportCountReportSchema =
+  BaseQuerySchema.extend({
+    // Date Filter
+    date: dateMandatory('Date'),
+  });
+export type UserReportAnalyticsReportCountReportDTO = z.infer<
+  typeof UserReportAnalyticsReportCountReportSchema
+>;
+
+// UserReportAnalytics Daily Report Count Report Schema
+export const UserReportAnalyticsDailyReportCountReportSchema =
+  BaseQuerySchema.extend({
+    // Relations - Parent
+    organisation_id: single_select_mandatory('UserOrganisation'),
+
+    // Date Range Filter
+    from_date: dateMandatory('From Date'),
+    to_date: dateMandatory('To Date'),
+  });
+export type UserReportAnalyticsDailyReportCountReportDTO = z.infer<
+  typeof UserReportAnalyticsDailyReportCountReportSchema
+>;
+
 // UserReportAnalytics Monthly Report Analysis Schema
 export const UserReportAnalyticsMonthlyReportAnalysisSchema =
   BaseQuerySchema.extend({
@@ -127,4 +168,8 @@ export const findUserReportAnalytics = (payload: UserReportAnalyticsQueryDTO): P
 export const createUserReportAnalytics = (payload: UserReportAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // UserReportAnalytics Report APIs
+export const getUserReportAnalyticsReportCount = (payload: UserReportAnalyticsReportCountReportDTO): Promise<FBR<UserReportAnalyticsReportCountReportReturn[]>> => apiPost(ENDPOINTS.report_count, payload);
+
+export const getUserReportAnalyticsDailyReportCount = (payload: UserReportAnalyticsDailyReportCountReportDTO): Promise<FBR<UserReportAnalyticsDailyReportCountReportReturn[]>> => apiPost(ENDPOINTS.report_daily_count, payload);
+
 export const getUserReportAnalyticsMonthlyReportAnalysis = (payload: UserReportAnalyticsMonthlyReportAnalysisDTO): Promise<FBR<UserReportAnalyticsMonthlyReportAnalysisReturn[]>> => apiPost(ENDPOINTS.monthly_report_analysis, payload);
