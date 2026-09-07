@@ -110,13 +110,13 @@ export interface User extends Record<string, unknown> {
   user_details?: string;
 
   // Default Settings
-  show_vehicle_filters: YesNo;
-  default_theme_layout: String;
-  default_theme_primary_color: String;
-  default_theme_primary_color_code: String;
-  default_theme_secondary_color: String;
-  default_theme_secondary_color_code: String;
-  default_theme_scheme: String;
+  show_vehicle_filters?: YesNo;
+  default_theme_layout?: string;
+  default_theme_primary_color?: string;
+  default_theme_primary_color_code?: string;
+  default_theme_secondary_color?: string;
+  default_theme_secondary_color_code?: string;
+  default_theme_scheme?: string;
 
   // Metadata
   status: Status;
@@ -335,6 +335,8 @@ export interface User extends Record<string, unknown> {
     FleetFuelDailySummary?: number;
     GpsLockRelayLog?: number;
     GPSLockDigitalDoorLog?: number;
+
+    UserBookmark?: number;
   };
 }
 
