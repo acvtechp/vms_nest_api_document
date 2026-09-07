@@ -116,7 +116,7 @@ export interface User extends Record<string, unknown> {
   default_theme_primary_color_code: String;
   default_theme_secondary_color: String;
   default_theme_secondary_color_code: String;
-  default_theme_schemes: String;
+  default_theme_scheme: String;
 
   // Metadata
   status: Status;
@@ -710,7 +710,7 @@ export const update_default_theme_secondary_color = async (id: string, data: Use
   return apiPatch<SBR, UserDefaultThemeSecondaryColorDTO>(ENDPOINTS.update_default_theme_secondary_color(id), data);
 };
 
-export const update_default_theme_schemes = async (id: string, data: UserDefaultThemeSchemeDTO,): Promise<SBR> => {
+export const update_default_theme_scheme = async (id: string, data: UserDefaultThemeSchemeDTO,): Promise<SBR> => {
   return apiPatch<SBR, UserDefaultThemeSchemeDTO>(ENDPOINTS.update_default_theme_scheme(id), data);
 };
 
