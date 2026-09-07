@@ -81,7 +81,7 @@ const ENDPOINTS = {
   update_default_theme_layout: (id: string): string => `${URL}/default_theme_layout/${id}`,
   update_default_theme_primary_color: (id: string): string => `${URL}/default_theme_primary_color/${id}`,
   update_default_theme_secondary_color: (id: string): string => `${URL}/default_theme_secondary_color/${id}`,
-  update_default_layout_schemes: (id: string): string => `${URL}/default_layout_schemes/${id}`,
+  update_default_theme_scheme: (id: string): string => `${URL}/default_theme_scheme/${id}`,
   update_default_bookmark_page: (id: string): string => `${URL}/default_bookmark_page/${id}`,
 };
 
@@ -116,7 +116,7 @@ export interface User extends Record<string, unknown> {
   default_theme_primary_color_code: String;
   default_theme_secondary_color: String;
   default_theme_secondary_color_code: String;
-  default_layout_schemes: String;
+  default_theme_schemes: String;
 
   // Metadata
   status: Status;
@@ -548,12 +548,12 @@ export type UserDefaultThemeSecondaryColorDTO = z.infer<
   typeof UserDefaultThemeSecondaryColorSchema
 >;
 
-// Update User Default Layout Schemes Schema
-export const UserDefaultLayoutSchemesSchema = z.object({
-  default_layout_schemes: stringMandatory('Default Layout Schemes', 1, 100),
+// Update User Default Theme Scheme Schema
+export const UserDefaultThemeSchemeSchema = z.object({
+  default_theme_scheme: stringMandatory('Default Theme Scheme', 1, 100),
 });
-export type UserDefaultLayoutSchemesDTO = z.infer<
-  typeof UserDefaultLayoutSchemesSchema
+export type UserDefaultThemeSchemeDTO = z.infer<
+  typeof UserDefaultThemeSchemeSchema
 >;
 
 // Update User Default Bookmark Page Schema
@@ -710,8 +710,8 @@ export const update_default_theme_secondary_color = async (id: string, data: Use
   return apiPatch<SBR, UserDefaultThemeSecondaryColorDTO>(ENDPOINTS.update_default_theme_secondary_color(id), data);
 };
 
-export const update_default_layout_schemes = async (id: string, data: UserDefaultLayoutSchemesDTO,): Promise<SBR> => {
-  return apiPatch<SBR, UserDefaultLayoutSchemesDTO>(ENDPOINTS.update_default_layout_schemes(id), data);
+export const update_default_theme_schemes = async (id: string, data: UserDefaultThemeSchemeDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserDefaultThemeSchemeDTO>(ENDPOINTS.update_default_theme_scheme(id), data);
 };
 
 export const update_default_bookmark_page = async (id: string, data: UserDefaultBookmarkPageDTO,): Promise<SBR> => {
