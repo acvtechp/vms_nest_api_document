@@ -8,6 +8,7 @@ import {
   stringMandatory,
   enumMandatory,
   multi_select_optional,
+  numberMandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -39,6 +40,7 @@ export interface MasterMainLanguage extends Record<string, unknown> {
   // Main Field Details
   language_name: string;
   language_code: string;
+  sort_order: number;
 
   // Metadata
   status: Status;
@@ -62,6 +64,7 @@ export const MasterMainLanguageSchema = z.object({
   // Main Field Details
   language_name: stringMandatory('Language Name', 3, 50),
   language_code: stringMandatory('Language Code', 2, 10),
+  sort_order: numberMandatory('Sort Order'),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -81,6 +84,7 @@ export type MasterMainLanguageQueryDTO = z.infer<
 export const toMasterMainLanguagePayload = (row: MasterMainLanguage): MasterMainLanguageDTO => ({
   language_name: row.language_name || '',
   language_code: row.language_code || '',
+  sort_order: row.sort_order || 0,
 
   status: row.status || Status.Active,
 });
@@ -89,6 +93,7 @@ export const toMasterMainLanguagePayload = (row: MasterMainLanguage): MasterMain
 export const newMasterMainLanguagePayload = (): MasterMainLanguageDTO => ({
   language_name: '',
   language_code: '',
+  sort_order: 0,
 
   status: Status.Active,
 });
