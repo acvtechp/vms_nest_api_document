@@ -50,6 +50,8 @@ import { FleetVendorFuelStation } from 'src/services/fleet/vendor_management/fle
 import { FleetVendorServiceCenter } from 'src/services/fleet/vendor_management/fleet_vendor_service_center';
 import { FleetWorkshop } from 'src/services/fleet/workshop_management/fleet_workshop_service';
 import { MasterBookmarkPage } from 'src/services/master/bookmark/master_bookmark_page_service';
+import { FASTagDetails } from 'src/services/account/fasttag_details';
+import { EWayBillDetails } from 'src/services/account/eway_bill_details';
 
 const URL = 'user/user';
 
@@ -152,6 +154,7 @@ export interface User extends Record<string, unknown> {
   MasterMainTimeZone?: MasterMainTimeZone;
   time_zone_code?: string;
   time_zone_identifier?: string;
+  time_zone_offset?: number;
 
   date_format_id?: string;
   MasterMainDateFormat?: MasterMainDateFormat;
@@ -177,8 +180,8 @@ export interface User extends Record<string, unknown> {
   InvoiceFile?: InvoiceFile[];
   Ticket?: Ticket[];
   TicketFile?: TicketFile[];
-  // FasttagDetails?: FasttagDetails[];
-  // EWayBillDetails?: EWayBillDetails[];
+  FASTagDetails?: FASTagDetails[];
+  EWayBillDetails?: EWayBillDetails[];
   UserLoginPush?: UserLoginPush[];
   UserVehicleLink?: UserVehicleLink[];
   OrganisationNotificationPreferenceUserLink?: OrganisationNotificationPreferenceUserLink[];
@@ -268,8 +271,8 @@ export interface User extends Record<string, unknown> {
     InvoiceFile?: number;
     Ticket?: number;
     TicketFile?: number;
-    BookMark?: number;
-    FasttagDetails?: number;
+    UserBookmark?: number;
+    FASTagDetails?: number;
     EWayBillDetails?: number;
     UserLoginPush?: number;
     UserVehicleLink?: number;
@@ -335,8 +338,6 @@ export interface User extends Record<string, unknown> {
     FleetFuelDailySummary?: number;
     GpsLockRelayLog?: number;
     GPSLockDigitalDoorLog?: number;
-
-    UserBookmark?: number;
   };
 }
 
@@ -410,6 +411,7 @@ export const UserSchema = z.object({
   language_id: single_select_optional('MasterMainLanguage'), // Single-Selection -> MasterMainLanguage
   time_zone_id: single_select_optional('MasterMainTimeZone'), // Single-Selection -> MasterMainTimeZone
   date_format_id: single_select_optional('MasterMainDateFormat'), // Single-Selection -> MasterMainDateFormat
+  bookmark_page_id: single_select_optional('MasterBookmarkPage'), // Single-Selection -> MasterBookmarkPage
 
   // Profile Image/Logo
   user_image_url: stringOptional('User Image URL', 0, 300),
@@ -447,6 +449,7 @@ export const UserQuerySchema = BaseQuerySchema.extend({
   language_ids: multi_select_optional('MasterMainLanguage'), // Multi-Selection -> MasterMainLanguage
   time_zone_ids: multi_select_optional('MasterMainTimeZone'), // Multi-Selection -> MasterMainTimeZone
   date_format_ids: multi_select_optional('MasterMainDateFormat'), // Multi-Selection -> MasterMainDateFormat
+  bookmark_page_ids: multi_select_optional('MasterBookmarkPage'), // Multi-Selection -> MasterBookmarkPage
 
   // Enums
   can_login: enumArrayOptional('Can Login', YesNo),
@@ -590,6 +593,7 @@ export const toUserPayload = (row: User): UserDTO => ({
   language_id: row.language_id || '',
   date_format_id: row.date_format_id || '',
   time_zone_id: row.time_zone_id || '',
+  bookmark_page_id: row.bookmark_page_id || '',
 
   status: row.status || Status.Active,
 
@@ -635,6 +639,7 @@ export const newUserPayload = (): UserDTO => ({
   language_id: '',
   time_zone_id: '',
   date_format_id: '',
+  bookmark_page_id: '',
 
   status: Status.Active
 });
