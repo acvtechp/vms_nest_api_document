@@ -38,8 +38,12 @@ export interface FuelConsumptionMonthly extends Record<string, unknown> {
   '30': FuelConsumptionDailyData;
   '31': FuelConsumptionDailyData;
 
+  org_id: string;
+
   v_id: string;
   vn_f: string;
+  vt: string;
+
   d_id: string;
   dr_f?: string;
   dr_url?: string;
