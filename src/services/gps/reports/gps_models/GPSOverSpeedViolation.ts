@@ -1,5 +1,37 @@
 export interface GPSOverSpeedViolation extends Record<string, unknown> {
   si: number;
+
+  date_f: string;
+  day: string;
+
+  org_id: string;
+  db_i: string;
+  db_g: string;
+
+  v_id: string;
+  vn_f: string;
+  vt: string;
+
+  fleet_name?: string;
+  sub_company_name?: string;
+  branch_name?: string;
+  color_name?: string;
+  tag_name?: string;
+
+  vehicle_type?: string;
+  vehicle_make?: string;
+  vehicle_model?: string;
+  vehicle_sub_model?: string;
+  status_type?: string;
+  ownership_type?: string;
+  associated_to?: string;
+  fuel_type?: string;
+  fuel_unit?: string;
+
+  d_id: string;
+  dr_f?: string;
+  dr_url?: string;
+
   fdt: string;
   tdt: string;
   fdts: number;
@@ -16,17 +48,6 @@ export interface GPSOverSpeedViolation extends Record<string, unknown> {
   tdt_f_db: string;
 
   ts_f: string;
-  date_f: string;
-  day: string;
-  org_id: string;
-  db_i: string;
-  db_g: string;
-  vn_f: string;
-  vt: string;
-  dr_f?: string;
-  dr_url?: string;
-  v_id: string;
-  d_id: string;
 
   s_la: number;
   s_lo: number;
