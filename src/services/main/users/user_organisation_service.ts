@@ -203,7 +203,6 @@ export interface UserOrganisation extends Record<string, unknown> {
 
   // Operations
   is_sync_gps_data_from_utrack: YesNo;
-  show_vehicle_filters: YesNo;
   is_bus_college: YesNo;
 
   // Metadata
@@ -752,7 +751,6 @@ export const UserOrganisationSchema = z.object({
     YesNo,
     YesNo.No,
   ),
-  show_vehicle_filters: enumOptional('Show Vehicle Filters', YesNo, YesNo.Yes),
   is_bus_college: enumOptional('Is Bus College', YesNo, YesNo.No),
 
   // Metadata
@@ -785,11 +783,6 @@ export const UserOrganisationQuerySchema = BaseQuerySchema.extend({
     YesNo,
     getAllEnums(YesNo),
   ),
-  show_vehicle_filters: enumArrayOptional(
-    'Show Vehicle Filters',
-    YesNo,
-    getAllEnums(YesNo),
-  ),
   is_bus_college: enumArrayOptional(
     'Is Bus College',
     YesNo,
@@ -810,16 +803,6 @@ export const UserOrganisationLogoSchema = z.object({
 export type UserOrganisationLogoDTO = z.infer<
   typeof UserOrganisationLogoSchema
 >;
-
-// UserOrganisation Show Filter Schema
-export const UserOrganisationShowFilterSchema = z.object({
-  // Profile Image/Logo
-  show_vehicle_filters: enumMandatory('Show Vehicle Filters', YesNo, YesNo.Yes),
-});
-export type UserOrganisationShowFilterDTO = z.infer<
-  typeof UserOrganisationShowFilterSchema
->;
-
 
 // Convert UserOrganisation Data to API Payload
 export const toUserOrganisationPayload = (row: UserOrganisation): UserOrganisationDTO => ({
@@ -865,7 +848,6 @@ export const toUserOrganisationPayload = (row: UserOrganisation): UserOrganisati
 
   // Operations
   is_sync_gps_data_from_utrack: row.is_sync_gps_data_from_utrack || YesNo.No,
-  show_vehicle_filters: row.show_vehicle_filters || YesNo.Yes,
   is_bus_college: row.is_bus_college || YesNo.No,
 
   industry_id: row.industry_id,
@@ -928,7 +910,6 @@ export const newUserOrganisationPayload = (): UserOrganisationDTO => ({
 
   // Operations
   is_sync_gps_data_from_utrack: YesNo.No,
-  show_vehicle_filters: YesNo.Yes,
   is_bus_college: YesNo.No,
 
   industry_id: '',
@@ -976,10 +957,6 @@ export const updateUserOrganisation = async (id: string, data: UserOrganisationD
 
 export const deleteUserOrganisation = async (id: string): Promise<SBR> => {
   return apiDelete<SBR>(ENDPOINTS.delete(id));
-};
-
-export const updateUserOrganisationShowFilter = async (id: string, data: UserOrganisationShowFilterDTO): Promise<SBR> => {
-  return apiPatch<SBR, UserOrganisationShowFilterDTO>(ENDPOINTS.update_show_filter(id), data);
 };
 
 export const getNextOrganisationUTrackId = async (): Promise<BR<NextOrganisationUTrackId>> => {

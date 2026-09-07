@@ -49,6 +49,7 @@ import { FleetInspectionForm } from 'src/services/fleet/inspection_management/fl
 import { FleetVendorFuelStation } from 'src/services/fleet/vendor_management/fleet_vendor_fuel_station';
 import { FleetVendorServiceCenter } from 'src/services/fleet/vendor_management/fleet_vendor_service_center';
 import { FleetWorkshop } from 'src/services/fleet/workshop_management/fleet_workshop_service';
+import { MasterBookmarkPage } from 'src/services/master/bookmark/master_bookmark_page_service';
 
 const URL = 'user/user';
 
@@ -76,6 +77,12 @@ const ENDPOINTS = {
   update_default_language: (id: string): string => `${URL}/default_language/${id}`,
   update_default_timezone: (id: string): string => `${URL}/default_timezone/${id}`,
   update_default_date_format: (id: string): string => `${URL}/default_date_format/${id}`,
+  update_show_vehicle_filters: (id: string): string => `${URL}/show_vehicle_filters/${id}`,
+  update_default_theme_layout: (id: string): string => `${URL}/default_theme_layout/${id}`,
+  update_default_theme_primary_color: (id: string): string => `${URL}/default_theme_primary_color/${id}`,
+  update_default_theme_secondary_color: (id: string): string => `${URL}/default_theme_secondary_color/${id}`,
+  update_default_layout_schemes: (id: string): string => `${URL}/default_layout_schemes/${id}`,
+  update_default_bookmark_page: (id: string): string => `${URL}/default_bookmark_page/${id}`,
 };
 
 // User Interface
@@ -101,6 +108,15 @@ export interface User extends Record<string, unknown> {
   all_vehicles: YesNo;
 
   user_details?: string;
+
+  // Default Settings
+  show_vehicle_filters: YesNo;
+  default_theme_layout: String;
+  default_theme_primary_color: String;
+  default_theme_primary_color_code: String;
+  default_theme_secondary_color: String;
+  default_theme_secondary_color_code: String;
+  default_layout_schemes: String;
 
   // Metadata
   status: Status;
@@ -141,6 +157,12 @@ export interface User extends Record<string, unknown> {
   MasterMainDateFormat?: MasterMainDateFormat;
   date_format_date?: string;
   date_format_time?: string;
+
+  bookmark_page_id?: string;
+  MasterBookmarkPage?: MasterBookmarkPage;
+  page_name?: string;
+  page_icon_name?: string;
+  page_url?: string;
 
   // Relations - Child
 
@@ -476,6 +498,72 @@ export type UserDefaultDateFormatDTO = z.infer<
   typeof UserDefaultDateFormatSchema
 >;
 
+// Update User Show Vehicle Filters Schema
+export const UserShowVehicleFiltersSchema = z.object({
+  show_vehicle_filters: enumMandatory('Show Vehicle Filters', YesNo, YesNo.Yes),
+});
+export type UserShowVehicleFiltersDTO = z.infer<
+  typeof UserShowVehicleFiltersSchema
+>;
+
+// Update User Default Theme Layout Schema
+export const UserDefaultThemeLayoutSchema = z.object({
+  default_theme_layout: stringMandatory('Default Theme Layout', 1, 100),
+});
+export type UserDefaultThemeLayoutDTO = z.infer<
+  typeof UserDefaultThemeLayoutSchema
+>;
+
+// Update User Default Theme Primary Color Schema
+export const UserDefaultThemePrimaryColorSchema = z.object({
+  default_theme_primary_color: stringMandatory(
+    'Default Theme Primary Color',
+    1,
+    100,
+  ),
+  default_theme_primary_color_code: stringMandatory(
+    'Default Theme Primary Color Code',
+    1,
+    100,
+  ),
+});
+export type UserDefaultThemePrimaryColorDTO = z.infer<
+  typeof UserDefaultThemePrimaryColorSchema
+>;
+
+// Update User Default Theme Secondary Color Schema
+export const UserDefaultThemeSecondaryColorSchema = z.object({
+  default_theme_secondary_color: stringMandatory(
+    'Default Theme Secondary Color',
+    1,
+    100,
+  ),
+  default_theme_secondary_color_code: stringMandatory(
+    'Default Theme Secondary Color Code',
+    1,
+    100,
+  ),
+});
+export type UserDefaultThemeSecondaryColorDTO = z.infer<
+  typeof UserDefaultThemeSecondaryColorSchema
+>;
+
+// Update User Default Layout Schemes Schema
+export const UserDefaultLayoutSchemesSchema = z.object({
+  default_layout_schemes: stringMandatory('Default Layout Schemes', 1, 100),
+});
+export type UserDefaultLayoutSchemesDTO = z.infer<
+  typeof UserDefaultLayoutSchemesSchema
+>;
+
+// Update User Default Bookmark Page Schema
+export const UserDefaultBookmarkPageSchema = z.object({
+  bookmark_page_id: single_select_mandatory('MasterBookmarkPage'),
+});
+export type UserDefaultBookmarkPageDTO = z.infer<
+  typeof UserDefaultBookmarkPageSchema
+>;
+
 // Convert User Data to API Payload
 export const toUserPayload = (row: User): UserDTO => ({
   first_name: row.first_name || '',
@@ -594,14 +682,38 @@ export const getUserCacheSimple = async (organisation_id: string): Promise<FBR<U
 };
 
 // Update Default Language
-export const updateUserDefaultLanguage = async (id: string, data: UserDefaultLanguageDTO): Promise<SBR> => {
+export const update_default_language = async (id: string, data: UserDefaultLanguageDTO): Promise<SBR> => {
   return apiPatch<SBR, UserDefaultLanguageDTO>(ENDPOINTS.update_default_language(id), data);
 };
 
-export const updateUserDefaultTimezone = async (id: string, data: UserDefaultTimeZoneDTO): Promise<SBR> => {
+export const update_default_timezone = async (id: string, data: UserDefaultTimeZoneDTO): Promise<SBR> => {
   return apiPatch<SBR, UserDefaultTimeZoneDTO>(ENDPOINTS.update_default_timezone(id), data);
 };
 
-export const updateUserDefaultDateformat = async (id: string, data: UserDefaultDateFormatDTO): Promise<SBR> => {
+export const update_default_date_format = async (id: string, data: UserDefaultDateFormatDTO): Promise<SBR> => {
   return apiPatch<SBR, UserDefaultDateFormatDTO>(ENDPOINTS.update_default_date_format(id), data);
+};
+
+export const update_show_vehicle_filters = async (id: string, data: UserShowVehicleFiltersDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserShowVehicleFiltersDTO>(ENDPOINTS.update_show_vehicle_filters(id), data);
+};
+
+export const update_default_theme_layout = async (id: string, data: UserDefaultThemeLayoutDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserDefaultThemeLayoutDTO>(ENDPOINTS.update_default_theme_layout(id), data);
+};
+
+export const update_default_theme_primary_color = async (id: string, data: UserDefaultThemePrimaryColorDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserDefaultThemePrimaryColorDTO>(ENDPOINTS.update_default_theme_primary_color(id), data);
+};
+
+export const update_default_theme_secondary_color = async (id: string, data: UserDefaultThemeSecondaryColorDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserDefaultThemeSecondaryColorDTO>(ENDPOINTS.update_default_theme_secondary_color(id), data);
+};
+
+export const update_default_layout_schemes = async (id: string, data: UserDefaultLayoutSchemesDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserDefaultLayoutSchemesDTO>(ENDPOINTS.update_default_layout_schemes(id), data);
+};
+
+export const update_default_bookmark_page = async (id: string, data: UserDefaultBookmarkPageDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserDefaultBookmarkPageDTO>(ENDPOINTS.update_default_bookmark_page(id), data);
 };
