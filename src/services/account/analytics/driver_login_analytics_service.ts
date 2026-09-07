@@ -23,7 +23,6 @@ const URL = 'analytics/driver_login_analytics';
 const ENDPOINTS = {
   // MasterDriverLoginAnalytics APIs
   find: `${URL}/search`,
-  create: URL,
 
   // MasterDriverLoginAnalytics Report APIs
   report_login_count: `${URL}/report_login_count`,
@@ -68,23 +67,6 @@ export interface MasterDriverLoginAnalyticsDailyLoginReportReturn {
   date: string;
   login_count: number;
 }
-
-// MasterDriverLoginAnalytics Create Schema
-export const MasterDriverLoginAnalyticsSchema = z.object({
-  // Relations - Parent
-  organisation_id: single_select_mandatory('UserOrganisation'),
-  organisation_branch_id: single_select_mandatory('OrganisationBranch'),
-  driver_id: single_select_mandatory('MasterDriver'),
-
-  // Main Field Details
-  platform: enumMandatory('Platform', LoginFrom, LoginFrom.Web),
-
-  // Metadata
-  status: enumMandatory('Status', Status, Status.Active),
-});
-export type MasterDriverLoginAnalyticsDTO = z.infer<
-  typeof MasterDriverLoginAnalyticsSchema
->;
 
 // MasterDriverLoginAnalytics Query Schema
 export const MasterDriverLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
@@ -141,8 +123,6 @@ export type MasterDriverLoginAnalyticsDailyLoginReportDTO = z.infer<
 
 // MasterDriverLoginAnalytics APIs
 export const findMasterDriverLoginAnalytics = (payload: MasterDriverLoginAnalyticsQueryDTO): Promise<FBR<MasterDriverLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
-
-export const createMasterDriverLoginAnalytics = (payload: MasterDriverLoginAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // MasterDriverLoginAnalytics Report APIs
 export const getMasterDriverLoginAnalyticsLoginCountReport = (payload: MasterDriverLoginAnalyticsLoginCountReportDTO): Promise<FBR<MasterDriverLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);

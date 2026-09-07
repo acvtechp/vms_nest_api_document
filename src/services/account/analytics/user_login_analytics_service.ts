@@ -23,7 +23,6 @@ const URL = 'analytics/user_login_analytics';
 const ENDPOINTS = {
   // UserLoginAnalytics APIs
   find: `${URL}/search`,
-  create: URL,
 
   // UserLoginAnalytics Report APIs
   report_login_count: `${URL}/report_login_count`,
@@ -66,20 +65,6 @@ export interface UserLoginAnalyticsDailyLoginReportReturn {
   date: string;
   login_count: number;
 }
-
-// UserLoginAnalytics Create Schema
-export const UserLoginAnalyticsSchema = z.object({
-  // Relations - Parent
-  organisation_id: single_select_mandatory('UserOrganisation'),
-  user_id: single_select_mandatory('User'),
-
-  // Main Field Details
-  platform: enumMandatory('Platform', LoginFrom, LoginFrom.Web),
-
-  // Metadata
-  status: enumMandatory('Status', Status, Status.Active),
-});
-export type UserLoginAnalyticsDTO = z.infer<typeof UserLoginAnalyticsSchema>;
 
 // UserLoginAnalytics Query Schema
 export const UserLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
@@ -125,8 +110,6 @@ export type UserLoginAnalyticsDailyLoginReportDTO = z.infer<
 
 // UserLoginAnalytics APIs
 export const findUserLoginAnalytics = (payload: UserLoginAnalyticsQueryDTO): Promise<FBR<UserLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
-
-export const createUserLoginAnalytics = (payload: UserLoginAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // UserLoginAnalytics Report APIs
 export const getUserLoginAnalyticsLoginCountReport = (payload: UserLoginAnalyticsLoginCountReportDTO): Promise<FBR<UserLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);

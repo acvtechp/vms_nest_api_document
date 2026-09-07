@@ -24,7 +24,6 @@ const URL = 'analytics/parent_login_analytics';
 const ENDPOINTS = {
   // StudentGuardianLoginAnalytics APIs
   find: `${URL}/search`,
-  create: URL,
 
   // StudentGuardianLoginAnalytics Report APIs
   report_login_count: `${URL}/report_login_count`,
@@ -69,23 +68,6 @@ export interface StudentGuardianLoginAnalyticsDailyLoginReportReturn {
   date: string;
   login_count: number;
 }
-
-// StudentGuardianLoginAnalytics Create Schema
-export const StudentGuardianLoginAnalyticsSchema = z.object({
-  // Relations - Parent
-  organisation_id: single_select_mandatory('UserOrganisation'),
-  organisation_branch_id: single_select_optional('OrganisationBranch'),
-  guardian_id: single_select_mandatory('StudentGuardian'),
-
-  // Main Field Details
-  platform: enumMandatory('Platform', LoginFrom, LoginFrom.Web),
-
-  // Metadata
-  status: enumMandatory('Status', Status, Status.Active),
-});
-export type StudentGuardianLoginAnalyticsDTO = z.infer<
-  typeof StudentGuardianLoginAnalyticsSchema
->;
 
 // StudentGuardianLoginAnalytics Query Schema
 export const StudentGuardianLoginAnalyticsQuerySchema = BaseQuerySchema.extend({
@@ -142,8 +124,6 @@ export type StudentGuardianLoginAnalyticsDailyLoginReportDTO = z.infer<
 
 // StudentGuardianLoginAnalytics APIs
 export const findStudentGuardianLoginAnalytics = (payload: StudentGuardianLoginAnalyticsQueryDTO): Promise<FBR<StudentGuardianLoginAnalytics[]>> => apiPost(ENDPOINTS.find, payload);
-
-export const createStudentGuardianLoginAnalytics = (payload: StudentGuardianLoginAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // StudentGuardianLoginAnalytics Report APIs
 export const getStudentGuardianLoginAnalyticsLoginCountReport = (payload: StudentGuardianLoginAnalyticsLoginCountReportDTO): Promise<FBR<StudentGuardianLoginAnalyticsLoginCountReportReturn[]>> => apiPost(ENDPOINTS.report_login_count, payload);

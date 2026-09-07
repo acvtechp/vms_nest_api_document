@@ -27,6 +27,8 @@ const ENDPOINTS = {
   create: URL,
 
   // UserPageAnalytics Report APIs
+  report_page_count: `${URL}/report_page_count`,
+  report_daily_page_count: `${URL}/report_daily_page_count`,
   monthly_page_analysis: `${URL}/monthly_page_analysis`,
 };
 
@@ -52,6 +54,21 @@ export interface UserPageAnalytics {
   user_id: string;
   user_details: string;
   user_image_url: string;
+}
+
+// UserPageAnalytics Page Count Report Return
+export interface UserPageAnalyticsPageCountReportReturn {
+  organisation_id: string;
+  organisation_name: string;
+  organisation_code: string;
+  organisation_logo_url: string;
+  page_count: number;
+}
+
+// UserPageAnalytics Daily Page Count Report Return
+export interface UserPageAnalyticsDailyPageCountReportReturn {
+  date: string;
+  page_count: number;
 }
 
 // UserPageAnalytics Monthly Page Analysis Return
@@ -97,6 +114,29 @@ export type UserPageAnalyticsQueryDTO = z.infer<
   typeof UserPageAnalyticsQuerySchema
 >;
 
+// UserPageAnalytics Page Count Report Schema
+export const UserPageAnalyticsPageCountReportSchema = BaseQuerySchema.extend({
+  // Date Filter
+  date: dateMandatory('Date'),
+});
+export type UserPageAnalyticsPageCountReportDTO = z.infer<
+  typeof UserPageAnalyticsPageCountReportSchema
+>;
+
+// UserPageAnalytics Daily Page Count Report Schema
+export const UserPageAnalyticsDailyPageCountReportSchema =
+  BaseQuerySchema.extend({
+    // Relations - Parent
+    organisation_id: single_select_mandatory('UserOrganisation'),
+
+    // Date Range Filter
+    from_date: dateMandatory('From Date'),
+    to_date: dateMandatory('To Date'),
+  });
+export type UserPageAnalyticsDailyPageCountReportDTO = z.infer<
+  typeof UserPageAnalyticsDailyPageCountReportSchema
+>;
+
 // UserPageAnalytics Monthly Page Analysis Schema
 export const UserPageAnalyticsMonthlyPageAnalysisSchema =
   BaseQuerySchema.extend({
@@ -113,4 +153,8 @@ export const findUserPageAnalytics = (payload: UserPageAnalyticsQueryDTO): Promi
 export const createUserPageAnalytics = (payload: UserPageAnalyticsDTO): Promise<SBR> => apiPost(ENDPOINTS.create, payload);
 
 // UserPageAnalytics Report APIs
+export const getUserPageAnalyticsPageCountReport = (payload: UserPageAnalyticsPageCountReportDTO): Promise<FBR<UserPageAnalyticsPageCountReportReturn[]>> => apiPost(ENDPOINTS.report_page_count, payload);
+
+export const getUserPageAnalyticsDailyPageCountReport = (payload: UserPageAnalyticsDailyPageCountReportDTO): Promise<FBR<UserPageAnalyticsDailyPageCountReportReturn[]>> => apiPost(ENDPOINTS.report_daily_page_count, payload);
+
 export const getUserPageAnalyticsMonthlyPageAnalysis = (payload: UserPageAnalyticsMonthlyPageAnalysisDTO): Promise<FBR<UserPageAnalyticsMonthlyPageAnalysisReturn[]>> => apiPost(ENDPOINTS.monthly_page_analysis, payload);
