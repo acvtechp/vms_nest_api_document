@@ -80,6 +80,8 @@ const ENDPOINTS = {
   update_default_timezone: (id: string): string => `${URL}/default_timezone/${id}`,
   update_default_date_format: (id: string): string => `${URL}/default_date_format/${id}`,
   update_show_vehicle_filters: (id: string): string => `${URL}/show_vehicle_filters/${id}`,
+  update_show_temperature_filters: (id: string): string => `${URL}/show_temperature_filters/${id}`,
+  update_show_vehicle_info_columns: (id: string): string => `${URL}/show_vehicle_info_columns/${id}`,
   update_default_theme_layout: (id: string): string => `${URL}/default_theme_layout/${id}`,
   update_default_theme_primary_color: (id: string): string => `${URL}/default_theme_primary_color/${id}`,
   update_default_theme_secondary_color: (id: string): string => `${URL}/default_theme_secondary_color/${id}`,
@@ -511,6 +513,30 @@ export type UserShowVehicleFiltersDTO = z.infer<
   typeof UserShowVehicleFiltersSchema
 >;
 
+// Update User Show Temperature Filters Schema
+export const UserShowTemperatureFiltersSchema = z.object({
+  show_temperature_filters: enumMandatory(
+    'Show Temperature Filters',
+    YesNo,
+    YesNo.Yes,
+  ),
+});
+export type UserShowTemperatureFiltersDTO = z.infer<
+  typeof UserShowTemperatureFiltersSchema
+>;
+
+// Update User Show Vehicle Info Columns Schema
+export const UserShowVehicleInfoColumnsSchema = z.object({
+  show_vehicle_info_columns: enumMandatory(
+    'Show Vehicle Info Columns',
+    YesNo,
+    YesNo.Yes,
+  ),
+});
+export type UserShowVehicleInfoColumnsDTO = z.infer<
+  typeof UserShowVehicleInfoColumnsSchema
+>;
+
 // Update User Default Theme Layout Schema
 export const UserDefaultThemeLayoutSchema = z.object({
   default_theme_layout: stringMandatory('Default Theme Layout', 1, 100),
@@ -703,6 +729,14 @@ export const update_default_date_format = async (id: string, data: UserDefaultDa
 
 export const update_show_vehicle_filters = async (id: string, data: UserShowVehicleFiltersDTO,): Promise<SBR> => {
   return apiPatch<SBR, UserShowVehicleFiltersDTO>(ENDPOINTS.update_show_vehicle_filters(id), data);
+};
+
+export const update_show_temperature_filters = async (id: string, data: UserShowTemperatureFiltersDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserShowTemperatureFiltersDTO>(ENDPOINTS.update_show_temperature_filters(id), data);
+};
+
+export const update_show_vehicle_info_columns = async (id: string, data: UserShowVehicleInfoColumnsDTO,): Promise<SBR> => {
+  return apiPatch<SBR, UserShowVehicleInfoColumnsDTO>(ENDPOINTS.update_show_vehicle_info_columns(id), data);
 };
 
 export const update_default_theme_layout = async (id: string, data: UserDefaultThemeLayoutDTO,): Promise<SBR> => {

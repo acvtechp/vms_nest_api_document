@@ -4,7 +4,7 @@ import { SBR, FBR } from '../../core/BaseResponse';
 
 // Zod
 import { z } from 'zod';
-import { single_select_mandatory } from '../../zod_utils/zod_utils';
+import { numberMandatory, single_select_mandatory, stringMandatory } from '../../zod_utils/zod_utils';
 
 // Enums
 import { Status } from '../../core/Enums';
@@ -23,6 +23,8 @@ const ENDPOINTS = {
   selection_list: `${URL}/selection_list`,
   save_selection: `${URL}/save_selection`,
   selected_list: `${URL}/selected_list`,
+  bookmark_page_by_url_add: `${URL}/bookmark_page_by_url_add`,
+  bookmark_page_by_url_remove: `${URL}/bookmark_page_by_url_remove`,
 };
 
 // UserBookmark Interface
@@ -72,7 +74,7 @@ export type UserBookmarkSelectionQueryDTO = z.infer<typeof UserBookmarkSelection
 
 export const UserBookmarkSaveSelectionItemSchema = z.object({
   bookmark_page_id: single_select_mandatory('MasterBookmarkPage'),
-  sort_order: z.coerce.number().optional().default(0),
+  sort_order: numberMandatory('Sort Order'),
 });
 
 export const UserBookmarkSaveSelectionSchema = z.object({
@@ -83,6 +85,14 @@ export const UserBookmarkSaveSelectionSchema = z.object({
   pages: z.array(UserBookmarkSaveSelectionItemSchema).default([]),
 });
 export type UserBookmarkSaveSelectionDTO = z.infer<typeof UserBookmarkSaveSelectionSchema>;
+
+export const UserBookmarkPageURLSchema = z.object({
+  // Relations - Parent
+  organisation_id: single_select_mandatory('UserOrganisation'),
+  user_id: single_select_mandatory('User'),
+  page_url: stringMandatory('Page URL', 1, 300),
+});
+export type UserBookmarkPageURLDTO = z.infer<typeof UserBookmarkPageURLSchema>;
 
 // API Methods
 export const user_bookmark_get_selection_list = async (data: UserBookmarkSelectionQueryDTO): Promise<FBR<UserBookmark[]>> => {
@@ -95,4 +105,12 @@ export const user_bookmark_save_selection = async (data: UserBookmarkSaveSelecti
 
 export const user_bookmark_get_selected_list = async (data: UserBookmarkSelectionQueryDTO): Promise<FBR<UserBookmark[]>> => {
   return apiPost<FBR<UserBookmark[]>, UserBookmarkSelectionQueryDTO>(ENDPOINTS.selected_list, data);
+};
+
+export const user_bookmark_page_by_url_add = async (data: UserBookmarkPageURLDTO): Promise<SBR> => {
+  return apiPost<SBR, UserBookmarkPageURLDTO>(ENDPOINTS.bookmark_page_by_url_add, data);
+};
+
+export const user_bookmark_page_by_url_remove = async (data: UserBookmarkPageURLDTO): Promise<SBR> => {
+  return apiPost<SBR, UserBookmarkPageURLDTO>(ENDPOINTS.bookmark_page_by_url_remove, data);
 };
