@@ -19,7 +19,6 @@ import { Status } from '../../../core/Enums';
 // Other Models
 import { MasterMainCountry } from '../../../services/master/main/master_main_country_service';
 import { UserOrganisation } from '../../../services/main/users/user_organisation_service';
-//import { MasterMainLandMark } from "@api/services/master/main/master_main_landmark_service";
 
 const URL = 'master/main/state';
 
@@ -31,6 +30,7 @@ const ENDPOINTS = {
   delete: (id: string): string => `${URL}/${id}`,
 
   // Cache APIs
+  cache_all: `${URL}/cache_all`,
   cache: (country_id: string): string => `${URL}/cache?country_id=${country_id}`,
 };
 
@@ -127,6 +127,10 @@ export const deleteMasterMainState = async (id: string): Promise<SBR> => {
 };
 
 // Cache APIs
+export const getMasterMainStateCacheAll = async (): Promise<FBR<MasterMainState[]>> => {
+  return apiGet<FBR<MasterMainState[]>>(ENDPOINTS.cache_all);
+};
+
 export const getMasterMainStateCache = async (country_id: string): Promise<FBR<MasterMainState[]>> => {
   return apiGet<FBR<MasterMainState[]>>(ENDPOINTS.cache(country_id));
 };
