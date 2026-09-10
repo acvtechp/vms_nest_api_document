@@ -31,8 +31,6 @@ const ENDPOINTS = {
 
   // Cache APIs
   cache: (organisation_id: string): string => `${URL}/cache/${organisation_id}`,
-  cache_count: (organisation_id: string): string => `${URL}/cache_count/${organisation_id}`,
-  cache_child: (organisation_id: string): string => `${URL}/cache_child/${organisation_id}`,
 };
 
 //  MasterVehicleFuelRemovalReason Interface
@@ -129,13 +127,5 @@ export const deleteMasterVehicleFuelRemovalReason = async (id: string): Promise<
 // Cache APIs
 export const getMasterVehicleFuelRemovalReasonCache = async (organisation_id: string): Promise<FBR<MasterVehicleFuelRemovalReason[]>> => {
   return apiGet<FBR<MasterVehicleFuelRemovalReason[]>>(ENDPOINTS.cache(organisation_id));
-};
-
-export const getMasterVehicleFuelRemovalReasonCacheCount = async (organisation_id: string): Promise<FBR<MasterVehicleFuelRemovalReason>> => {
-  return apiGet<FBR<MasterVehicleFuelRemovalReason>>(ENDPOINTS.cache_count(organisation_id));
-};
-
-export const getMasterVehicleFuelRemovalReasonCacheChild = async (organisation_id: string): Promise<FBR<MasterVehicleFuelRemovalReason[]>> => {
-  return apiGet<FBR<MasterVehicleFuelRemovalReason[]>>(ENDPOINTS.cache_child(organisation_id));
 };
 

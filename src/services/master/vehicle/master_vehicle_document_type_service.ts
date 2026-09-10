@@ -59,8 +59,6 @@ export interface MasterVehicleDocumentType extends Record<string, unknown> {
   FleetDocument?: FleetDocument[];
   FleetDocumentExpiry?: FleetDocumentExpiry[];
 
-
-
   // Relations - Child Count
   _count?: {
     FleetDocument?: number;

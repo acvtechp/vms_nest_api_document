@@ -8,6 +8,7 @@ import {
   stringMandatory,
   enumMandatory,
   multi_select_optional,
+  numberMandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -39,6 +40,7 @@ export interface MasterMainDateFormat extends Record<string, unknown> {
   // Main Field Details
   date_format_date: string;
   date_format_time: string;
+  sort_order: number;
 
   // Metadata
   status: Status;
@@ -62,6 +64,7 @@ export const MasterMainDateFormatSchema = z.object({
   // Main Field Details
   date_format_date: stringMandatory('Date Format Date', 3, 50),
   date_format_time: stringMandatory('Date Format Time', 3, 50),
+  sort_order: numberMandatory('Sort Order'),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -83,6 +86,7 @@ export type MasterMainDateFormatQueryDTO = z.infer<
 export const toMasterMainDateFormatPayload = (row: MasterMainDateFormat): MasterMainDateFormatDTO => ({
   date_format_date: row.date_format_date || '',
   date_format_time: row.date_format_time || '',
+  sort_order: row.sort_order || 0,
 
   status: row.status || Status.Active,
 });
@@ -91,6 +95,7 @@ export const toMasterMainDateFormatPayload = (row: MasterMainDateFormat): Master
 export const newMasterMainDateFormatPayload = (): MasterMainDateFormatDTO => ({
   date_format_date: '',
   date_format_time: '',
+  sort_order: 0,
 
   status: Status.Active,
 });
