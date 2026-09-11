@@ -115,6 +115,9 @@ export interface User extends Record<string, unknown> {
 
   // Default Settings
   show_vehicle_filters?: YesNo;
+  show_temperature_filters?: YesNo;
+  show_vehicle_info_columns?: YesNo;
+
   default_theme_layout?: string;
   default_theme_primary_color?: string;
   default_theme_primary_color_code?: string;
@@ -433,6 +436,18 @@ export const UserSchema = z.object({
   all_vehicles: enumMandatory('All Vehicles', YesNo, YesNo.No),
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi selection -> MasterVehicle
 
+  show_vehicle_filters: enumMandatory('Show Vehicle Filters', YesNo, YesNo.No),
+  show_temperature_filters: enumMandatory(
+    'Show Temperature Filters',
+    YesNo,
+    YesNo.No,
+  ),
+  show_vehicle_info_columns: enumMandatory(
+    'Show Vehicle Info Columns',
+    YesNo,
+    YesNo.No,
+  ),
+
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
@@ -608,6 +623,10 @@ export const toUserPayload = (row: User): UserDTO => ({
   can_login: row.can_login || YesNo.Yes,
   all_vehicles: row.all_vehicles || YesNo.Yes,
 
+  show_vehicle_filters: row.show_vehicle_filters || YesNo.No,
+  show_temperature_filters: row.show_temperature_filters || YesNo.No,
+  show_vehicle_info_columns: row.show_vehicle_info_columns || YesNo.No,
+
   user_image_url: row.user_image_url || '',
   user_image_key: row.user_image_key || '',
   user_image_name: row.user_image_name || '',
@@ -653,6 +672,10 @@ export const newUserPayload = (): UserDTO => ({
   is_root_user: YesNo.Yes,
   all_vehicles: YesNo.Yes,
   vehicle_ids: [],
+
+  show_vehicle_filters: YesNo.No,
+  show_temperature_filters: YesNo.No,
+  show_vehicle_info_columns: YesNo.No,
 
   user_image_url: '',
   user_image_key: '',
