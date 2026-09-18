@@ -9,8 +9,8 @@ import { MasterVehicleOwnershipType } from '../vehicle/master_vehicle_ownership_
 import { MasterVehicleAssociatedTo } from '../vehicle/master_vehicle_associated_to_service';
 import { MasterVehicleFuelType } from '../vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from '../vehicle/master_vehicle_fuel_unit_service';
-import { MasterVehicleFuelRemovalReason } from '../vehicle/master_vehicle_fuel_removal_reason_service';
-import { MasterVehicleDocumentType } from '../vehicle/master_vehicle_document_type_service';
+import { MasterFleetFuelRemovalReason } from '../fleet/master_fleet_fuel_removal_reason_service';
+import { MasterFleetDocumentType } from '../fleet/master_fleet_document_type_service';
 import { MasterUserStatus } from '../user/master_user_status_service';
 import { MasterUserRole } from '../user/master_user_role_service';
 import { MasterTyreMake } from '../tyre/master_tyre_make_service';
@@ -105,8 +105,8 @@ export interface VehicleAllCache extends Record<string, unknown> {
   MasterVehicleAssociatedTo: MasterVehicleAssociatedTo[];
   MasterVehicleFuelType: MasterVehicleFuelType[];
   MasterVehicleFuelUnit: MasterVehicleFuelUnit[];
-  MasterVehicleFuelRemovalReason: MasterVehicleFuelRemovalReason[];
-  MasterVehicleDocumentType: MasterVehicleDocumentType[];
+  MasterFleetFuelRemovalReason: MasterFleetFuelRemovalReason[];
+  MasterFleetDocumentType: MasterFleetDocumentType[];
 }
 
 // UserAllCache Interface

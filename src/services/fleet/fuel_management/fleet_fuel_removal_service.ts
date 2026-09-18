@@ -32,7 +32,7 @@ import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
 import { MasterMainLandMark } from 'src/services/master/main/master_main_landmark_service';
 import { MasterVehicleFuelType } from 'src/services/master/vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from 'src/services/master/vehicle/master_vehicle_fuel_unit_service';
-import { MasterVehicleFuelRemovalReason } from 'src/services/master/vehicle/master_vehicle_fuel_removal_reason_service';
+import { MasterFleetFuelRemovalReason } from 'src/services/master/fleet/master_fleet_fuel_removal_reason_service';
 
 const URL = 'fleet/fuel_management/fleet_fuel_removal';
 
@@ -80,8 +80,8 @@ export interface FleetFuelRemoval extends Record<string, unknown> {
   total_cost?: number;
 
   // Removal Reason
-  fuel_removal_reason_id?: string;
-  MasterVehicleFuelRemovalReason?: MasterVehicleFuelRemovalReason;
+  fleet_fuel_removal_reason_id?: string;
+  MasterFleetFuelRemovalReason?: MasterFleetFuelRemovalReason;
   removal_reason?: string;
   removal_details?: string;
 
@@ -187,9 +187,9 @@ export const FleetFuelRemovalSchema = z.object({
   driver_id: single_select_optional('MasterDriver'), // Single-Selection -> MasterDriver
   vehicle_fuel_type_id: single_select_optional('MasterVehicleFuelType'), // Single-Selection -> MasterVehicleFuelType
   vehicle_fuel_unit_id: single_select_optional('MasterVehicleFuelUnit'), // Single-Selection -> MasterVehicleFuelUnit
-  fuel_removal_reason_id: single_select_optional(
-    'MasterVehicleFuelRemovalReason',
-  ), // Single-Selection -> MasterVehicleFuelRemovalReason
+  fleet_fuel_removal_reason_id: single_select_optional(
+    'MasterFleetFuelRemovalReason',
+  ), // Single-Selection -> MasterFleetFuelRemovalReason
 
   // Removal Quantity
   before_removal_quantity: doubleOptional('Before Remove Quantity'),
@@ -259,9 +259,9 @@ export const FleetFuelRemovalQuerySchema = BaseQuerySchema.extend({
   driver_ids: multi_select_optional('MasterDriver'), // Multi-selection -> MasterDriver
   vehicle_fuel_type_ids: multi_select_optional('MasterVehicleFuelType'), // Multi-selection -> MasterVehicleFuelType
   vehicle_fuel_unit_ids: multi_select_optional('MasterVehicleFuelUnit'), // Multi-selection -> MasterVehicleFuelUnit
-  fuel_removal_reason_ids: multi_select_optional(
-    'MasterVehicleFuelRemovalReason',
-  ), // Multi-selection -> MasterVehicleFuelRemovalReason
+  fleet_fuel_removal_reason_ids: multi_select_optional(
+    'MasterFleetFuelRemovalReason',
+  ), // Multi-selection -> MasterFleetFuelRemovalReason
 
   // Enums
   entry_source: enumArrayOptional(
@@ -320,7 +320,7 @@ export const toFleetFuelRemovalPayload = (row: FleetFuelRemoval): FleetFuelRemov
   total_cost: row.total_cost || 0,
 
   // Removal Reason
-  fuel_removal_reason_id: row.fuel_removal_reason_id || '',
+  fleet_fuel_removal_reason_id: row.fleet_fuel_removal_reason_id || '',
 
   // Source Details
   entry_source: row.entry_source || RefillEntrySource.Manual,
@@ -369,7 +369,7 @@ export const newFleetFuelRemovalPayload = (): FleetFuelRemovalDTO => ({
   driver_id: '',
   vehicle_fuel_type_id: '',
   vehicle_fuel_unit_id: '',
-  fuel_removal_reason_id: '',
+  fleet_fuel_removal_reason_id: '',
 
   before_removal_quantity: 0,
   after_removal_quantity: 0,

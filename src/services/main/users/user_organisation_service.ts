@@ -99,8 +99,8 @@ import { MasterUserRole } from 'src/services/master/user/master_user_role_servic
 import { MasterUserStatus } from 'src/services/master/user/master_user_status_service';
 
 import { MasterVehicleAssociatedTo } from 'src/services/master/vehicle/master_vehicle_associated_to_service';
-import { MasterVehicleDocumentType } from 'src/services/master/vehicle/master_vehicle_document_type_service';
-import { MasterVehicleFuelRemovalReason } from 'src/services/master/vehicle/master_vehicle_fuel_removal_reason_service';
+import { MasterFleetDocumentType } from 'src/services/master/fleet/master_fleet_document_type_service';
+import { MasterFleetFuelRemovalReason } from 'src/services/master/fleet/master_fleet_fuel_removal_reason_service';
 import { MasterVehicleFuelType } from 'src/services/master/vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from 'src/services/master/vehicle/master_vehicle_fuel_unit_service';
 import { MasterVehicleMake } from 'src/services/master/vehicle/master_vehicle_make_service';
@@ -290,8 +290,6 @@ export interface UserOrganisation extends Record<string, unknown> {
   MasterVehicleAssociatedTo?: MasterVehicleAssociatedTo[];
   MasterVehicleFuelType?: MasterVehicleFuelType[];
   MasterVehicleFuelUnit?: MasterVehicleFuelUnit[];
-  MasterVehicleFuelRemovalReason?: MasterVehicleFuelRemovalReason[];
-  MasterVehicleDocumentType?: MasterVehicleDocumentType[];
 
   MasterUserRole?: MasterUserRole[];
   MasterUserStatus?: MasterUserStatus[];
@@ -303,6 +301,8 @@ export interface UserOrganisation extends Record<string, unknown> {
   MasterFleetInsuranceClaimStatus?: MasterFleetInsuranceClaimStatus[];
   MasterFleetServiceTask?: MasterFleetServiceTask[];
   MasterFleetServicePart?: MasterFleetServicePart[];
+  MasterFleetFuelRemovalReason?: MasterFleetFuelRemovalReason[];
+  MasterFleetDocumentType?: MasterFleetDocumentType[];
 
   MasterExpenseName?: MasterExpenseName[];
   MasterExpenseType?: MasterExpenseType[];
@@ -481,8 +481,8 @@ export interface UserOrganisation extends Record<string, unknown> {
     MasterVehicleAssociatedTo?: number;
     MasterVehicleFuelType?: number;
     MasterVehicleFuelUnit?: number;
-    MasterVehicleFuelRemovalReason?: number;
-    MasterVehicleDocumentType?: number;
+    MasterFleetFuelRemovalReason?: number;
+    MasterFleetDocumentType?: number;
 
     MasterUserRole?: number;
     MasterUserStatus?: number;
