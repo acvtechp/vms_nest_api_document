@@ -18,9 +18,8 @@ import { Status } from '../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../main/users/user_organisation_service';
-import { MasterVehicle } from '../../main/vehicle/master_vehicle_service';
 
-const URL = 'master/vehicle/fuel_removal_reason';
+const URL = 'master/fleet/fuel_removal_reason';
 
 const ENDPOINTS = {
   // MasterFleetFuelRemovalReason APIs

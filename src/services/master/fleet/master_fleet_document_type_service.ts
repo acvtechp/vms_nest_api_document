@@ -20,7 +20,7 @@ import { Status } from '../../../core/Enums';
 import { UserOrganisation } from '../../main/users/user_organisation_service';
 import { FleetDocument, FleetDocumentExpiry } from 'src/services/fleet/document_management/document_management_service';
 
-const URL = 'master/vehicle/vehicle_document_type';
+const URL = 'master/fleet/document_type';
 
 const ENDPOINTS = {
   // MasterFleetDocumentType APIs
