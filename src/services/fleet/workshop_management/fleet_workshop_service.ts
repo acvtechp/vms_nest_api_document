@@ -78,6 +78,7 @@ export interface FleetWorkshop extends Record<string, unknown> {
     // Relations - Child
     // Child - Fleet
     FleetService?: FleetService[];
+    AssignedUser?: User[];
     //   FleetTyreRetreading?: FleetTyreRetreading[];
     //   FleetTyreDamageRepair?: FleetTyreDamageRepair[];
     //   FleetSparePartsUsage?: FleetSparePartsUsage[];
@@ -87,6 +88,7 @@ export interface FleetWorkshop extends Record<string, unknown> {
     // Relations - Child Count
     _count?: {
         FleetService?: number;
+        AssignedUser?: number;
         FleetTyreRetreading?: number;
         FleetTyreDamageRepair?: number;
         FleetSparePartsUsage?: number;

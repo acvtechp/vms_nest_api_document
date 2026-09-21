@@ -142,6 +142,10 @@ export interface User extends Record<string, unknown> {
   branch_name?: string;
   branch_city?: string;
 
+  assigned_workshop_id?: string;
+  AssignedFleetWorkshop?: FleetWorkshop;
+  workshop_name?: string;
+
   user_role_id?: string;
   MasterUserRole?: MasterUserRole;
   user_role?: string;
@@ -411,6 +415,7 @@ export const UserSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
   organisation_branch_id: single_select_optional('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+  assigned_workshop_id: single_select_optional('FleetWorkshop'), // Single-Selection -> FleetWorkshop
   user_role_id: single_select_optional('MasterUserRole'), // Single-Selection -> MasterUserRole
   user_status_id: single_select_optional('MasterUserStatus'), // Single-Selection -> MasterUserStatus
   language_id: single_select_optional('MasterMainLanguage'), // Single-Selection -> MasterMainLanguage
@@ -461,6 +466,7 @@ export const UserQuerySchema = BaseQuerySchema.extend({
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
   organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
+  assigned_workshop_ids: multi_select_optional('FleetWorkshop'), // Multi-Selection -> FleetWorkshop
   user_role_ids: multi_select_optional('MasterUserRole'), // Multi-Selection -> MasterUserRole
   user_status_ids: multi_select_optional('MasterUserStatus'), // Multi-Selection -> MasterUserStatus
   language_ids: multi_select_optional('MasterMainLanguage'), // Multi-Selection -> MasterMainLanguage
@@ -633,6 +639,7 @@ export const toUserPayload = (row: User): UserDTO => ({
 
   organisation_id: row.organisation_id || '',
   organisation_branch_id: row.organisation_branch_id || '',
+  assigned_workshop_id: row.assigned_workshop_id || '',
   user_role_id: row.user_role_id || '',
   user_status_id: row.user_status_id || '',
   language_id: row.language_id || '',
@@ -683,6 +690,7 @@ export const newUserPayload = (): UserDTO => ({
 
   organisation_id: '',
   organisation_branch_id: '',
+  assigned_workshop_id: '',
   user_role_id: '',
   user_status_id: '',
   language_id: '',

@@ -176,10 +176,6 @@ export interface FleetDocumentExpiry extends Record<string, unknown> {
     document_id: string;
     FleetDocument?: FleetDocument;
 
-    fleet_document_type_id: string;
-    MasterFleetDocumentType?: MasterFleetDocumentType;
-    document_type?: string;
-
     // Relations - Child Count
     _count?: {};
 }
@@ -202,104 +198,131 @@ export interface DocumentDashboard extends Record<string, unknown> {
 
 // FleetDocumentFile Schema
 export const FleetDocumentFileSchema = BaseFileSchema.extend({
-    // Relations - Parent
-    organisation_id: single_select_optional('UserOrganisation'), // Single-Selection -> UserOrganisation
-    user_id: single_select_optional('User'), // Single-Selection -> User
-    document_id: single_select_optional('FleetDocument'), // Single-Selection -> FleetDocument
+  // Relations - Parent
+  organisation_id: single_select_optional('UserOrganisation'), // Single-Selection -> UserOrganisation
+  user_id: single_select_optional('User'), // Single-Selection -> User
+  document_id: single_select_optional('FleetDocument'), // Single-Selection -> FleetDocument
 });
 export type FleetDocumentFileDTO = z.infer<typeof FleetDocumentFileSchema>;
 
 // FleetDocument Create/Update Schema
 export const FleetDocumentSchema = z.object({
-    // Relations - Parent
-    organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-    user_id: single_select_optional('User'), // Single-Selection -> User
-    vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
-    fleet_document_type_id: single_select_mandatory('MasterFleetDocumentType'), // Single-Selection -> MasterFleetDocumentType
-    vendor_id: single_select_optional('FleetVendor'), // Single-Selection -> FleetVendor
+  // Relations - Parent
+  organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+  user_id: single_select_optional('User'), // Single-Selection -> User
+  vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
+  fleet_document_type_id: single_select_mandatory('MasterFleetDocumentType'), // Single-Selection -> MasterFleetDocumentType
+  vendor_id: single_select_optional('FleetVendor'), // Single-Selection -> FleetVendor
 
-    // Main Field Details
-    document_number: stringOptional('Document Number', 0, 100),
-    document_authorized_name: stringOptional('Document Authorized Name', 0, 100),
-    document_cost: doubleOptional('Document Cost'),
-    document_issue_date: dateOptional('Document Issue Date'),
-    document_valid_till_date: dateOptional('Document Valid Till Date'),
-    document_renewal_date: dateOptional('Document Renewal Date'),
-    document_validity_status: enumMandatory('DocumentValidityStatus', DocumentValidityStatus, DocumentValidityStatus.Valid),
-    document_status: enumMandatory('DocumentStatus', DocumentStatus, DocumentStatus.Active),
-    document_details_1: stringOptional('Document Details 1', 0, 200),
-    document_details_2: stringOptional('Document Details 2', 0, 200),
-    document_details_3: stringOptional('Document Details 3', 0, 200),
-    document_details_4: stringOptional('Document Details 4', 0, 200),
-    document_notes: stringOptional('Document Notes', 0, 2000),
+  // Main Field Details
+  document_number: stringOptional('Document Number', 0, 100),
+  document_authorized_name: stringOptional('Document Authorized Name', 0, 100),
+  document_cost: doubleOptional('Document Cost'),
+  document_issue_date: dateOptional('Document Issue Date'),
+  document_valid_till_date: dateOptional('Document Valid Till Date'),
+  document_renewal_date: dateOptional('Document Renewal Date'),
+  document_validity_status: enumMandatory(
+    'DocumentValidityStatus',
+    DocumentValidityStatus,
+    DocumentValidityStatus.Valid,
+  ),
+  document_status: enumMandatory(
+    'DocumentStatus',
+    DocumentStatus,
+    DocumentStatus.Active,
+  ),
+  document_details_1: stringOptional('Document Details 1', 0, 200),
+  document_details_2: stringOptional('Document Details 2', 0, 200),
+  document_details_3: stringOptional('Document Details 3', 0, 200),
+  document_details_4: stringOptional('Document Details 4', 0, 200),
+  document_notes: stringOptional('Document Notes', 0, 2000),
 
-    // Metadata
-    status: enumMandatory('Status', Status, Status.Active),
+  // Metadata
+  status: enumMandatory('Status', Status, Status.Active),
 
-    // Other
-    time_zone_id: single_select_mandatory('MasterMainTimeZone'),
+  // Files
+  FleetDocumentFileSchema: nestedArrayOfObjectsOptional(
+    'FleetDocumentFile',
+    FleetDocumentFileSchema,
+    [],
+  ),
 
-    // Files
-    FleetDocumentFileSchema: nestedArrayOfObjectsOptional('FleetDocumentFile', FleetDocumentFileSchema, []),
+  // Other
+  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type FleetDocumentDTO = z.infer<typeof FleetDocumentSchema>;
 
 // FleetDocument Query Schema
 export const FleetDocumentQuerySchema = BaseQuerySchema.extend({
-    // Self Table
-    document_ids: multi_select_optional('FleetDocument'), // Multi-Selection -> FleetDocument
+  // Self Table
+  document_ids: multi_select_optional('FleetDocument'), // Multi-Selection -> FleetDocument
 
-    // Relations - Parent
-    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
-    user_ids: multi_select_optional('User'), // Multi-Selection -> User
-    vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-Selection -> MasterVehicle
-    fleet_document_type_ids: multi_select_optional('MasterFleetDocumentType'), // Multi-Selection -> MasterFleetDocumentType
-    vendor_ids: multi_select_optional('FleetVendor'), // Multi-Selection -> FleetVendor
+  // Relations - Parent
+  organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
+  user_ids: multi_select_optional('User'), // Multi-Selection -> User
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-Selection -> MasterVehicle
+  fleet_document_type_ids: multi_select_optional('MasterFleetDocumentType'), // Multi-Selection -> MasterFleetDocumentType
+  vendor_ids: multi_select_optional('FleetVendor'), // Multi-Selection -> FleetVendor
 
-    // Enums
-    document_status: enumArrayOptional('Document Status', DocumentStatus, getAllEnums(DocumentStatus)),
-    document_validity_status: enumArrayOptional('Document Validity Status', DocumentValidityStatus, getAllEnums(DocumentValidityStatus)),
+  // Enums
+  document_status: enumArrayOptional(
+    'Document Status',
+    DocumentStatus,
+    getAllEnums(DocumentStatus),
+  ),
+  document_validity_status: enumArrayOptional(
+    'Document Validity Status',
+    DocumentValidityStatus,
+    getAllEnums(DocumentValidityStatus),
+  ),
 });
 export type FleetDocumentQueryDTO = z.infer<typeof FleetDocumentQuerySchema>;
 
 // FleetDocumentExpiry Create/Update Schema
 export const FleetDocumentExpirySchema = z.object({
-    // Relations - Parent
-    organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-    vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
-    document_id: single_select_mandatory('FleetDocument'), // Single-Selection -> FleetDocument
+  // Relations - Parent
+  organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+  vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
+  document_id: single_select_mandatory('FleetDocument'), // Single-Selection -> FleetDocument
 
-    // Main Field Details
-    expiry_type: enumMandatory('Expiry Type', ExpiryType, ExpiryType.Expiring),
+  // Main Field Details
+  expiry_type: enumMandatory('Expiry Type', ExpiryType, ExpiryType.Expiring),
 
-    // Metadata
-    status: enumMandatory('Status', Status, Status.Active),
+  // Metadata
+  status: enumMandatory('Status', Status, Status.Active),
 });
 export type FleetDocumentExpiryDTO = z.infer<typeof FleetDocumentExpirySchema>;
 
 // FleetDocumentExpiry Query Schema
 export const FleetDocumentExpiryQuerySchema = BaseQuerySchema.extend({
-    // Self Table
-    document_expiry_ids: multi_select_optional('FleetDocumentExpiry'), // Multi-selection -> FleetDocumentExpiry
+  // Self Table
+  document_expiry_ids: multi_select_optional('FleetDocumentExpiry'), // Multi-selection -> FleetDocumentExpiry
 
-    // Relations - Parent
-    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-    vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
-    document_ids: multi_select_optional('FleetDocument'), // Multi-selection -> FleetDocument
-    fleet_document_type_ids: multi_select_optional('MasterFleetDocumentType'), // Multi-selection -> MasterFleetDocumentType
+  // Relations - Parent
+  organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
+  document_ids: multi_select_optional('FleetDocument'), // Multi-selection -> FleetDocument
 
-    // Main Field Details
-    expiry_type: enumArrayOptional('Expiry Type', ExpiryType, getAllEnums(ExpiryType)),
+  // Main Field Details
+  expiry_type: enumArrayOptional(
+    'Expiry Type',
+    ExpiryType,
+    getAllEnums(ExpiryType),
+  ),
 });
-export type FleetDocumentExpiryQueryDTO = z.infer<typeof FleetDocumentExpiryQuerySchema>;
+export type FleetDocumentExpiryQueryDTO = z.infer<
+  typeof FleetDocumentExpiryQuerySchema
+>;
 
 // FleetDocumentDashBoard Query Schema
 export const FleetDocumentDashBoardQuerySchema = BaseQuerySchema.extend({
-    // Relations - Parent
-    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
-    vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-Selection -> MasterVehicle
+  // Relations - Parent
+  organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-Selection -> MasterVehicle
 });
-export type FleetDocumentDashBoardQueryDTO = z.infer<typeof FleetDocumentDashBoardQuerySchema>;
+export type FleetDocumentDashBoardQueryDTO = z.infer<
+  typeof FleetDocumentDashBoardQuerySchema
+>;
 
 // Convert FleetDocument Data to API Payload
 export const toFleetDocumentPayload = (row: FleetDocument): FleetDocumentDTO => ({
