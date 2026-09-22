@@ -39,9 +39,8 @@ export interface MasterFleetServicePart extends Record<string, unknown> {
   fleet_service_part_id: string;
 
   // Main Field Details
-  part_name?: string;
+  fleet_service_part?: string;
   description?: string;
-  part_amount?: number;
 
   // Metadata
   status: Status;
@@ -70,14 +69,15 @@ export const MasterFleetServicePartSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  part_name: stringOptional('Part Name', 0, 100),
-  description: stringOptional('Description', 0, 500),
-  part_amount: doubleOptionalLatLng('Part Amount'),
+  fleet_service_part: stringOptional('Fleet Service Part', 3, 100),
+  description: stringOptional('Description', 0, 300),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
-export type MasterFleetServicePartDTO = z.infer<typeof MasterFleetServicePartSchema>;
+export type MasterFleetServicePartDTO = z.infer<
+  typeof MasterFleetServicePartSchema
+>;
 
 // MasterFleetServicePart Query Schema
 export const MasterFleetServicePartQuerySchema = BaseQuerySchema.extend({
@@ -87,15 +87,16 @@ export const MasterFleetServicePartQuerySchema = BaseQuerySchema.extend({
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
 });
-export type MasterFleetServicePartQueryDTO = z.infer<typeof MasterFleetServicePartQuerySchema>;
+export type MasterFleetServicePartQueryDTO = z.infer<
+  typeof MasterFleetServicePartQuerySchema
+>;
 
 // Convert MasterFleetServicePart Data to API Payload
 export const toMasterFleetServicePartPayload = (row: MasterFleetServicePart,): MasterFleetServicePartDTO => ({
   organisation_id: row.organisation_id || '',
 
-  part_name: row.part_name || '',
+  fleet_service_part: row.fleet_service_part || '',
   description: row.description || '',
-  part_amount: row.part_amount || 0,
 
   status: row.status || Status.Active,
 });
@@ -104,9 +105,8 @@ export const toMasterFleetServicePartPayload = (row: MasterFleetServicePart,): M
 export const newMasterFleetServicePartPayload = (): MasterFleetServicePartDTO => ({
   organisation_id: '',
 
-  part_name: '',
+  fleet_service_part: '',
   description: '',
-  part_amount: 0,
 
   status: Status.Active,
 });

@@ -239,7 +239,7 @@ export interface FleetServiceTask extends Record<string, unknown> {
 
   fleet_service_part_id?: string;
   MasterFleetServicePart?: MasterFleetServicePart;
-  part_name?: string;
+  fleet_service_part?: string;
 
   // Relations - Child
   // Child - Fleet
