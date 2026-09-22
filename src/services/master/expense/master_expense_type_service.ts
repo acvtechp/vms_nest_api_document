@@ -38,7 +38,7 @@ export interface MasterExpenseType extends Record<string, unknown> {
   expense_type_id: string;
 
   // Main Field Details
-  expense_type_name: string;
+  expense_type: string;
   description?: string;
 
   // Metadata
@@ -60,7 +60,7 @@ export const MasterExpenseTypeSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  expense_type_name: stringMandatory('Expense Type Name', 3, 100),
+  expense_type: stringMandatory('Expense Type', 3, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -84,7 +84,7 @@ export type MasterExpenseTypeQueryDTO = z.infer<
 export const toMasterExpenseTypePayload = (row: MasterExpenseType): MasterExpenseTypeDTO => ({
   organisation_id: row.organisation_id || '',
 
-  expense_type_name: row.expense_type_name || '',
+  expense_type: row.expense_type || '',
   description: row.description || '',
 
   status: row.status || Status.Active,
@@ -94,7 +94,7 @@ export const toMasterExpenseTypePayload = (row: MasterExpenseType): MasterExpens
 export const newMasterExpenseTypePayload = (): MasterExpenseTypeDTO => ({
   organisation_id: '',
 
-  expense_type_name: '',
+  expense_type: '',
   description: '',
 
   status: Status.Active,
