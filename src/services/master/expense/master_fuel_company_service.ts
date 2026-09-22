@@ -29,7 +29,7 @@ const ENDPOINTS = {
 
   // File Uploads
   update_master_fuel_company_logo: (id: string): string => `${URL}/update_master_fuel_company_logo/${id}`,
-  delete_master_fuel_company_logo: (id: string): string => `${URL}/delete_master_fuel_company_logo/${id}`,
+  remove_master_fuel_company_logo: (id: string): string => `${URL}/remove_master_fuel_company_logo/${id}`,
 
   // MasterFuelCompany APIs
   find: `${URL}/search`,
@@ -163,8 +163,8 @@ export const update_master_fuel_company_logo = async (id: string, data: FuelComp
   return apiPatch<SBR, FuelCompanyLogoDTO>(ENDPOINTS.update_master_fuel_company_logo(id), data);
 };
 
-export const delete_master_fuel_company_logo = async (id: string): Promise<SBR> => {
-  return apiDelete<SBR>(ENDPOINTS.delete_master_fuel_company_logo(id));
+export const remove_master_fuel_company_logo = async (id: string): Promise<SBR> => {
+  return apiDelete<SBR>(ENDPOINTS.remove_master_fuel_company_logo(id));
 };
 
 // MasterFuelCompany APIs

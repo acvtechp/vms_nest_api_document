@@ -29,7 +29,7 @@ const ENDPOINTS = {
 
   // File Uploads
   update_organisation_sub_company_logo: (id: string): string => `${URL}/update_organisation_sub_company_logo/${id}`,
-  delete_organisation_sub_company_logo: (id: string): string => `${URL}/delete_organisation_sub_company_logo/${id}`,
+  remove_organisation_sub_company_logo: (id: string): string => `${URL}/remove_organisation_sub_company_logo/${id}`,
 
   // OrganisationSubCompany APIs
   find: `${URL}/search`,
@@ -164,8 +164,8 @@ export const update_organisation_sub_company_logo = async (id: string, data: Sub
   return apiPatch<SBR, SubCompanyLogoDTO>(ENDPOINTS.update_organisation_sub_company_logo(id), data);
 };
 
-export const delete_organisation_sub_company_logo = async (id: string): Promise<SBR> => {
-  return apiDelete<SBR>(ENDPOINTS.delete_organisation_sub_company_logo(id));
+export const remove_organisation_sub_company_logo = async (id: string): Promise<SBR> => {
+  return apiDelete<SBR>(ENDPOINTS.remove_organisation_sub_company_logo(id));
 };
 
 // OrganisationSubCompany APIs
