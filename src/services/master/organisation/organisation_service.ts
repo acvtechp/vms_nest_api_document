@@ -8,6 +8,7 @@ import { OrganisationBranch } from './organisation_branch_service';
 import { OrganisationColor } from './organisation_color_service';
 import { OrganisationTag } from './organisation_tag_service';
 import { OrganisationGroup } from './organisation_group_service';
+import { OrganisationFleet } from './organisation_fleet_service';
 
 const URL = 'master/organisation';
 
@@ -26,6 +27,7 @@ export interface MasterOrganisationCacheData
   OrganisationColor: OrganisationColor[];
   OrganisationTag: OrganisationTag[];
   OrganisationGroup: OrganisationGroup[];
+  OrganisationFleet: OrganisationFleet[];
 }
 
 // Cache APIs
