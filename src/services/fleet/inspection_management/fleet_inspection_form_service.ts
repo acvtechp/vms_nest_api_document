@@ -71,6 +71,8 @@ export interface FleetInspectionForm extends Record<string, unknown> {
   // Relations - Child Count
   _count?: {
     FleetInspection?: number;
+    FleetInspection_ThisMonth?: number;
+    FleetInspection_ThisYear?: number;
   };
 }
 

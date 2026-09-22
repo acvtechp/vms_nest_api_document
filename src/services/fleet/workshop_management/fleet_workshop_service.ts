@@ -88,6 +88,8 @@ export interface FleetWorkshop extends Record<string, unknown> {
     // Relations - Child Count
     _count?: {
         FleetService?: number;
+        FleetService_ThisMonth?: number;
+        FleetService_ThisYear?: number;
         AssignedUser?: number;
         FleetTyreRetreading?: number;
         FleetTyreDamageRepair?: number;
