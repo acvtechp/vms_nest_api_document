@@ -22,9 +22,9 @@ export interface GPSOverSpeedViolation extends Record<string, unknown> {
   vehicle_make?: string;
   vehicle_model?: string;
   vehicle_sub_model?: string;
-  status_type?: string;
-  ownership_type?: string;
-  associated_to?: string;
+  vehicle_status?: string;
+  vehicle_ownership?: string;
+  vehicle_associated?: string;
   fuel_type?: string;
   fuel_unit?: string;
 
