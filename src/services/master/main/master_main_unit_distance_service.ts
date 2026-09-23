@@ -33,11 +33,11 @@ const ENDPOINTS = {
 // MasterMainUnitDistance Interface
 export interface MasterMainUnitDistance extends Record<string, unknown> {
   // Primary Fields
-  unit_id: string;
+  distance_unit_id: string;
 
   // Main Field Details
-  unit_name: string;
-  unit_code: string;
+  distance_unit_name: string;
+  distance_unit_code: string;
 
   // Metadata
   status: Status;
@@ -57,8 +57,8 @@ export interface MasterMainUnitDistance extends Record<string, unknown> {
 // MasterMainUnitDistance Create/Update Schema
 export const MasterMainUnitDistanceSchema = z.object({
   // Main Field Details
-  unit_name: stringMandatory('Unit Name', 1, 50),
-  unit_code: stringMandatory('Unit Code', 1, 10),
+  distance_unit_name: stringMandatory('Distance Unit Name', 1, 50),
+  distance_unit_code: stringMandatory('Distance Unit Code', 1, 10),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -70,7 +70,7 @@ export type MasterMainUnitDistanceDTO = z.infer<
 // MasterMainUnitDistance Query Schema
 export const MasterMainUnitDistanceQuerySchema = BaseQuerySchema.extend({
   // Self Table
-  unit_ids: multi_select_optional('Unit Distance'), // Multi-selection -> MasterMainUnitDistance
+  distance_unit_ids: multi_select_optional('MasterMainUnitDistance'), // Multi-selection -> MasterMainUnitDistance
 });
 export type MasterMainUnitDistanceQueryDTO = z.infer<
   typeof MasterMainUnitDistanceQuerySchema
@@ -78,16 +78,16 @@ export type MasterMainUnitDistanceQueryDTO = z.infer<
 
 // Convert MasterMainUnitDistance Data to API Payload
 export const toMasterMainUnitDistancePayload = (row: MasterMainUnitDistance): MasterMainUnitDistanceDTO => ({
-  unit_name: row.unit_name || '',
-  unit_code: row.unit_code || '',
+  distance_unit_name: row.distance_unit_name || '',
+  distance_unit_code: row.distance_unit_code || '',
 
   status: row.status || Status.Active,
 });
 
 // Create New MasterMainUnitDistance Payload
 export const newMasterMainUnitDistancePayload = (): MasterMainUnitDistanceDTO => ({
-  unit_name: '',
-  unit_code: '',
+  distance_unit_name: '',
+  distance_unit_code: '',
 
   status: Status.Active,
 });

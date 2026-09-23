@@ -33,11 +33,11 @@ const ENDPOINTS = {
 // MasterMainUnitVolume Interface
 export interface MasterMainUnitVolume extends Record<string, unknown> {
   // Primary Fields
-  unit_id: string;
+  volume_unit_id: string;
 
   // Main Field Details
-  unit_name: string;
-  unit_code: string;
+  volume_unit_name: string;
+  volume_unit_code: string;
 
   // Metadata
   status: Status;
@@ -57,8 +57,8 @@ export interface MasterMainUnitVolume extends Record<string, unknown> {
 // MasterMainUnitVolume Create/Update Schema
 export const MasterMainUnitVolumeSchema = z.object({
   // Main Field Details
-  unit_name: stringMandatory('Unit Name', 1, 50),
-  unit_code: stringMandatory('Unit Code', 1, 10),
+  volume_unit_name: stringMandatory('Volume Unit Name', 1, 50),
+  volume_unit_code: stringMandatory('Volume Unit Code', 1, 10),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -70,7 +70,7 @@ export type MasterMainUnitVolumeDTO = z.infer<
 // MasterMainUnitVolume Query Schema
 export const MasterMainUnitVolumeQuerySchema = BaseQuerySchema.extend({
   // Self Table
-  unit_ids: multi_select_optional('Unit Volume'), // Multi-selection -> MasterMainUnitVolume
+  volume_unit_ids: multi_select_optional('MasterMainUnitVolume'), // Multi-selection -> MasterMainUnitVolume
 });
 export type MasterMainUnitVolumeQueryDTO = z.infer<
   typeof MasterMainUnitVolumeQuerySchema
@@ -78,16 +78,16 @@ export type MasterMainUnitVolumeQueryDTO = z.infer<
 
 // Convert MasterMainUnitVolume Data to API Payload
 export const toMasterMainUnitVolumePayload = (row: MasterMainUnitVolume): MasterMainUnitVolumeDTO => ({
-  unit_name: row.unit_name || '',
-  unit_code: row.unit_code || '',
+  volume_unit_name: row.volume_unit_name || '',
+  volume_unit_code: row.volume_unit_code || '',
 
   status: row.status || Status.Active,
 });
 
 // Create New MasterMainUnitVolume Payload
 export const newMasterMainUnitVolumePayload = (): MasterMainUnitVolumeDTO => ({
-  unit_name: '',
-  unit_code: '',
+  volume_unit_name: '',
+  volume_unit_code: '',
 
   status: Status.Active,
 });

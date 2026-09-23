@@ -33,11 +33,11 @@ const ENDPOINTS = {
 // MasterMainUnitMileage Interface
 export interface MasterMainUnitMileage extends Record<string, unknown> {
   // Primary Fields
-  unit_id: string;
+  mileage_unit_id: string;
 
   // Main Field Details
-  unit_name: string;
-  unit_code: string;
+  mileage_unit_name: string;
+  mileage_unit_code: string;
 
   // Metadata
   status: Status;
@@ -57,8 +57,8 @@ export interface MasterMainUnitMileage extends Record<string, unknown> {
 // MasterMainUnitMileage Create/Update Schema
 export const MasterMainUnitMileageSchema = z.object({
   // Main Field Details
-  unit_name: stringMandatory('Unit Name', 1, 50),
-  unit_code: stringMandatory('Unit Code', 1, 10),
+  mileage_unit_name: stringMandatory('Mileage Unit Name', 1, 50),
+  mileage_unit_code: stringMandatory('Mileage Unit Code', 1, 10),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -70,7 +70,7 @@ export type MasterMainUnitMileageDTO = z.infer<
 // MasterMainUnitMileage Query Schema
 export const MasterMainUnitMileageQuerySchema = BaseQuerySchema.extend({
   // Self Table
-  unit_ids: multi_select_optional('Unit Mileage'), // Multi-selection -> MasterMainUnitMileage
+  mileage_unit_ids: multi_select_optional('MasterMainUnitMileage'), // Multi-selection -> MasterMainUnitMileage
 });
 export type MasterMainUnitMileageQueryDTO = z.infer<
   typeof MasterMainUnitMileageQuerySchema
@@ -78,16 +78,16 @@ export type MasterMainUnitMileageQueryDTO = z.infer<
 
 // Convert MasterMainUnitMileage Data to API Payload
 export const toMasterMainUnitMileagePayload = (row: MasterMainUnitMileage): MasterMainUnitMileageDTO => ({
-  unit_name: row.unit_name || '',
-  unit_code: row.unit_code || '',
+  mileage_unit_name: row.mileage_unit_name || '',
+  mileage_unit_code: row.mileage_unit_code || '',
 
   status: row.status || Status.Active,
 });
 
 // Create New MasterMainUnitMileage Payload
 export const newMasterMainUnitMileagePayload = (): MasterMainUnitMileageDTO => ({
-  unit_name: '',
-  unit_code: '',
+  mileage_unit_name: '',
+  mileage_unit_code: '',
 
   status: Status.Active,
 });
