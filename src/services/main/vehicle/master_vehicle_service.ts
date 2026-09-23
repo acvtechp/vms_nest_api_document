@@ -68,9 +68,9 @@ import { MasterVehicleType } from '../../../services/master/vehicle/master_vehic
 import { MasterVehicleMake } from '../../../services/master/vehicle/master_vehicle_make_service';
 import { MasterVehicleModel } from '../../../services/master/vehicle/master_vehicle_model_service';
 import { MasterVehicleSubModel } from '../../../services/master/vehicle/master_vehicle_sub_model_service';
-import { MasterVehicleStatusType } from '../../../services/master/vehicle/master_vehicle_status_type_service';
-import { MasterVehicleOwnershipType } from '../../../services/master/vehicle/master_vehicle_ownership_type_service';
-import { MasterVehicleAssociatedTo } from '../../../services/master/vehicle/master_vehicle_associated_to_service';
+import { MasterVehicleStatus } from '../../master/vehicle/master_vehicle_status_service';
+import { MasterVehicleOwnership } from '../../master/vehicle/master_vehicle_ownership_service';
+import { MasterVehicleAssociated } from '../../master/vehicle/master_vehicle_associated_service';
 import { MasterVehicleFuelType } from '../../../services/master/vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from '../../../services/master/vehicle/master_vehicle_fuel_unit_service';
 
@@ -327,17 +327,17 @@ export interface MasterVehicle extends Record<string, unknown> {
   MasterVehicleSubModel?: MasterVehicleSubModel;
   vehicle_sub_model?: string;
 
-  vehicle_status_type_id?: string;
-  MasterVehicleStatusType?: MasterVehicleStatusType;
-  status_type?: string;
+  vehicle_status_id?: string;
+  MasterVehicleStatus?: MasterVehicleStatus;
+  vehicle_status?: string;
 
-  vehicle_ownership_type_id?: string;
-  MasterVehicleOwnershipType?: MasterVehicleOwnershipType;
-  ownership_type?: string;
+  vehicle_ownership_id?: string;
+  MasterVehicleOwnership?: MasterVehicleOwnership;
+  vehicle_ownership?: string;
 
-  vehicle_associated_to_id?: string;
-  MasterVehicleAssociatedTo?: MasterVehicleAssociatedTo;
-  associated_to?: string;
+  vehicle_associated_id?: string;
+  MasterVehicleAssociated?: MasterVehicleAssociated;
+  vehicle_associated?: string;
 
   // Relations - Fuel Details
   vehicle_fuel_type_id?: string;
@@ -1127,11 +1127,9 @@ export const VehicleSchema = z.object({
   vehicle_make_id: single_select_optional('MasterVehicleMake'), // Single-Selection -> MasterVehicleMake
   vehicle_model_id: single_select_optional('MasterVehicleModel'), // Single-Selection -> MasterVehicleModel
   vehicle_sub_model_id: single_select_optional('MasterVehicleSubModel'), // Single-Selection -> MasterVehicleSubModel
-  vehicle_status_type_id: single_select_optional('MasterVehicleStatusType'), // Single-Selection -> MasterVehicleStatusType
-  vehicle_ownership_type_id: single_select_optional(
-    'MasterVehicleOwnershipType',
-  ), // Single-Selection -> MasterVehicleOwnershipType
-  vehicle_associated_to_id: single_select_optional('MasterVehicleAssociatedTo'), // Single-Selection -> MasterVehicleAssociatedTo
+  vehicle_status_id: single_select_optional('MasterVehicleStatus'), // Single-Selection -> MasterVehicleStatus
+  vehicle_ownership_id: single_select_optional('MasterVehicleOwnership'), // Single-Selection -> MasterVehicleOwnership
+  vehicle_associated_id: single_select_optional('MasterVehicleAssociated'), // Single-Selection -> MasterVehicleAssociated
 
   // Fuel
   vehicle_fuel_type_id: single_select_optional('MasterVehicleFuelType'), // Single-Selection -> MasterVehicleFuelType
@@ -1509,11 +1507,9 @@ export const VehicleQuerySchema = BaseQuerySchema.extend({
   vehicle_make_ids: multi_select_optional('MasterVehicleMake'), // Multi-Selection -> MasterVehicleMake
   vehicle_model_ids: multi_select_optional('MasterVehicleModel'), // Multi-Selection -> MasterVehicleModel
   vehicle_sub_model_ids: multi_select_optional('MasterVehicleSubModel'), // Multi-Selection -> MasterVehicleSubModel
-  vehicle_status_type_ids: multi_select_optional('MasterVehicleStatusType'), // Multi-Selection -> MasterVehicleStatusType
-  vehicle_ownership_type_ids: multi_select_optional(
-    'MasterVehicleOwnershipType',
-  ), // Multi-Selection -> MasterVehicleOwnershipType
-  vehicle_associated_to_ids: multi_select_optional('MasterVehicleAssociatedTo'), // Multi-Selection -> MasterVehicleAssociatedTo
+  vehicle_status_ids: multi_select_optional('MasterVehicleStatus'), // Multi-Selection -> MasterVehicleStatus
+  vehicle_ownership_ids: multi_select_optional('MasterVehicleOwnership'), // Multi-Selection -> MasterVehicleOwnership
+  vehicle_associated_ids: multi_select_optional('MasterVehicleAssociated'), // Multi-Selection -> MasterVehicleAssociated
   vehicle_fuel_type_ids: multi_select_optional('MasterVehicleFuelType'), // Multi-Selection -> MasterVehicleFuelType
   vehicle_fuel_unit_ids: multi_select_optional('MasterVehicleFuelUnit'), // Multi-Selection -> MasterVehicleFuelUnit
 
@@ -1644,9 +1640,9 @@ export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
   vehicle_make_id: row.vehicle_make_id || '',
   vehicle_model_id: row.vehicle_model_id || '',
   vehicle_sub_model_id: row.vehicle_sub_model_id || '',
-  vehicle_status_type_id: row.vehicle_status_type_id || '',
-  vehicle_ownership_type_id: row.vehicle_ownership_type_id || '',
-  vehicle_associated_to_id: row.vehicle_associated_to_id || '',
+  vehicle_status_id: row.vehicle_status_id || '',
+  vehicle_ownership_id: row.vehicle_ownership_id || '',
+  vehicle_associated_id: row.vehicle_associated_id || '',
 
   vehicle_fuel_type_id: row.vehicle_fuel_type_id || '',
   vehicle_fuel_unit_id: row.vehicle_fuel_unit_id || '',
@@ -1719,9 +1715,9 @@ export const newVehiclePayload = (): VehicleDTO => ({
   vehicle_make_id: '',
   vehicle_model_id: '',
   vehicle_sub_model_id: '',
-  vehicle_status_type_id: '',
-  vehicle_ownership_type_id: '',
-  vehicle_associated_to_id: '',
+  vehicle_status_id: '',
+  vehicle_ownership_id: '',
+  vehicle_associated_id: '',
 
   vehicle_fuel_type_id: '',
   vehicle_fuel_unit_id: '',

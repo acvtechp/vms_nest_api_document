@@ -98,15 +98,15 @@ import { MasterTyreModel } from 'src/services/master/tyre/master_tyre_model_serv
 import { MasterUserRole } from 'src/services/master/user/master_user_role_service';
 import { MasterUserStatus } from 'src/services/master/user/master_user_status_service';
 
-import { MasterVehicleAssociatedTo } from 'src/services/master/vehicle/master_vehicle_associated_to_service';
+import { MasterVehicleAssociated } from 'src/services/master/vehicle/master_vehicle_associated_service';
 import { MasterFleetDocumentType } from 'src/services/master/fleet/master_fleet_document_type_service';
 import { MasterFleetFuelRemovalReason } from 'src/services/master/fleet/master_fleet_fuel_removal_reason_service';
 import { MasterVehicleFuelType } from 'src/services/master/vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from 'src/services/master/vehicle/master_vehicle_fuel_unit_service';
 import { MasterVehicleMake } from 'src/services/master/vehicle/master_vehicle_make_service';
 import { MasterVehicleModel } from 'src/services/master/vehicle/master_vehicle_model_service';
-import { MasterVehicleOwnershipType } from 'src/services/master/vehicle/master_vehicle_ownership_type_service';
-import { MasterVehicleStatusType } from 'src/services/master/vehicle/master_vehicle_status_type_service';
+import { MasterVehicleOwnership } from 'src/services/master/vehicle/master_vehicle_ownership_service';
+import { MasterVehicleStatus } from 'src/services/master/vehicle/master_vehicle_status_service';
 import { MasterVehicleSubModel } from 'src/services/master/vehicle/master_vehicle_sub_model_service';
 import { MasterVehicleType } from 'src/services/master/vehicle/master_vehicle_type_service';
 import { MasterMainUnitDistance } from 'src/services/master/main/master_main_unit_distance_service';
@@ -285,9 +285,9 @@ export interface UserOrganisation extends Record<string, unknown> {
   MasterVehicleMake?: MasterVehicleMake[];
   MasterVehicleModel?: MasterVehicleModel[];
   MasterVehicleSubModel?: MasterVehicleSubModel[];
-  MasterVehicleStatusType?: MasterVehicleStatusType[];
-  MasterVehicleOwnershipType?: MasterVehicleOwnershipType[];
-  MasterVehicleAssociatedTo?: MasterVehicleAssociatedTo[];
+  MasterVehicleStatusType?: MasterVehicleStatus[];
+  MasterVehicleOwnershipType?: MasterVehicleOwnership[];
+  MasterVehicleAssociatedTo?: MasterVehicleAssociated[];
   MasterVehicleFuelType?: MasterVehicleFuelType[];
   MasterVehicleFuelUnit?: MasterVehicleFuelUnit[];
 

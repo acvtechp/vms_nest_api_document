@@ -6,9 +6,9 @@ import { FBR } from '../../../core/BaseResponse';
 import { MasterVehicleType } from './master_vehicle_type_service';
 import { MasterVehicleMake } from './master_vehicle_make_service';
 import { MasterVehicleSubModel } from './master_vehicle_sub_model_service';
-import { MasterVehicleStatusType } from './master_vehicle_status_type_service';
-import { MasterVehicleOwnershipType } from './master_vehicle_ownership_type_service';
-import { MasterVehicleAssociatedTo } from './master_vehicle_associated_to_service';
+import { MasterVehicleStatus } from './master_vehicle_status_service';
+import { MasterVehicleOwnership } from './master_vehicle_ownership_service';
+import { MasterVehicleAssociated } from './master_vehicle_associated_service';
 import { MasterVehicleFuelType } from './master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from './master_vehicle_fuel_unit_service';
 
@@ -27,9 +27,9 @@ export interface MasterVehiclesCacheData
   MasterVehicleType: MasterVehicleType[];
   MasterVehicleMake: MasterVehicleMake[];
   MasterVehicleSubModel: MasterVehicleSubModel[];
-  MasterVehicleStatusType: MasterVehicleStatusType[];
-  MasterVehicleOwnershipType: MasterVehicleOwnershipType[];
-  MasterVehicleAssociatedTo: MasterVehicleAssociatedTo[];
+  MasterVehicleStatusType: MasterVehicleStatus[];
+  MasterVehicleOwnershipType: MasterVehicleOwnership[];
+  MasterVehicleAssociatedTo: MasterVehicleAssociated[];
   MasterVehicleFuelType: MasterVehicleFuelType[];
   MasterVehicleFuelUnit: MasterVehicleFuelUnit[];
 }

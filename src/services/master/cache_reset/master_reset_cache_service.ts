@@ -4,9 +4,9 @@ import { apiGet } from '../../../core/apiCall';
 import { BR, SBR } from '../../../core/BaseResponse';
 import { MasterVehicleType } from '../vehicle/master_vehicle_type_service';
 import { MasterVehicleMake } from '../vehicle/master_vehicle_make_service';
-import { MasterVehicleStatusType } from '../vehicle/master_vehicle_status_type_service';
-import { MasterVehicleOwnershipType } from '../vehicle/master_vehicle_ownership_type_service';
-import { MasterVehicleAssociatedTo } from '../vehicle/master_vehicle_associated_to_service';
+import { MasterVehicleStatus } from '../vehicle/master_vehicle_status_service';
+import { MasterVehicleOwnership } from '../vehicle/master_vehicle_ownership_service';
+import { MasterVehicleAssociated } from '../vehicle/master_vehicle_associated_service';
 import { MasterVehicleFuelType } from '../vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from '../vehicle/master_vehicle_fuel_unit_service';
 import { MasterFleetFuelRemovalReason } from '../fleet/master_fleet_fuel_removal_reason_service';
@@ -100,9 +100,9 @@ const ENDPOINTS = {
 export interface VehicleAllCache extends Record<string, unknown> {
   MasterVehicleType: MasterVehicleType[];
   MasterVehicleMake: MasterVehicleMake[];
-  MasterVehicleStatusType: MasterVehicleStatusType[];
-  MasterVehicleOwnershipType: MasterVehicleOwnershipType[];
-  MasterVehicleAssociatedTo: MasterVehicleAssociatedTo[];
+  MasterVehicleStatusType: MasterVehicleStatus[];
+  MasterVehicleOwnershipType: MasterVehicleOwnership[];
+  MasterVehicleAssociatedTo: MasterVehicleAssociated[];
   MasterVehicleFuelType: MasterVehicleFuelType[];
   MasterVehicleFuelUnit: MasterVehicleFuelUnit[];
   MasterFleetFuelRemovalReason: MasterFleetFuelRemovalReason[];
