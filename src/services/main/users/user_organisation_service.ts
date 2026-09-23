@@ -285,9 +285,9 @@ export interface UserOrganisation extends Record<string, unknown> {
   MasterVehicleMake?: MasterVehicleMake[];
   MasterVehicleModel?: MasterVehicleModel[];
   MasterVehicleSubModel?: MasterVehicleSubModel[];
-  MasterVehicleStatusType?: MasterVehicleStatus[];
-  MasterVehicleOwnershipType?: MasterVehicleOwnership[];
-  MasterVehicleAssociatedTo?: MasterVehicleAssociated[];
+  MasterVehicleStatus?: MasterVehicleStatus[];
+  MasterVehicleOwnership?: MasterVehicleOwnership[];
+  MasterVehicleAssociated?: MasterVehicleAssociated[];
   MasterVehicleFuelType?: MasterVehicleFuelType[];
   MasterVehicleFuelUnit?: MasterVehicleFuelUnit[];
 
@@ -476,9 +476,9 @@ export interface UserOrganisation extends Record<string, unknown> {
     MasterVehicleMake?: number;
     MasterVehicleModel?: number;
     MasterVehicleSubModel?: number;
-    MasterVehicleStatusType?: number;
-    MasterVehicleOwnershipType?: number;
-    MasterVehicleAssociatedTo?: number;
+    MasterVehicleStatus?: number;
+    MasterVehicleOwnership?: number;
+    MasterVehicleAssociated?: number;
     MasterVehicleFuelType?: number;
     MasterVehicleFuelUnit?: number;
     MasterFleetFuelRemovalReason?: number;

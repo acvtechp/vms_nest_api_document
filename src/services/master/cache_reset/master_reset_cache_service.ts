@@ -100,9 +100,9 @@ const ENDPOINTS = {
 export interface VehicleAllCache extends Record<string, unknown> {
   MasterVehicleType: MasterVehicleType[];
   MasterVehicleMake: MasterVehicleMake[];
-  MasterVehicleStatusType: MasterVehicleStatus[];
-  MasterVehicleOwnershipType: MasterVehicleOwnership[];
-  MasterVehicleAssociatedTo: MasterVehicleAssociated[];
+  MasterVehicleStatus: MasterVehicleStatus[];
+  MasterVehicleOwnership: MasterVehicleOwnership[];
+  MasterVehicleAssociated: MasterVehicleAssociated[];
   MasterVehicleFuelType: MasterVehicleFuelType[];
   MasterVehicleFuelUnit: MasterVehicleFuelUnit[];
   MasterFleetFuelRemovalReason: MasterFleetFuelRemovalReason[];

@@ -27,9 +27,9 @@ export interface MasterVehiclesCacheData
   MasterVehicleType: MasterVehicleType[];
   MasterVehicleMake: MasterVehicleMake[];
   MasterVehicleSubModel: MasterVehicleSubModel[];
-  MasterVehicleStatusType: MasterVehicleStatus[];
-  MasterVehicleOwnershipType: MasterVehicleOwnership[];
-  MasterVehicleAssociatedTo: MasterVehicleAssociated[];
+  MasterVehicleStatus: MasterVehicleStatus[];
+  MasterVehicleOwnership: MasterVehicleOwnership[];
+  MasterVehicleAssociated: MasterVehicleAssociated[];
   MasterVehicleFuelType: MasterVehicleFuelType[];
   MasterVehicleFuelUnit: MasterVehicleFuelUnit[];
 }
