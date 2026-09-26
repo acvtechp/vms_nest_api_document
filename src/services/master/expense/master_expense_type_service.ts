@@ -101,7 +101,7 @@ export const newMasterExpenseTypePayload = (): MasterExpenseTypeDTO => ({
 });
 
 // MasterExpenseType APIs
-export const findMasterExpenseTypes = async (data: MasterExpenseTypeQueryDTO): Promise<FBR<MasterExpenseType[]>> => {
+export const findMasterExpenseType = async (data: MasterExpenseTypeQueryDTO): Promise<FBR<MasterExpenseType[]>> => {
   return apiPost<FBR<MasterExpenseType[]>, MasterExpenseTypeQueryDTO>(ENDPOINTS.find, data);
 };
 

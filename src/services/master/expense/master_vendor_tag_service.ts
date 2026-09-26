@@ -101,7 +101,7 @@ export const newMasterVendorTagPayload = (): MasterVendorTagDTO => ({
 });
 
 // MasterVendorTag APIs
-export const findMasterVendorTags = async (data: MasterVendorTagQueryDTO): Promise<FBR<MasterVendorTag[]>> => {
+export const findMasterVendorTag = async (data: MasterVendorTagQueryDTO): Promise<FBR<MasterVendorTag[]>> => {
   return apiPost<FBR<MasterVendorTag[]>, MasterVendorTagQueryDTO>(ENDPOINTS.find, data);
 };
 

@@ -34,8 +34,9 @@ import { MasterFleetIncidentType } from 'src/services/master/fleet/master_fleet_
 import { MasterFleetIncidentStatus } from 'src/services/master/fleet/master_fleet_incident_status_service';
 import { MasterFleetIncidentSeverity } from 'src/services/master/fleet/master_fleet_incident_severity_service';
 import { MasterFleetInsuranceClaimStatus } from 'src/services/master/fleet/master_fleet_insurance_claim_status_service';
-import { MasterExpenseName } from 'src/services/master/expense/master_expense_name_service';
+import { MasterExpenseItem } from 'src/services/master/expense/master_expense_item_service';
 import { FleetIssue } from 'src/services/fleet/issue_management/issue_management_service';
+import { MasterExpenseType } from 'src/services/master/expense/master_expense_type_service';
 
 const URL = 'fleet/incident_management/fleet_incident';
 
@@ -230,9 +231,13 @@ export interface FleetIncidentCost extends Record<string, unknown> {
   incident_id: string;
   FleetIncident?: FleetIncident;
 
-  expense_name_id: string;
-  MasterExpenseName?: MasterExpenseName;
-  expense_name?: string;
+  expense_type_id: string;
+  MasterExpenseType?: MasterExpenseType;
+  expense_type?: string;
+
+  expense_item_id: string;
+  MasterExpenseItem?: MasterExpenseItem;
+  expense_item?: string;
 
   // Relations - Child Count
   _count?: {};
@@ -367,24 +372,29 @@ export const FleetIncidentDashBoardQuerySchema = BaseQuerySchema.extend({
 });
 export type FleetIncidentDashBoardQueryDTO = z.infer<typeof FleetIncidentDashBoardQuerySchema>;
 
-// FleetIncidentCost Create/Update Schema
+// FleetIncidentCost Create/update Schema
 export const FleetIncidentCostSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
   user_id: single_select_optional('User'), // Single-Selection -> User
   incident_id: single_select_mandatory('FleetIncident'), // Single-Selection -> FleetIncident
-  expense_name_id: single_select_mandatory('MasterExpenseName'), // Single-Selection -> MasterExpenseName
+  expense_type_id: single_select_mandatory('MasterExpenseType'), // Single-Selection -> MasterExpenseType
+  expense_item_id: single_select_mandatory('MasterExpenseItem'), // Single-Selection -> MasterExpenseItem
 
   // Main Field Details
   incident_cost_date: dateOptional('Incident Cost Date'),
   incident_cost_amount: doubleOptional('Incident Cost Amount'),
-  incident_cost_description: stringOptional('Incident Cost Description', 0, 2000),
-
-  // Other
-  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
+  incident_cost_description: stringOptional(
+    'Incident Cost Description',
+    0,
+    2000,
+  ),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
+
+  // Other
+  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type FleetIncidentCostDTO = z.infer<typeof FleetIncidentCostSchema>;
 
@@ -397,9 +407,12 @@ export const FleetIncidentCostQuerySchema = BaseQuerySchema.extend({
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
   user_ids: multi_select_optional('User'), // Multi-Selection -> User
   incident_ids: multi_select_optional('FleetIncident'), // Multi-Selection -> FleetIncident
-  expense_name_ids: multi_select_optional('MasterExpenseName'), // Multi-Selection -> MasterExpenseName
+  expense_type_ids: multi_select_optional('MasterExpenseType'), // Multi-Selection -> MasterExpenseType
+  expense_item_ids: multi_select_optional('MasterExpenseItem'), // Multi-Selection -> MasterExpenseItem
 });
-export type FleetIncidentCostQueryDTO = z.infer<typeof FleetIncidentCostQuerySchema>;
+export type FleetIncidentCostQueryDTO = z.infer<
+  typeof FleetIncidentCostQuerySchema
+>;
 
 // Convert FleetIncident Data to API Payload
 export const toFleetIncidentPayload = (row: FleetIncident): FleetIncidentDTO => ({
@@ -534,7 +547,8 @@ export const toFleetIncidentCostPayload = (row: FleetIncidentCost): FleetInciden
   organisation_id: row.organisation_id || '',
   user_id: row.user_id || '',
   incident_id: row.incident_id || '',
-  expense_name_id: row.expense_name_id || '',
+  expense_type_id: row.expense_type_id || '',
+  expense_item_id: row.expense_item_id || '',
 
   incident_cost_date: row.incident_cost_date || '',
   incident_cost_amount: row.incident_cost_amount || 0,
@@ -550,7 +564,8 @@ export const newFleetIncidentCostPayload = (): FleetIncidentCostDTO => ({
   organisation_id: '',
   user_id: '',
   incident_id: '',
-  expense_name_id: '',
+  expense_type_id: '',
+  expense_item_id: '',
 
   incident_cost_date: '',
   incident_cost_amount: 0,

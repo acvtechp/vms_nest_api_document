@@ -37,10 +37,10 @@ const ENDPOINTS = {
 // MasterVendorDocumentType Interface
 export interface MasterVendorDocumentType extends Record<string, unknown> {
   // Primary Fields
-  document_type_id: string;
+  vendor_document_type_id: string;
 
   // Main Field Details
-  document_type: string;
+  vendor_document_type: string;
   description?: string;
 
   // Metadata
@@ -62,7 +62,7 @@ export const MasterVendorDocumentTypeSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  document_type: stringMandatory('Document Type', 3, 100),
+  vendor_document_type: stringMandatory('Vendor Document Type', 3, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -75,7 +75,7 @@ export type MasterVendorDocumentTypeDTO = z.infer<
 // MasterVendorDocumentType Query Schema
 export const MasterVendorDocumentTypeQuerySchema = BaseQuerySchema.extend({
   // Self Table
-  document_type_ids: multi_select_optional('MasterVendorDocumentType'), // Multi-Selection -> MasterVendorDocumentType
+  vendor_document_type_ids: multi_select_optional('MasterVendorDocumentType'), // Multi-Selection -> MasterVendorDocumentType
 
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
@@ -88,7 +88,7 @@ export type MasterVendorDocumentTypeQueryDTO = z.infer<
 export const toMasterVendorDocumentTypePayload = (row: MasterVendorDocumentType): MasterVendorDocumentTypeDTO => ({
   organisation_id: row.organisation_id || '',
 
-  document_type: row.document_type || '',
+  vendor_document_type: row.vendor_document_type || '',
   description: row.description || '',
 
   status: row.status || Status.Active,
@@ -98,14 +98,14 @@ export const toMasterVendorDocumentTypePayload = (row: MasterVendorDocumentType)
 export const newMasterVendorDocumentTypePayload = (): MasterVendorDocumentTypeDTO => ({
   organisation_id: '',
 
-  document_type: '',
+  vendor_document_type: '',
   description: '',
 
   status: Status.Active,
 });
 
 // MasterVendorDocumentType APIs
-export const findMasterVendorDocumentTypes = async (data: MasterVendorDocumentTypeQueryDTO): Promise<FBR<MasterVendorDocumentType[]>> => {
+export const findMasterVendorDocumentType = async (data: MasterVendorDocumentTypeQueryDTO): Promise<FBR<MasterVendorDocumentType[]>> => {
   return apiPost<FBR<MasterVendorDocumentType[]>, MasterVendorDocumentTypeQueryDTO>(ENDPOINTS.find, data);
 };
 

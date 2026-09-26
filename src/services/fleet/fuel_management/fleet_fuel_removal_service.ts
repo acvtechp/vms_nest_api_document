@@ -32,7 +32,7 @@ import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
 import { MasterMainLandMark } from 'src/services/master/main/master_main_landmark_service';
 import { MasterVehicleFuelType } from 'src/services/master/vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from 'src/services/master/vehicle/master_vehicle_fuel_unit_service';
-import { MasterFleetFuelRemovalReason } from 'src/services/master/fleet/master_fleet_fuel_removal_reason_service';
+import { MasterFuelRemovalReason } from 'src/services/master/expense/master_fuel_removal_reason_service';
 
 const URL = 'fleet/fuel_management/fleet_fuel_removal';
 
@@ -80,9 +80,9 @@ export interface FleetFuelRemoval extends Record<string, unknown> {
   total_cost?: number;
 
   // Removal Reason
-  fleet_fuel_removal_reason_id?: string;
-  MasterFleetFuelRemovalReason?: MasterFleetFuelRemovalReason;
-  removal_reason?: string;
+  fuel_removal_reason_id?: string;
+  MasterFuelRemovalReason?: MasterFuelRemovalReason;
+  fuel_removal_reason?: string;
   removal_details?: string;
 
   // Source Details
@@ -187,9 +187,7 @@ export const FleetFuelRemovalSchema = z.object({
   driver_id: single_select_optional('MasterDriver'), // Single-Selection -> MasterDriver
   vehicle_fuel_type_id: single_select_optional('MasterVehicleFuelType'), // Single-Selection -> MasterVehicleFuelType
   vehicle_fuel_unit_id: single_select_optional('MasterVehicleFuelUnit'), // Single-Selection -> MasterVehicleFuelUnit
-  fleet_fuel_removal_reason_id: single_select_optional(
-    'MasterFleetFuelRemovalReason',
-  ), // Single-Selection -> MasterFleetFuelRemovalReason
+  fuel_removal_reason_id: single_select_optional('MasterFuelRemovalReason'), // Single-Selection -> MasterFuelRemovalReason
 
   // Removal Quantity
   before_removal_quantity: doubleOptional('Before Remove Quantity'),
@@ -235,15 +233,18 @@ export const FleetFuelRemovalSchema = z.object({
   longitude: doubleOptionalLatLng('Longitude'),
   google_location: stringOptional('Google Location', 0, 500),
 
-  // Other
+  // Metadata
   status: enumMandatory('Status', Status, Status.Active),
-  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 
+  // Files
   FleetFuelRemovalFileSchema: nestedArrayOfObjectsOptional(
     'FleetFuelRemovalFileSchema',
     FleetFuelRemovalFileSchema,
     [],
   ),
+
+  // Other
+  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type FleetFuelRemovalDTO = z.infer<typeof FleetFuelRemovalSchema>;
 
@@ -257,11 +258,10 @@ export const FleetFuelRemovalQuerySchema = BaseQuerySchema.extend({
   user_ids: multi_select_optional('User'), // Multi-selection -> User
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
   driver_ids: multi_select_optional('MasterDriver'), // Multi-selection -> MasterDriver
+  device_ids: multi_select_optional('MasterDevice'), // Multi-selection -> MasterDevice
   vehicle_fuel_type_ids: multi_select_optional('MasterVehicleFuelType'), // Multi-selection -> MasterVehicleFuelType
   vehicle_fuel_unit_ids: multi_select_optional('MasterVehicleFuelUnit'), // Multi-selection -> MasterVehicleFuelUnit
-  fleet_fuel_removal_reason_ids: multi_select_optional(
-    'MasterFleetFuelRemovalReason',
-  ), // Multi-selection -> MasterFleetFuelRemovalReason
+  fuel_removal_reason_ids: multi_select_optional('MasterFuelRemovalReason'), // Multi-selection -> MasterFuelRemovalReason
 
   // Enums
   entry_source: enumArrayOptional(
@@ -320,7 +320,7 @@ export const toFleetFuelRemovalPayload = (row: FleetFuelRemoval): FleetFuelRemov
   total_cost: row.total_cost || 0,
 
   // Removal Reason
-  fleet_fuel_removal_reason_id: row.fleet_fuel_removal_reason_id || '',
+  fuel_removal_reason_id: row.fuel_removal_reason_id || '',
 
   // Source Details
   entry_source: row.entry_source || RefillEntrySource.Manual,
@@ -369,7 +369,7 @@ export const newFleetFuelRemovalPayload = (): FleetFuelRemovalDTO => ({
   driver_id: '',
   vehicle_fuel_type_id: '',
   vehicle_fuel_unit_id: '',
-  fleet_fuel_removal_reason_id: '',
+  fuel_removal_reason_id: '',
 
   before_removal_quantity: 0,
   after_removal_quantity: 0,

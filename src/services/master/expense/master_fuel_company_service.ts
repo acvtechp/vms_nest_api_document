@@ -18,7 +18,6 @@ import { Status } from '../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../main/users/user_organisation_service';
-import { MasterMainCountry } from '../main/master_main_country_service';
 import { FleetVendorFuelStation } from 'src/services/fleet/vendor_management/fleet_vendor_fuel_station';
 
 const URL = 'master/expense/fuel_company';
@@ -67,10 +66,6 @@ export interface MasterFuelCompany extends Record<string, unknown> {
   organisation_code?: string;
   organisation_logo_url?: string;
 
-  country_id: string;
-  MasterMainCountry?: MasterMainCountry;
-  country_name?: string;
-
   // Relations - Child
   // Child - Fleet
   FleetVendorFuelStation?: FleetVendorFuelStation[]
@@ -85,7 +80,6 @@ export interface MasterFuelCompany extends Record<string, unknown> {
 export const MasterFuelCompanySchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-  country_id: single_select_mandatory('MasterMainCountry'), // Single-Selection -> MasterMainCountry
 
   // Profile Image/Logo
   logo_url: stringOptional('Logo URL', 0, 300),
@@ -108,7 +102,6 @@ export const MasterFuelCompanyQuerySchema = BaseQuerySchema.extend({
 
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
-  country_ids: multi_select_optional('MasterMainCountry'), // Multi-Selection -> MasterMainCountry
 });
 export type MasterFuelCompanyQueryDTO = z.infer<
   typeof MasterFuelCompanyQuerySchema
@@ -126,7 +119,6 @@ export type FuelCompanyLogoDTO = z.infer<typeof FuelCompanyLogoSchema>;
 // Convert MasterFuelCompany Data to API Payload
 export const toMasterFuelCompanyPayload = (row: MasterFuelCompany): MasterFuelCompanyDTO => ({
   organisation_id: row.organisation_id || '',
-  country_id: row.country_id || '',
 
   company_name: row.company_name || '',
   description: row.description || '',
@@ -141,7 +133,6 @@ export const toMasterFuelCompanyPayload = (row: MasterFuelCompany): MasterFuelCo
 // Create New MasterFuelCompany Payload
 export const newMasterFuelCompanyPayload = (): MasterFuelCompanyDTO => ({
   organisation_id: '',
-  country_id: '',
 
   company_name: '',
   description: '',
@@ -168,7 +159,7 @@ export const remove_master_fuel_company_logo = async (id: string): Promise<SBR> 
 };
 
 // MasterFuelCompany APIs
-export const findMasterFuelCompanys = async (data: MasterFuelCompanyQueryDTO): Promise<FBR<MasterFuelCompany[]>> => {
+export const findMasterFuelCompany = async (data: MasterFuelCompanyQueryDTO): Promise<FBR<MasterFuelCompany[]>> => {
   return apiPost<FBR<MasterFuelCompany[]>, MasterFuelCompanyQueryDTO>(ENDPOINTS.find, data);
 };
 

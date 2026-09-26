@@ -446,9 +446,9 @@ export interface FleetVendorDocument extends Record<string, unknown> {
   vendor_name?: string;
   vendor_code?: string;
 
-  document_type_id: string;
+  vendor_document_type_id: string;
   MasterVendorDocumentType?: MasterVendorDocumentType;
-  document_type?: string;
+  vendor_document_type?: string;
 
   // Relations - Child
   // Child - Fleet
@@ -763,7 +763,7 @@ export const FleetVendorDocumentSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
   user_id: single_select_optional('User'), // Single-Selection -> User
   vendor_id: single_select_mandatory('FleetVendor'), // Single-Selection -> FleetVendor
-  document_type_id: single_select_mandatory('MasterVendorDocumentType'), // Single-Selection -> MasterVendorDocumentType
+  vendor_document_type_id: single_select_mandatory('MasterVendorDocumentType'), // Single-Selection -> MasterVendorDocumentType
 
   // Main Field Details
   document_name: stringMandatory('Document Name', 3, 150),
@@ -773,10 +773,15 @@ export const FleetVendorDocumentSchema = z.object({
   expiry_date: dateOptional('Expiry Date'),
   remarks: stringOptional('Remarks', 0, 150),
 
-  FleetVendorDocumentFileSchema: nestedArrayOfObjectsOptional('FleetVendorDocumentFileSchema', FleetVendorDocumentFileSchema, []),
-
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
+
+  // Files
+  FleetVendorDocumentFileSchema: nestedArrayOfObjectsOptional(
+    'FleetVendorDocumentFileSchema',
+    FleetVendorDocumentFileSchema,
+    [],
+  ),
 
   // Other
   time_zone_id: single_select_mandatory('MasterMainTimeZone'),
@@ -792,15 +797,19 @@ export const FleetVendorDocumentQuerySchema = BaseQuerySchema.extend({
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
   user_ids: multi_select_optional('User'), // Multi-selection -> User
   vendor_ids: multi_select_optional('FleetVendor'), // Multi-selection -> FleetVendor
-  document_type_ids: multi_select_optional('MasterVendorDocumentType'), // Multi-selection -> MasterVendorDocumentType
+  vendor_document_type_ids: multi_select_optional('MasterVendorDocumentType'), // Multi-selection -> MasterVendorDocumentType
 });
-export type FleetVendorDocumentQueryDTO = z.infer<typeof FleetVendorDocumentQuerySchema>;
+export type FleetVendorDocumentQueryDTO = z.infer<
+  typeof FleetVendorDocumentQuerySchema
+>;
 
 // FleetVendorDashBoard Query Schema
 export const FleetVendorDashBoardQuerySchema = BaseQuerySchema.extend({
   organisation_ids: multi_select_mandatory('UserOrganisation'), // Multi-Selection -> UserOrganisation
 });
-export type FleetVendorDashBoardQueryDTO = z.infer<typeof FleetVendorDashBoardQuerySchema>;
+export type FleetVendorDashBoardQueryDTO = z.infer<
+  typeof FleetVendorDashBoardQuerySchema
+>;
 
 // Convert FleetVendor Data to API Payload
 export const toFleetVendorPayload = (row: FleetVendor): FleetVendorDTO => ({
@@ -1045,7 +1054,7 @@ export const toFleetVendorDocumentPayload = (row: FleetVendorDocument): FleetVen
   organisation_id: row.organisation_id || '',
   user_id: row.user_id || '',
   vendor_id: row.vendor_id || '',
-  document_type_id: row.document_type_id || '',
+  vendor_document_type_id: row.vendor_document_type_id || '',
 
   document_name: row.document_name || '',
   document_number: row.document_number || '',
@@ -1086,7 +1095,7 @@ export const newFleetVendorDocumentPayload = (): FleetVendorDocumentDTO => ({
   organisation_id: '',
   user_id: '',
   vendor_id: '',
-  document_type_id: '',
+  vendor_document_type_id: '',
 
   document_name: '',
   document_number: '',

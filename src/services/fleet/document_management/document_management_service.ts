@@ -25,7 +25,7 @@ import { DocumentValidityStatus, DocumentStatus, ExpiryType, FileType, Status } 
 import { UserOrganisation } from 'src/services/main/users/user_organisation_service';
 import { User } from 'src/services/main/users/user_service';
 import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
-import { MasterFleetDocumentType } from 'src/services/master/fleet/master_fleet_document_type_service';
+import { MasterVehicleDocumentType } from 'src/services/master/expense/master_vehicle_document_type_service';
 import { FleetVendor } from 'src/services/fleet/vendor_management/fleet_vendor_service';
 
 const URL = 'fleet/document_management/fleet_document';
@@ -100,9 +100,9 @@ export interface FleetDocument extends Record<string, unknown> {
     vehicle_number?: string;
     vehicle_type?: string;
 
-    fleet_document_type_id: string;
-    MasterFleetDocumentType?: MasterFleetDocumentType;
-    document_type?: string;
+    vehicle_document_type_id: string;
+    MasterVehicleDocumentType?: MasterVehicleDocumentType;
+    vehicle_document_type?: string;
 
     vendor_id?: string;
     FleetVendor?: FleetVendor;
@@ -211,7 +211,9 @@ export const FleetDocumentSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
   user_id: single_select_optional('User'), // Single-Selection -> User
   vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
-  fleet_document_type_id: single_select_mandatory('MasterFleetDocumentType'), // Single-Selection -> MasterFleetDocumentType
+  vehicle_document_type_id: single_select_mandatory(
+    'MasterVehicleDocumentType',
+  ), // Single-Selection -> MasterVehicleDocumentType
   vendor_id: single_select_optional('FleetVendor'), // Single-Selection -> FleetVendor
 
   // Main Field Details
@@ -261,7 +263,7 @@ export const FleetDocumentQuerySchema = BaseQuerySchema.extend({
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
   user_ids: multi_select_optional('User'), // Multi-Selection -> User
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-Selection -> MasterVehicle
-  fleet_document_type_ids: multi_select_optional('MasterFleetDocumentType'), // Multi-Selection -> MasterFleetDocumentType
+  vehicle_document_type_ids: multi_select_optional('MasterVehicleDocumentType'), // Multi-Selection -> MasterVehicleDocumentType
   vendor_ids: multi_select_optional('FleetVendor'), // Multi-Selection -> FleetVendor
 
   // Enums
@@ -329,7 +331,7 @@ export const toFleetDocumentPayload = (row: FleetDocument): FleetDocumentDTO => 
     organisation_id: row.organisation_id || '',
     user_id: row.user_id || '',
     vehicle_id: row.vehicle_id || '',
-    fleet_document_type_id: row.fleet_document_type_id || '',
+    vehicle_document_type_id: row.vehicle_document_type_id || '',
     vendor_id: row.vendor_id || '',
 
     document_number: row.document_number || '',
@@ -379,7 +381,7 @@ export const newFleetDocumentPayload = (): FleetDocumentDTO => ({
     organisation_id: '',
     user_id: '',
     vehicle_id: '',
-    fleet_document_type_id: '',
+    vehicle_document_type_id: '',
     vendor_id: '',
 
     document_number: '',

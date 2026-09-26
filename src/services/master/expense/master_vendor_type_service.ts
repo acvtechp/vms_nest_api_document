@@ -101,7 +101,7 @@ export const newMasterVendorTypePayload = (): MasterVendorTypeDTO => ({
 });
 
 // MasterVendorType APIs
-export const findMasterVendorTypes = async (data: MasterVendorTypeQueryDTO): Promise<FBR<MasterVendorType[]>> => {
+export const findMasterVendorType = async (data: MasterVendorTypeQueryDTO): Promise<FBR<MasterVendorType[]>> => {
   return apiPost<FBR<MasterVendorType[]>, MasterVendorTypeQueryDTO>(ENDPOINTS.find, data);
 };
 

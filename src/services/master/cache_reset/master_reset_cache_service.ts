@@ -9,8 +9,6 @@ import { MasterVehicleOwnership } from '../vehicle/master_vehicle_ownership_serv
 import { MasterVehicleAssociated } from '../vehicle/master_vehicle_associated_service';
 import { MasterVehicleFuelType } from '../vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from '../vehicle/master_vehicle_fuel_unit_service';
-import { MasterFleetFuelRemovalReason } from '../fleet/master_fleet_fuel_removal_reason_service';
-import { MasterFleetDocumentType } from '../fleet/master_fleet_document_type_service';
 import { MasterUserStatus } from '../user/master_user_status_service';
 import { MasterUserRole } from '../user/master_user_role_service';
 import { MasterTyreMake } from '../tyre/master_tyre_make_service';
@@ -38,7 +36,6 @@ import { MasterFleetIncidentStatus } from '../fleet/master_fleet_incident_status
 import { MasterFleetIncidentSeverity } from '../fleet/master_fleet_incident_severity_service';
 import { MasterFleetInsuranceClaimStatus } from '../fleet/master_fleet_insurance_claim_status_service';
 import { MasterFleetServiceTask } from '../fleet/master_fleet_service_task_service';
-import { MasterExpenseName } from '../expense/master_expense_name_service';
 import { MasterExpenseType } from '../expense/master_expense_type_service';
 import { MasterVendorType } from '../expense/master_vendor_type_service';
 import { MasterVendorTag } from '../expense/master_vendor_tag_service';
@@ -51,6 +48,9 @@ import { MasterRelationship } from '../bus/master_relationship_service';
 import { MasterSection } from '../bus/master_section_service';
 import { MasterStream } from '../bus/master_stream_service';
 import { MasterYear } from '../bus/master_year_service';
+import { MasterExpenseItem } from '../expense/master_expense_item_service';
+import { MasterVehicleDocumentType } from '../expense/master_vehicle_document_type_service';
+import { MasterFuelRemovalReason } from '../expense/master_fuel_removal_reason_service';
 
 const URL = 'master';
 
@@ -105,8 +105,6 @@ export interface VehicleAllCache extends Record<string, unknown> {
   MasterVehicleAssociated: MasterVehicleAssociated[];
   MasterVehicleFuelType: MasterVehicleFuelType[];
   MasterVehicleFuelUnit: MasterVehicleFuelUnit[];
-  MasterFleetFuelRemovalReason: MasterFleetFuelRemovalReason[];
-  MasterFleetDocumentType: MasterFleetDocumentType[];
 }
 
 // UserAllCache Interface
@@ -166,12 +164,14 @@ export interface FleetAllCache extends Record<string, unknown> {
 
 // ExpenseAllCache Interface
 export interface ExpenseAllCache extends Record<string, unknown> {
-  MasterExpenseName: MasterExpenseName[];
+  MasterExpenseItem: MasterExpenseItem[];
   MasterExpenseType: MasterExpenseType[];
   MasterVendorType: MasterVendorType[];
   MasterVendorTag: MasterVendorTag[];
   MasterVendorDocumentType: MasterVendorDocumentType[];
+  MasterVehicleDocumentType: MasterVehicleDocumentType[];
   MasterFuelCompany: MasterFuelCompany[];
+  MasterFuelRemovalReason: MasterFuelRemovalReason[];
 }
 
 // BusAllCache Interface

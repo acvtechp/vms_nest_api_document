@@ -80,7 +80,6 @@ import { MasterSection } from 'src/services/master/bus/master_section_service';
 import { MasterSemester } from 'src/services/master/bus/master_semester_service';
 import { MasterStream } from 'src/services/master/bus/master_stream_service';
 import { MasterYear } from 'src/services/master/bus/master_year_service';
-import { MasterExpenseName } from 'src/services/master/expense/master_expense_name_service';
 import { MasterExpenseType } from 'src/services/master/expense/master_expense_type_service';
 import { MasterFuelCompany } from 'src/services/master/expense/master_fuel_company_service';
 import { MasterVendorDocumentType } from 'src/services/master/expense/master_vendor_document_type_service';
@@ -99,8 +98,6 @@ import { MasterUserRole } from 'src/services/master/user/master_user_role_servic
 import { MasterUserStatus } from 'src/services/master/user/master_user_status_service';
 
 import { MasterVehicleAssociated } from 'src/services/master/vehicle/master_vehicle_associated_service';
-import { MasterFleetDocumentType } from 'src/services/master/fleet/master_fleet_document_type_service';
-import { MasterFleetFuelRemovalReason } from 'src/services/master/fleet/master_fleet_fuel_removal_reason_service';
 import { MasterVehicleFuelType } from 'src/services/master/vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from 'src/services/master/vehicle/master_vehicle_fuel_unit_service';
 import { MasterVehicleMake } from 'src/services/master/vehicle/master_vehicle_make_service';
@@ -124,6 +121,9 @@ import { FleetServiceSchedule } from 'src/services/fleet/service_management/flee
 import { FleetWorkshop } from 'src/services/fleet/workshop_management/fleet_workshop_service';
 import { MasterDailySchedule, MasterDailyScheduleStudent } from 'src/services/fleet/bus_mangement/master_daily_schedule';
 import { MasterSpecialSchedule, MasterSpecialScheduleStudent } from 'src/services/fleet/bus_mangement/master_special_schedule';
+import { MasterFuelRemovalReason } from 'src/services/master/expense/master_fuel_removal_reason_service';
+import { MasterExpenseItem } from 'src/services/master/expense/master_expense_item_service';
+import { MasterVehicleDocumentType } from 'src/services/master/expense/master_vehicle_document_type_service';
 
 const URL = 'user/organisation';
 
@@ -301,10 +301,10 @@ export interface UserOrganisation extends Record<string, unknown> {
   MasterFleetInsuranceClaimStatus?: MasterFleetInsuranceClaimStatus[];
   MasterFleetServiceTask?: MasterFleetServiceTask[];
   MasterFleetServicePart?: MasterFleetServicePart[];
-  MasterFleetFuelRemovalReason?: MasterFleetFuelRemovalReason[];
-  MasterFleetDocumentType?: MasterFleetDocumentType[];
+  MasterFuelRemovalReason?: MasterFuelRemovalReason[];
+  MasterVehicleDocumentType?: MasterVehicleDocumentType[];
 
-  MasterExpenseName?: MasterExpenseName[];
+  MasterExpenseItem?: MasterExpenseItem[];
   MasterExpenseType?: MasterExpenseType[];
   MasterVendorType?: MasterVendorType[];
   MasterVendorTag?: MasterVendorTag[];

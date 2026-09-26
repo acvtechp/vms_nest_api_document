@@ -30,9 +30,10 @@ import { User } from 'src/services/main/users/user_service';
 import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
 import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
 import { MasterMainLandMark } from 'src/services/master/main/master_main_landmark_service';
-import { MasterExpenseName } from 'src/services/master/expense/master_expense_name_service';
+import { MasterExpenseItem } from 'src/services/master/expense/master_expense_item_service';
 import { FleetIssue } from 'src/services/fleet/issue_management/issue_management_service';
 import { MasterFleetBreakdownType } from 'src/services/master/fleet/master_fleet_breakdown_type_service';
+import { MasterExpenseType } from 'src/services/master/expense/master_expense_type_service';
 
 const URL = 'fleet/breakdown_management/fleet_breakdown';
 
@@ -191,9 +192,13 @@ export interface FleetBreakdownCost extends Record<string, unknown> {
   breakdown_id: string;
   FleetBreakdown?: FleetBreakdown;
 
-  expense_name_id: string;
-  MasterExpenseName?: MasterExpenseName;
-  expense_name?: string;
+  expense_type_id: string;
+  MasterExpenseType?: MasterExpenseType;
+  expense_type?: string;
+
+  expense_item_id: string;
+  MasterExpenseItem?: MasterExpenseItem;
+  expense_item?: string;
 
   // Relations - Child Count
   _count?: {};
@@ -291,24 +296,29 @@ export const FleetBreakdownDashBoardQuerySchema = BaseQuerySchema.extend({
 });
 export type FleetBreakdownDashBoardQueryDTO = z.infer<typeof FleetBreakdownDashBoardQuerySchema>;
 
-// FleetBreakdownCost Create/Update Schema
+// FleetBreakdownCost Create/update Schema
 export const FleetBreakdownCostSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
   user_id: single_select_optional('User'), // Single-Selection -> User
   breakdown_id: single_select_mandatory('FleetBreakdown'), // Single-Selection -> FleetBreakdown
-  expense_name_id: single_select_mandatory('MasterExpenseName'), // Single-Selection -> MasterExpenseName
+  expense_type_id: single_select_mandatory('MasterExpenseType'), // Single-Selection -> MasterExpenseType
+  expense_item_id: single_select_mandatory('MasterExpenseItem'), // Single-Selection -> MasterExpenseItem
 
   // Main Field Details
   breakdown_cost_date: dateOptional('Breakdown Cost Date'),
   breakdown_cost_amount: doubleOptional('Breakdown Cost Amount'),
-  breakdown_cost_description: stringOptional('Breakdown Cost Description', 0, 2000),
-
-  // Other
-  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
+  breakdown_cost_description: stringOptional(
+    'Breakdown Cost Description',
+    0,
+    2000,
+  ),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
+
+  // Other
+  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type FleetBreakdownCostDTO = z.infer<typeof FleetBreakdownCostSchema>;
 
@@ -321,9 +331,12 @@ export const FleetBreakdownCostQuerySchema = BaseQuerySchema.extend({
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
   user_ids: multi_select_optional('User'), // Multi-Selection -> User
   breakdown_ids: multi_select_optional('FleetBreakdown'), // Multi-Selection -> FleetBreakdown
-  expense_name_ids: multi_select_optional('MasterExpenseName'), // Multi-Selection -> MasterExpenseName
+  expense_type_ids: multi_select_optional('MasterExpenseType'), // Multi-Selection -> MasterExpenseType
+  expense_item_ids: multi_select_optional('MasterExpenseItem'), // Multi-Selection -> MasterExpenseItem
 });
-export type FleetBreakdownCostQueryDTO = z.infer<typeof FleetBreakdownCostQuerySchema>;
+export type FleetBreakdownCostQueryDTO = z.infer<
+  typeof FleetBreakdownCostQuerySchema
+>;
 
 // Convert FleetBreakdown Data to API Payload
 export const toFleetBreakdownPayload = (row: FleetBreakdown): FleetBreakdownDTO => ({
@@ -410,7 +423,8 @@ export const toFleetBreakdownCostPayload = (row: FleetBreakdownCost): FleetBreak
   organisation_id: row.organisation_id || '',
   user_id: row.user_id || '',
   breakdown_id: row.breakdown_id || '',
-  expense_name_id: row.expense_name_id || '',
+  expense_type_id: row.expense_type_id || '',
+  expense_item_id: row.expense_item_id || '',
 
   breakdown_cost_date: row.breakdown_cost_date || '',
   breakdown_cost_amount: row.breakdown_cost_amount || 0,
@@ -426,7 +440,8 @@ export const newFleetBreakdownCostPayload = (): FleetBreakdownCostDTO => ({
   organisation_id: '',
   user_id: '',
   breakdown_id: '',
-  expense_name_id: '',
+  expense_type_id: '',
+  expense_item_id: '',
 
   breakdown_cost_date: '',
   breakdown_cost_amount: 0,
