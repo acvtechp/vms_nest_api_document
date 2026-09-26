@@ -42,7 +42,7 @@ export interface OrganisationFleet extends Record<string, unknown> {
 
   // Main Field Details
   fleet_name: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

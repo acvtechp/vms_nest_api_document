@@ -42,7 +42,7 @@ export interface MasterSparePartUnit extends Record<string, unknown> {
   // Main Field Details
   unit_name: string;
   unit_code: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

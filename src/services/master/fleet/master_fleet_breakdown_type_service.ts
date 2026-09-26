@@ -40,7 +40,7 @@ export interface MasterFleetBreakdownType extends Record<string, unknown> {
 
   // Main Field Details
   fleet_breakdown_type: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

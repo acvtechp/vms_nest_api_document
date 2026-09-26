@@ -41,7 +41,7 @@ export interface MasterVehicleFuelUnit extends Record<string, unknown> {
 
   // Main Field Details
   fuel_unit: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

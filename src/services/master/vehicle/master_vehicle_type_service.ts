@@ -36,7 +36,7 @@ export interface MasterVehicleType extends Record<string, unknown> {
 
   // Main Field Details
   vehicle_type: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

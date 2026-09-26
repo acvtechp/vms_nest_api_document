@@ -38,7 +38,7 @@ export interface MasterMainIndustry extends Record<string, unknown> {
 
   // Main Field Details
   industry_name: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

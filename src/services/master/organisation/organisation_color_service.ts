@@ -44,7 +44,7 @@ export interface OrganisationColor extends Record<string, unknown> {
   // Main Field Details
   color_name: string;
   color_code: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

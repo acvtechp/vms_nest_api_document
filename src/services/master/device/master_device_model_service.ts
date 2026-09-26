@@ -45,7 +45,7 @@ export interface MasterDeviceModel extends Record<string, unknown> {
   // Main Field Details
   device_model_name: string;
   device_model_code?: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

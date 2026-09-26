@@ -40,7 +40,7 @@ export interface MasterFleetIncidentSeverity extends Record<string, unknown> {
 
   // Main Field Details
   fleet_incident_severity: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

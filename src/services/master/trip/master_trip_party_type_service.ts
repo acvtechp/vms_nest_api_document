@@ -40,7 +40,7 @@ export interface MasterTripPartyType extends Record<string, unknown> {
 
   // Main Field Details
   trip_party_type: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

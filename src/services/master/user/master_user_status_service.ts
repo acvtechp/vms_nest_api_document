@@ -41,7 +41,7 @@ export interface MasterUserStatus extends Record<string, unknown> {
 
   // Main Field Details
   user_status: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

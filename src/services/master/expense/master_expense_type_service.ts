@@ -39,7 +39,7 @@ export interface MasterExpenseType extends Record<string, unknown> {
 
   // Main Field Details
   expense_type: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

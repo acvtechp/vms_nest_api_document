@@ -41,7 +41,7 @@ export interface MasterUserRole extends Record<string, unknown> {
 
   // Main Field Details
   user_role: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

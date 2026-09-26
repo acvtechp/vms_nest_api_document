@@ -41,7 +41,7 @@ export interface MasterSection extends Record<string, unknown> {
 
   // Main Field Details
   section_name: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

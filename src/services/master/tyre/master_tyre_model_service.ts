@@ -45,7 +45,7 @@ export interface MasterTyreModel extends Record<string, unknown> {
 
   // Main Field Details
   tyre_model: string;
-  description?: string;
+  description: string;
 
   warranty_months?: number;
   warranty_kms?: number;

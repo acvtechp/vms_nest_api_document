@@ -41,7 +41,7 @@ export interface MasterRelationship extends Record<string, unknown> {
 
   // Main Field Details
   relationship_name: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

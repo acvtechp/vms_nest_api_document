@@ -43,7 +43,7 @@ export interface OrganisationTag extends Record<string, unknown> {
 
   // Main Field Details
   tag_name: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

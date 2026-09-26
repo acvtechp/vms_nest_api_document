@@ -41,7 +41,7 @@ export interface MasterStream extends Record<string, unknown> {
 
   // Main Field Details
   stream_name: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

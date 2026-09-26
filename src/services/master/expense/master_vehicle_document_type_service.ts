@@ -40,7 +40,7 @@ export interface MasterVehicleDocumentType extends Record<string, unknown> {
 
   // Main Field Details
   vehicle_document_type: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

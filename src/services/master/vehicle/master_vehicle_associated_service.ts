@@ -42,7 +42,7 @@ export interface MasterVehicleAssociated extends Record<string, unknown> {
 
   // Main Field Details
   vehicle_associated: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

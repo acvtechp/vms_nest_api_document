@@ -40,7 +40,7 @@ export interface MasterFleetServiceTask extends Record<string, unknown> {
 
   // Main Field Details
   fleet_service_task: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

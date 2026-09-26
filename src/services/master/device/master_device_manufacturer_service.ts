@@ -43,7 +43,7 @@ export interface MasterDeviceManufacturer extends Record<string, unknown> {
   // Main Field Details
   device_manufacturer_name: string;
   device_manufacturer_code?: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

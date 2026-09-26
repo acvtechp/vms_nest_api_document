@@ -47,7 +47,7 @@ export interface MasterFuelCompany extends Record<string, unknown> {
 
   // Main Field Details
   company_name: string;
-  description?: string;
+  description: string;
 
   // Logo
   logo_url?: string;

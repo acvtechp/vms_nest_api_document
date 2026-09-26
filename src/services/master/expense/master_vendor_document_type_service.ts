@@ -41,7 +41,7 @@ export interface MasterVendorDocumentType extends Record<string, unknown> {
 
   // Main Field Details
   vendor_document_type: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

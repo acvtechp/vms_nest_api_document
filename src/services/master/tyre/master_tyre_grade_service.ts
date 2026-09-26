@@ -41,7 +41,7 @@ export interface MasterTyreGrade extends Record<string, unknown> {
 
   // Main Field Details
   tyre_grade: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

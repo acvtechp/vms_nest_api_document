@@ -56,7 +56,7 @@ export interface OrganisationSubCompany extends Record<string, unknown> {
   // Main Field Details
   sub_company_name: string;
   sub_company_GSTIN?: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

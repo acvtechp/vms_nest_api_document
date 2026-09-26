@@ -44,7 +44,7 @@ export interface MasterSparePartSubCategory extends Record<string, unknown> {
   // Main Field Details
   sub_category_name: string;
   sub_category_code: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

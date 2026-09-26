@@ -42,7 +42,7 @@ export interface MasterVehicleOwnership extends Record<string, unknown> {
 
   // Main Field Details
   vehicle_ownership: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

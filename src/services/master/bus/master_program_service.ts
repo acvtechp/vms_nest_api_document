@@ -41,7 +41,7 @@ export interface MasterProgram extends Record<string, unknown> {
 
   // Main Field Details
   program_name: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

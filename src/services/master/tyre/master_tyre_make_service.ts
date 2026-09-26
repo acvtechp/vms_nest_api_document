@@ -43,7 +43,7 @@ export interface MasterTyreMake extends Record<string, unknown> {
 
   // Main Field Details
   tyre_make: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

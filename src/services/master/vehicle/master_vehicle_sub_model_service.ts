@@ -45,7 +45,7 @@ export interface MasterVehicleSubModel extends Record<string, unknown> {
 
   // Main Field Details
   vehicle_sub_model: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

@@ -45,7 +45,7 @@ export interface MasterDeviceType extends Record<string, unknown> {
   // Main Field Details
   device_type_name: string;
   device_type_code?: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

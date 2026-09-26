@@ -41,7 +41,7 @@ export interface MasterFleetInsuranceClaimStatus
 
   // Main Field Details
   fleet_insurance_claim_status: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

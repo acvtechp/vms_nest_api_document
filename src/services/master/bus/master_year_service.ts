@@ -41,7 +41,7 @@ export interface MasterYear extends Record<string, unknown> {
 
   // Main Field Details
   year_name: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;

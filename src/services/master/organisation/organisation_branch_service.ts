@@ -45,7 +45,7 @@ export interface OrganisationBranch extends Record<string, unknown> {
   branch_name: string;
   branch_city: string;
   branch_address: string;
-  description?: string;
+  description: string;
 
   // Metadata
   status: Status;
