@@ -75,7 +75,7 @@ import { GPSTrackHistoryShareLink, GPSTrackHistoryShareLinkNotification } from '
 import { MasterMainLanguage } from 'src/services/master/main/master_main_language_service';
 import { MasterClass } from 'src/services/master/bus/master_class_service';
 import { MasterProgram } from 'src/services/master/bus/master_program_service';
-import { MasterRelationship } from 'src/services/master/bus/master_guardian_relationship_service';
+import { MasterGuardianRelationship } from 'src/services/master/bus/master_guardian_relationship_service';
 import { MasterSection } from 'src/services/master/bus/master_section_service';
 import { MasterSemester } from 'src/services/master/bus/master_semester_service';
 import { MasterStream } from 'src/services/master/bus/master_stream_service';
@@ -124,6 +124,7 @@ import { MasterSpecialSchedule, MasterSpecialScheduleStudent } from 'src/service
 import { MasterFuelRemovalReason } from 'src/services/master/expense/master_fuel_removal_reason_service';
 import { MasterExpenseItem } from 'src/services/master/expense/master_expense_item_service';
 import { MasterVehicleDocumentType } from 'src/services/master/expense/master_vehicle_document_type_service';
+import { MasterAcademicYear } from 'src/services/master/bus/master_academic_year_service';
 
 const URL = 'user/organisation';
 
@@ -321,13 +322,14 @@ export interface UserOrganisation extends Record<string, unknown> {
   MasterSparePartSubCategory?: MasterSparePartSubCategory[];
   MasterSparePartUnit?: MasterSparePartUnit[];
 
+  MasterAcademicYear?: MasterAcademicYear[];
   MasterProgram?: MasterProgram[];
   MasterStream?: MasterStream[];
   MasterYear?: MasterYear[];
   MasterSemester?: MasterSemester[];
   MasterClass?: MasterClass[];
   MasterSection?: MasterSection[];
-  MasterRelationship?: MasterRelationship[];
+  MasterGuardianRelationship?: MasterGuardianRelationship[];
 
   // Child - Fleet
   FleetVendor?: FleetVendor[];
@@ -512,13 +514,14 @@ export interface UserOrganisation extends Record<string, unknown> {
     MasterSparePartSubCategory?: number;
     MasterSparePartUnit?: number;
 
+    MasterAcademicYear?: number;
     MasterProgram?: number;
     MasterStream?: number;
     MasterYear?: number;
     MasterSemester?: number;
     MasterClass?: number;
     MasterSection?: number;
-    MasterRelationship?: number;
+    MasterGuardianRelationship?: number;
 
     // Child - Fleet
     FleetVendor?: number;

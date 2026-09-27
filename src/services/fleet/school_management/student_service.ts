@@ -44,7 +44,7 @@ import { MasterSection } from 'src/services/master/bus/master_section_service';
 import { MasterSemester } from 'src/services/master/bus/master_semester_service';
 import { MasterStream } from 'src/services/master/bus/master_stream_service';
 import { MasterYear } from 'src/services/master/bus/master_year_service';
-import { MasterRelationship } from 'src/services/master/bus/master_guardian_relationship_service';
+import { MasterGuardianRelationship } from 'src/services/master/bus/master_guardian_relationship_service';
 import { MasterRoute, MasterRouteStop } from '../bus_mangement/master_route';
 import { MasterMainLandMark } from 'src/services/master/main/master_main_landmark_service';
 import { MasterDailySchedule, MasterDailyScheduleStudent } from '../bus_mangement/master_daily_schedule';
@@ -364,9 +364,9 @@ export interface StudentGuardianLink extends Record<string, unknown> {
     guardian_details?: string;
     guardian_photo_url?: string;
 
-    relationship_id: string;
-    MasterRelationship?: MasterRelationship;
-    relationship_name?: string;
+    guardian_relationship_id: string;
+    MasterGuardianRelationship?: MasterGuardianRelationship;
+    guardian_relationship?: string;
 
     // Relations - Child Count
     _count?: {};
@@ -708,7 +708,9 @@ export const StudentGuardianLinkSchema = z.object({
     organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
     organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
     student_id: single_select_mandatory('Student'), // Single-Selection -> Student
-    relationship_id: single_select_mandatory('MasterRelationship'), // Single-Selection -> MasterRelationship
+    guardian_relationship_id: single_select_mandatory(
+        'MasterGuardianRelationship',
+    ), // Single-Selection -> MasterGuardianRelationship
 
     // Profile Image/Logo
     photo_url: stringOptional('Photo URL', 0, 300),
@@ -1092,7 +1094,7 @@ export const toStudentGuardianLinkPayload = (row: StudentGuardianLink): StudentG
     organisation_id: row.organisation_id || '',
     organisation_branch_id: row.organisation_branch_id || '',
     student_id: row.student_id || '',
-    relationship_id: row.relationship_id || '',
+    guardian_relationship_id: row.guardian_relationship_id || '',
 
     is_primary: row.is_primary || YesNo.No,
     notes: row.notes || '',
@@ -1114,7 +1116,7 @@ export const newStudentGuardianLinkPayload = (): StudentGuardianLinkDTO => ({
     student_id: '',
     organisation_id: '',
     organisation_branch_id: '',
-    relationship_id: '',
+    guardian_relationship_id: '',
 
     is_primary: YesNo.No,
     notes: '',

@@ -1,7 +1,7 @@
 // Axios
-import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
 import { apiGet } from '../../../core/apiCall';
 import { BR, SBR } from '../../../core/BaseResponse';
+
 import { MasterVehicleType } from '../vehicle/master_vehicle_type_service';
 import { MasterVehicleMake } from '../vehicle/master_vehicle_make_service';
 import { MasterVehicleStatus } from '../vehicle/master_vehicle_status_service';
@@ -44,13 +44,14 @@ import { MasterFuelCompany } from '../expense/master_fuel_company_service';
 import { MasterClass } from '../bus/master_class_service';
 import { MasterProgram } from '../bus/master_program_service';
 import { MasterSemester } from '../bus/master_semester_service';
-import { MasterRelationship } from '../bus/master_guardian_relationship_service';
 import { MasterSection } from '../bus/master_section_service';
 import { MasterStream } from '../bus/master_stream_service';
 import { MasterYear } from '../bus/master_year_service';
 import { MasterExpenseItem } from '../expense/master_expense_item_service';
 import { MasterVehicleDocumentType } from '../expense/master_vehicle_document_type_service';
 import { MasterFuelRemovalReason } from '../expense/master_fuel_removal_reason_service';
+import { MasterGuardianRelationship } from '../bus/master_guardian_relationship_service';
+import { MasterAcademicYear } from '../bus/master_academic_year_service';
 
 const URL = 'master';
 
@@ -176,13 +177,14 @@ export interface ExpenseAllCache extends Record<string, unknown> {
 
 // BusAllCache Interface
 export interface BusAllCache extends Record<string, unknown> {
+  MasterAcademicYear: MasterAcademicYear[];
   MasterClass: MasterClass[];
   MasterProgram: MasterProgram[];
   MasterSemester: MasterSemester[];
-  MasterRelationship: MasterRelationship[];
   MasterSection: MasterSection[];
   MasterStream: MasterStream[];
   MasterYear: MasterYear[];
+  MasterGuardianRelationship: MasterGuardianRelationship[];
 }
 
 // Cache APIs
