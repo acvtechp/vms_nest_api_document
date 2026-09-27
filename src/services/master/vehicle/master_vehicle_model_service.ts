@@ -11,6 +11,7 @@ import {
   single_select_mandatory,
   stringOptional,
   stringUUIDMandatory,
+  multi_select_mandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -33,9 +34,13 @@ const ENDPOINTS = {
   delete: (id: string): string => `${URL}/${id}`,
 
   // Cache APIs
-  cache: (organisation_id: string, vehicle_make_id: string = ''): string => `${URL}/cache/${organisation_id}?vehicle_make_id=${vehicle_make_id}`,
-  cache_count: (organisation_id: string, vehicle_make_id: string = ''): string => `${URL}/cache_count/${organisation_id}?vehicle_make_id=${vehicle_make_id}`,
-  cache_child: (organisation_id: string, vehicle_make_id: string = ''): string => `${URL}/cache_child/${organisation_id}?vehicle_make_id=${vehicle_make_id}`,
+  cache: (organisation_id: string, vehicle_make_id: string): string => `${URL}/cache/${organisation_id}?vehicle_make_id=${vehicle_make_id}`,
+  cache_count: (organisation_id: string, vehicle_make_id: string): string => `${URL}/cache_count/${organisation_id}?vehicle_make_id=${vehicle_make_id}`,
+  cache_child: (organisation_id: string, vehicle_make_id: string): string => `${URL}/cache_child/${organisation_id}?vehicle_make_id=${vehicle_make_id}`,
+ 
+  cache_multiple: (organisation_id: string, vehicle_make_ids: string[]): string => `${URL}/cache_multiple/${organisation_id}?vehicle_make_ids=${encodeURIComponent(vehicle_make_ids.join(','))}`,
+  cache_count_multiple: (organisation_id: string, vehicle_make_ids: string[]): string => `${URL}/cache_count_multiple/${organisation_id}?vehicle_make_ids=${encodeURIComponent(vehicle_make_ids.join(','))}`,
+  cache_child_multiple: (organisation_id: string, vehicle_make_ids: string[]): string => `${URL}/cache_child_multiple/${organisation_id}?vehicle_make_ids=${encodeURIComponent(vehicle_make_ids.join(','))}`,
 };
 
 // MasterVehicleModel Interface
@@ -107,6 +112,11 @@ export const FindCacheSchema = z.object({
 });
 export type FindCacheDTO = z.infer<typeof FindCacheSchema>;
 
+export const FindCacheMultipleSchema = z.object({
+  vehicle_make_ids: multi_select_mandatory('MasterVehicleMake'),
+});
+export type FindCacheMultipleDTO = z.infer<typeof FindCacheMultipleSchema>;
+
 // Convert MasterVehicleModel Data to API Payload
 export const toMasterVehicleModelPayload = (row: MasterVehicleModel): MasterVehicleModelDTO => ({
   organisation_id: row.organisation_id || '',
@@ -147,15 +157,27 @@ export const deleteMasterVehicleModel = async (id: string): Promise<SBR> => {
 };
 
 // Cache APIs
-export const getMasterVehicleModelCache = async (organisation_id: string, vehicle_make_id?: string): Promise<FBR<MasterVehicleModel[]>> => {
+export const getMasterVehicleModelCache = async (organisation_id: string, vehicle_make_id: string): Promise<FBR<MasterVehicleModel[]>> => {
   return apiGet<FBR<MasterVehicleModel[]>>(ENDPOINTS.cache(organisation_id, vehicle_make_id));
 };
 
-export const getMasterVehicleModelCacheCount = async (organisation_id: string, vehicle_make_id?: string): Promise<FBR<MasterVehicleModel[]>> => {
+export const getMasterVehicleModelCacheCount = async (organisation_id: string, vehicle_make_id: string): Promise<FBR<MasterVehicleModel[]>> => {
   return apiGet<FBR<MasterVehicleModel[]>>(ENDPOINTS.cache_count(organisation_id, vehicle_make_id));
 };
 
-export const getMasterVehicleModelCacheChild = async (organisation_id: string, vehicle_make_id?: string): Promise<FBR<MasterVehicleModel[]>> => {
+export const getMasterVehicleModelCacheChild = async (organisation_id: string, vehicle_make_id: string): Promise<FBR<MasterVehicleModel[]>> => {
   return apiGet<FBR<MasterVehicleModel[]>>(ENDPOINTS.cache_child(organisation_id, vehicle_make_id));
+};
+
+export const getMasterVehicleModelCacheMultiple = async (organisation_id: string, vehicle_make_ids: string[]): Promise<FBR<MasterVehicleModel[]>> => {
+  return apiGet<FBR<MasterVehicleModel[]>>(ENDPOINTS.cache_multiple(organisation_id, vehicle_make_ids));
+};
+
+export const getMasterVehicleModelCacheCountMultiple = async (organisation_id: string, vehicle_make_ids: string[]): Promise<FBR<MasterVehicleModel[]>> => {
+  return apiGet<FBR<MasterVehicleModel[]>>(ENDPOINTS.cache_count_multiple(organisation_id, vehicle_make_ids));
+};
+
+export const getMasterVehicleModelCacheChildMultiple = async (organisation_id: string, vehicle_make_ids: string[]): Promise<FBR<MasterVehicleModel[]>> => {
+  return apiGet<FBR<MasterVehicleModel[]>>(ENDPOINTS.cache_child_multiple(organisation_id, vehicle_make_ids));
 };
 

@@ -39,7 +39,7 @@ export interface MasterFleetServicePart extends Record<string, unknown> {
   fleet_service_part_id: string;
 
   // Main Field Details
-  fleet_service_part?: string;
+  fleet_service_part: string;
   description: string;
 
   // Metadata
