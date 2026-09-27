@@ -185,27 +185,27 @@ export interface Student extends Record<string, unknown> {
 
     program_id?: string;
     MasterProgram?: MasterProgram;
-    program_name?: string;
+    program?: string;
 
     stream_id?: string;
     MasterStream?: MasterStream;
-    stream_name?: string;
+    stream?: string;
 
     year_id?: string;
     MasterYear?: MasterYear;
-    year_name?: string;
+    year?: string;
 
     semester_id?: string;
     MasterSemester?: MasterSemester;
-    semester_name?: string;
+    semester?: string;
 
     class_id?: string;
     MasterClass?: MasterClass;
-    class_name?: string;
+    class?: string;
 
     section_id?: string;
     MasterSection?: MasterSection;
-    section_name?: string;
+    section?: string;
 
     // Relations - Child
     StudentAddress?: StudentAddress[];
@@ -605,8 +605,10 @@ export const StudentSchema = z.object({
         TransportPlanType.Both,
     ),
 
-    // Other
+    // Metadata
     status: enumMandatory('Status', Status, Status.Active),
+
+    // Other
     time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type StudentDTO = z.infer<typeof StudentSchema>;
@@ -799,6 +801,7 @@ export const StudentLeaveRequestSchema = z.object({
     ),
     reason: stringOptional('Reason', 0, 500),
 
+    // Other
     time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type StudentLeaveRequestDTO = z.infer<typeof StudentLeaveRequestSchema>;
@@ -830,8 +833,10 @@ export const StudentStopChangeRequestSchema = z.object({
 
     reason: stringOptional('Reason', 0, 500),
 
-    // Other
+    // Metadata
     status: enumMandatory('Status', Status, Status.Active),
+
+    // Other
     time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type StudentStopChangeRequestDTO = z.infer<
