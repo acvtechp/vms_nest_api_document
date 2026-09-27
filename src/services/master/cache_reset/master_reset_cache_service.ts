@@ -2,56 +2,80 @@
 import { apiGet } from '../../../core/apiCall';
 import { BR, SBR } from '../../../core/BaseResponse';
 
+// Vehicle
 import { MasterVehicleType } from '../vehicle/master_vehicle_type_service';
 import { MasterVehicleMake } from '../vehicle/master_vehicle_make_service';
+import { MasterVehicleSubModel } from '../vehicle/master_vehicle_sub_model_service';
 import { MasterVehicleStatus } from '../vehicle/master_vehicle_status_service';
 import { MasterVehicleOwnership } from '../vehicle/master_vehicle_ownership_service';
 import { MasterVehicleAssociated } from '../vehicle/master_vehicle_associated_service';
 import { MasterVehicleFuelType } from '../vehicle/master_vehicle_fuel_type_service';
 import { MasterVehicleFuelUnit } from '../vehicle/master_vehicle_fuel_unit_service';
-import { MasterUserStatus } from '../user/master_user_status_service';
+
+// User
 import { MasterUserRole } from '../user/master_user_role_service';
+import { MasterUserStatus } from '../user/master_user_status_service';
+
+// Tyre
 import { MasterTyreMake } from '../tyre/master_tyre_make_service';
 import { MasterTyreGrade } from '../tyre/master_tyre_grade_service';
+
+// Trip
 import { MasterTripPartyType } from '../trip/master_trip_party_type_service';
+
+// Spare Part
 import { MasterSparePartCategory } from '../spare_part/master_spare_part_category_service';
 import { MasterSparePartUnit } from '../spare_part/master_spare_part_unit_service';
+
+// Organisation
 import { OrganisationSubCompany } from '../organisation/organisation_sub_company_service';
+import { OrganisationSubsidiary } from '../organisation/organisation_subsidiary_service';
 import { OrganisationBranch } from '../organisation/organisation_branch_service';
 import { OrganisationColor } from '../organisation/organisation_color_service';
 import { OrganisationTag } from '../organisation/organisation_tag_service';
+import { OrganisationFleet } from '../organisation/organisation_fleet_service';
 import { OrganisationGroup } from '../organisation/organisation_group_service';
+
+// Main
 import { MasterMainIndustry } from '../main/master_main_industry_service';
 import { MasterMainCountry } from '../main/master_main_country_service';
 import { MasterMainDateFormat } from '../main/master_main_date_format_service';
 import { MasterMainLanguage } from '../main/master_main_language_service';
-import { MasterMainUnitDistance } from '../main/master_main_unit_distance_service';
-import { MasterMainUnitMileage } from '../main/master_main_unit_mileage_service';
-import { MasterMainUnitVolume } from '../main/master_main_unit_volume_service';
 import { MasterMainFASTagBank } from '../main/master_main_fasttag_bank_service';
 import { MasterMainEwayBillProvider } from '../main/master_main_eway_bill_provider_service';
 import { MasterMainSimProvider } from '../main/master_main_sim_provider_service';
+import { MasterMainUnitDistance } from '../main/master_main_unit_distance_service';
+import { MasterMainUnitMileage } from '../main/master_main_unit_mileage_service';
+import { MasterMainUnitVolume } from '../main/master_main_unit_volume_service';
+
+// Fleet
+import { MasterFleetBreakdownType } from '../fleet/master_fleet_breakdown_type_service';
 import { MasterFleetIncidentType } from '../fleet/master_fleet_incident_type_service';
 import { MasterFleetIncidentStatus } from '../fleet/master_fleet_incident_status_service';
 import { MasterFleetIncidentSeverity } from '../fleet/master_fleet_incident_severity_service';
 import { MasterFleetInsuranceClaimStatus } from '../fleet/master_fleet_insurance_claim_status_service';
 import { MasterFleetServiceTask } from '../fleet/master_fleet_service_task_service';
+import { MasterFleetServicePart } from '../fleet/master_fleet_service_part_service';
+
+// Expense
 import { MasterExpenseType } from '../expense/master_expense_type_service';
+import { MasterExpenseItem } from '../expense/master_expense_item_service';
 import { MasterVendorType } from '../expense/master_vendor_type_service';
 import { MasterVendorTag } from '../expense/master_vendor_tag_service';
 import { MasterVendorDocumentType } from '../expense/master_vendor_document_type_service';
+import { MasterVehicleDocumentType } from '../expense/master_vehicle_document_type_service';
 import { MasterFuelCompany } from '../expense/master_fuel_company_service';
-import { MasterClass } from '../bus/master_class_service';
+import { MasterFuelRemovalReason } from '../expense/master_fuel_removal_reason_service';
+
+// Bus
+import { MasterAcademicYear } from '../bus/master_academic_year_service';
 import { MasterProgram } from '../bus/master_program_service';
-import { MasterSemester } from '../bus/master_semester_service';
-import { MasterSection } from '../bus/master_section_service';
 import { MasterStream } from '../bus/master_stream_service';
 import { MasterYear } from '../bus/master_year_service';
-import { MasterExpenseItem } from '../expense/master_expense_item_service';
-import { MasterVehicleDocumentType } from '../expense/master_vehicle_document_type_service';
-import { MasterFuelRemovalReason } from '../expense/master_fuel_removal_reason_service';
+import { MasterSemester } from '../bus/master_semester_service';
+import { MasterClass } from '../bus/master_class_service';
+import { MasterSection } from '../bus/master_section_service';
 import { MasterGuardianRelationship } from '../bus/master_guardian_relationship_service';
-import { MasterAcademicYear } from '../bus/master_academic_year_service';
 
 const URL = 'master';
 
@@ -101,6 +125,7 @@ const ENDPOINTS = {
 export interface VehicleAllCache extends Record<string, unknown> {
   MasterVehicleType: MasterVehicleType[];
   MasterVehicleMake: MasterVehicleMake[];
+  MasterVehicleSubModel: MasterVehicleSubModel[];
   MasterVehicleStatus: MasterVehicleStatus[];
   MasterVehicleOwnership: MasterVehicleOwnership[];
   MasterVehicleAssociated: MasterVehicleAssociated[];
@@ -134,9 +159,11 @@ export interface SparePartAllCache extends Record<string, unknown> {
 // OrganisationAllCache Interface
 export interface OrganisationAllCache extends Record<string, unknown> {
   OrganisationSubCompany: OrganisationSubCompany[];
+  OrganisationSubsidiary: OrganisationSubsidiary[];
   OrganisationBranch: OrganisationBranch[];
   OrganisationColor: OrganisationColor[];
   OrganisationTag: OrganisationTag[];
+  OrganisationFleet: OrganisationFleet[];
   OrganisationGroup: OrganisationGroup[];
 }
 
@@ -146,27 +173,29 @@ export interface MainAllCache extends Record<string, unknown> {
   MasterMainCountry: MasterMainCountry[];
   MasterMainDateFormat: MasterMainDateFormat[];
   MasterMainLanguage: MasterMainLanguage[];
-  MasterMainUnitDistance: MasterMainUnitDistance[];
-  MasterMainUnitMileage: MasterMainUnitMileage[];
-  MasterMainUnitVolume: MasterMainUnitVolume[];
   MasterMainFasttagBank: MasterMainFASTagBank[];
   MasterMainEwayBillProvider: MasterMainEwayBillProvider[];
   MasterMainSimProvider: MasterMainSimProvider[];
+  MasterMainUnitDistance: MasterMainUnitDistance[];
+  MasterMainUnitMileage: MasterMainUnitMileage[];
+  MasterMainUnitVolume: MasterMainUnitVolume[];
 }
 
 // FleetAllCache Interface
 export interface FleetAllCache extends Record<string, unknown> {
+  MasterFleetBreakdownType: MasterFleetBreakdownType[];
   MasterFleetIncidentType: MasterFleetIncidentType[];
   MasterFleetIncidentStatus: MasterFleetIncidentStatus[];
   MasterFleetIncidentSeverity: MasterFleetIncidentSeverity[];
   MasterFleetInsuranceClaimStatus: MasterFleetInsuranceClaimStatus[];
   MasterFleetServiceTask: MasterFleetServiceTask[];
+  MasterFleetServicePart: MasterFleetServicePart[];
 }
 
 // ExpenseAllCache Interface
 export interface ExpenseAllCache extends Record<string, unknown> {
-  MasterExpenseItem: MasterExpenseItem[];
   MasterExpenseType: MasterExpenseType[];
+  MasterExpenseItem: MasterExpenseItem[];
   MasterVendorType: MasterVendorType[];
   MasterVendorTag: MasterVendorTag[];
   MasterVendorDocumentType: MasterVendorDocumentType[];
@@ -178,12 +207,12 @@ export interface ExpenseAllCache extends Record<string, unknown> {
 // BusAllCache Interface
 export interface BusAllCache extends Record<string, unknown> {
   MasterAcademicYear: MasterAcademicYear[];
-  MasterClass: MasterClass[];
   MasterProgram: MasterProgram[];
-  MasterSemester: MasterSemester[];
-  MasterSection: MasterSection[];
   MasterStream: MasterStream[];
   MasterYear: MasterYear[];
+  MasterSemester: MasterSemester[];
+  MasterClass: MasterClass[];
+  MasterSection: MasterSection[];
   MasterGuardianRelationship: MasterGuardianRelationship[];
 }
 

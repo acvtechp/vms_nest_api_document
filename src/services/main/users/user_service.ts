@@ -52,6 +52,10 @@ import { FleetWorkshop } from 'src/services/fleet/workshop_management/fleet_work
 import { MasterBookmarkPage } from 'src/services/master/bookmark/master_bookmark_page_service';
 import { FASTagDetails } from 'src/services/account/fasttag_details';
 import { EWayBillDetails } from 'src/services/account/eway_bill_details';
+import { OrganisationColor } from 'src/services/master/organisation/organisation_color_service';
+import { OrganisationSubCompany } from 'src/services/master/organisation/organisation_sub_company_service';
+import { OrganisationSubsidiary } from 'src/services/master/organisation/organisation_subsidiary_service';
+import { OrganisationTag } from 'src/services/master/organisation/organisation_tag_service';
 
 const URL = 'user/user';
 
@@ -137,10 +141,28 @@ export interface User extends Record<string, unknown> {
   organisation_code?: string;
   organisation_logo_url?: string;
 
+  organisation_sub_company_id?: string;
+  OrganisationSubCompany?: OrganisationSubCompany;
+  sub_company_name?: string;
+
+  organisation_subsidiary_id?: string;
+  OrganisationSubsidiary?: OrganisationSubsidiary;
+  subsidiary_name?: string;
+  subsidiary_gstin?: string;
+
   organisation_branch_id?: string;
   OrganisationBranch?: OrganisationBranch;
   branch_name?: string;
   branch_city?: string;
+
+  organisation_color_id?: string;
+  OrganisationColor?: OrganisationColor;
+  color_name?: string;
+  color_code?: string;
+
+  organisation_tag_id?: string;
+  OrganisationTag?: OrganisationTag;
+  tag_name?: string;
 
   assigned_workshop_id?: string;
   AssignedFleetWorkshop?: FleetWorkshop;
@@ -414,10 +436,17 @@ export interface UserLoginPush extends Record<string, unknown> {
 export const UserSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+
+  organisation_sub_company_id: single_select_optional('OrganisationSubCompany'), // Single-Selection -> OrganisationSubCompany
+  organisation_subsidiary_id: single_select_optional('OrganisationSubsidiary'), // Single-Selection -> OrganisationSubsidiary
   organisation_branch_id: single_select_optional('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+  organisation_color_id: single_select_optional('OrganisationColor'), // Single-Selection -> OrganisationColor
+  organisation_tag_id: single_select_optional('OrganisationTag'), // Single-Selection -> OrganisationTag
   assigned_workshop_id: single_select_optional('FleetWorkshop'), // Single-Selection -> FleetWorkshop
+
   user_role_id: single_select_optional('MasterUserRole'), // Single-Selection -> MasterUserRole
   user_status_id: single_select_optional('MasterUserStatus'), // Single-Selection -> MasterUserStatus
+
   language_id: single_select_optional('MasterMainLanguage'), // Single-Selection -> MasterMainLanguage
   time_zone_id: single_select_optional('MasterMainTimeZone'), // Single-Selection -> MasterMainTimeZone
   date_format_id: single_select_optional('MasterMainDateFormat'), // Single-Selection -> MasterMainDateFormat
@@ -465,10 +494,17 @@ export const UserQuerySchema = BaseQuerySchema.extend({
 
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
+
+  organisation_sub_company_ids: multi_select_optional('OrganisationSubCompany'), // Multi-Selection -> OrganisationSubCompany
+  organisation_subsidiary_ids: multi_select_optional('OrganisationSubsidiary'), // Multi-Selection -> OrganisationSubsidiary
   organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
+  organisation_color_ids: multi_select_optional('OrganisationColor'), // Multi-Selection -> OrganisationColor
+  organisation_tag_ids: multi_select_optional('OrganisationTag'), // Multi-Selection -> OrganisationTag
   assigned_workshop_ids: multi_select_optional('FleetWorkshop'), // Multi-Selection -> FleetWorkshop
+
   user_role_ids: multi_select_optional('MasterUserRole'), // Multi-Selection -> MasterUserRole
   user_status_ids: multi_select_optional('MasterUserStatus'), // Multi-Selection -> MasterUserStatus
+
   language_ids: multi_select_optional('MasterMainLanguage'), // Multi-Selection -> MasterMainLanguage
   time_zone_ids: multi_select_optional('MasterMainTimeZone'), // Multi-Selection -> MasterMainTimeZone
   date_format_ids: multi_select_optional('MasterMainDateFormat'), // Multi-Selection -> MasterMainDateFormat
@@ -638,7 +674,11 @@ export const toUserPayload = (row: User): UserDTO => ({
   user_image_name: row.user_image_name || '',
 
   organisation_id: row.organisation_id || '',
+  organisation_sub_company_id: row.organisation_sub_company_id || '',
+  organisation_subsidiary_id: row.organisation_subsidiary_id || '',
   organisation_branch_id: row.organisation_branch_id || '',
+  organisation_color_id: row.organisation_color_id || '',
+  organisation_tag_id: row.organisation_tag_id || '',
   assigned_workshop_id: row.assigned_workshop_id || '',
   user_role_id: row.user_role_id || '',
   user_status_id: row.user_status_id || '',
@@ -689,7 +729,11 @@ export const newUserPayload = (): UserDTO => ({
   user_image_name: '',
 
   organisation_id: '',
+  organisation_sub_company_id: '',
+  organisation_subsidiary_id: '',
   organisation_branch_id: '',
+  organisation_color_id: '',
+  organisation_tag_id: '',
   assigned_workshop_id: '',
   user_role_id: '',
   user_status_id: '',

@@ -20,6 +20,7 @@ import { Status } from '../../../core/Enums';
 import { UserOrganisation } from '../../../services/main/users/user_organisation_service';
 import { MasterVehicle } from '../../../services/main/vehicle/master_vehicle_service';
 import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
+import { User } from 'src/services/main/users/user_service';
 
 const URL = 'master/organisation/tag';
 
@@ -60,11 +61,13 @@ export interface OrganisationTag extends Record<string, unknown> {
   // Relations - Child
   MasterVehicle?: MasterVehicle[];
   MasterDriver?: MasterDriver[];
+  User?: User[];
 
   // Relations - Child Count
   _count?: {
     MasterVehicle?: number;
     MasterDriver?: number;
+    User?: number;
   };
 }
 

@@ -20,6 +20,7 @@ import { Status } from '../../../core/Enums';
 import { UserOrganisation } from '../../../services/main/users/user_organisation_service';
 import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
 import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
+import { User } from 'src/services/main/users/user_service';
 
 const URL = 'master/organisation/color';
 
@@ -61,11 +62,13 @@ export interface OrganisationColor extends Record<string, unknown> {
   // Relations - Child
   MasterVehicle?: MasterVehicle[];
   MasterDriver?: MasterDriver[];
+  User?: User[];
 
   // Relations - Child Count
   _count?: {
     MasterVehicle?: number;
     MasterDriver?: number;
+    User?: number;
   };
 }
 
@@ -114,7 +117,7 @@ export const newOrganisationColorPayload = (): OrganisationColorDTO => ({
   color_name: '',
   color_code: '',
   description: '',
-  
+
   status: Status.Active,
 });
 

@@ -19,6 +19,8 @@ import { Status } from '../../../core/Enums';
 // Other Models
 import { UserOrganisation } from '../../main/users/user_organisation_service';
 import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
+import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
+import { User } from 'src/services/main/users/user_service';
 
 const URL = 'master/organisation/fleet';
 
@@ -58,10 +60,14 @@ export interface OrganisationFleet extends Record<string, unknown> {
 
   // Relations - Child
   MasterVehicle?: MasterVehicle[];
+  MasterDriver?: MasterDriver[];
+  User?: User[];
 
   // Relations - Child Count
   _count?: {
     MasterVehicle?: number;
+    MasterDriver?: number;
+    User?: number;
   };
 }
 
@@ -107,7 +113,7 @@ export const newOrganisationFleetPayload = (): OrganisationFleetDTO => ({
 
   fleet_name: '',
   description: '',
-  
+
   status: Status.Active,
 });
 

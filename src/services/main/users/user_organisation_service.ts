@@ -34,11 +34,15 @@ import { MasterMainUnitVolume } from '../../../services/master/main/master_main_
 import { DriverLoginPush, MasterDriver, MasterDriverFile } from '../../../services/main/drivers/master_driver_service';
 import { User, UserLoginPush } from '../../../services/main/users/user_service';
 
+// Master - Organisation
+import { OrganisationSubCompany } from '../../../services/master/organisation/organisation_sub_company_service';
+import { OrganisationSubsidiary } from '../../../services/master/organisation/organisation_subsidiary_service';
 import { OrganisationBranch } from '../../../services/master/organisation/organisation_branch_service';
 import { OrganisationColor } from '../../../services/master/organisation/organisation_color_service';
-import { OrganisationGroup } from '../../../services/master/organisation/organisation_group_service';
-import { OrganisationSubCompany } from '../../../services/master/organisation/organisation_sub_company_service';
+import { OrganisationFleet } from 'src/services/master/organisation/organisation_fleet_service';
 import { OrganisationTag } from '../../../services/master/organisation/organisation_tag_service';
+import { OrganisationGroup } from 'src/services/master/organisation/organisation_group_service';
+
 import { OrganisationCalendar } from 'src/services/fleet/school_management/calendar_service';
 
 import { OrganisationNotificationPreference } from 'src/services/account/notification_preferences.service';
@@ -277,8 +281,10 @@ export interface UserOrganisation extends Record<string, unknown> {
 
   // Child - Master
   OrganisationSubCompany?: OrganisationSubCompany[];
+  OrganisationSubsidiary?: OrganisationSubsidiary[];
   OrganisationBranch?: OrganisationBranch[];
   OrganisationColor?: OrganisationColor[];
+  OrganisationFleet?: OrganisationFleet[];
   OrganisationTag?: OrganisationTag[];
   OrganisationGroup?: OrganisationGroup[];
 
@@ -469,8 +475,10 @@ export interface UserOrganisation extends Record<string, unknown> {
 
     // Child - Master
     OrganisationSubCompany?: number;
+    OrganisationSubsidiary?: number;
     OrganisationBranch?: number;
     OrganisationColor?: number;
+    OrganisationFleet?: number;
     OrganisationTag?: number;
     OrganisationGroup?: number;
 
