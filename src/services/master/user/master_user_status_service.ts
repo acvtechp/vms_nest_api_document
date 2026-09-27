@@ -56,7 +56,6 @@ export interface MasterUserStatus extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - User
   User?: User[];
 
   // Relations - Child Count
@@ -112,7 +111,7 @@ export const newMasterUserStatusPayload = (): MasterUserStatusDTO => ({
 });
 
 // MasterUserStatus APIs
-export const findMasterUserStatuses = async (data: MasterUserStatusQueryDTO): Promise<FBR<MasterUserStatus[]>> => {
+export const findMasterUserStatus = async (data: MasterUserStatusQueryDTO): Promise<FBR<MasterUserStatus[]>> => {
   return apiPost<FBR<MasterUserStatus[]>, MasterUserStatusQueryDTO>(ENDPOINTS.find, data);
 };
 

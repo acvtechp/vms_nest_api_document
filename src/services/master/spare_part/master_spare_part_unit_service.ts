@@ -57,7 +57,6 @@ export interface MasterSparePartUnit extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Fleet
   //FleetSpareParts?: FleetSpareParts[];
 
   // Relations - Child Count
@@ -72,8 +71,8 @@ export const MasterSparePartUnitSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  unit_name: stringMandatory('Unit Name', 3, 50),
-  unit_code: stringMandatory('Unit Code', 2, 10),
+  unit_name: stringMandatory('Unit Name', 3, 100),
+  unit_code: stringMandatory('Unit Code', 2, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -114,7 +113,7 @@ export const newMasterSparePartUnitPayload = (): MasterSparePartUnitDTO => ({
 });
 
 // MasterSparePartUnit APIs
-export const findMasterSparePartUnits = async (data: SparePartUnitQueryDTO): Promise<FBR<MasterSparePartUnit[]>> => {
+export const findMasterSparePartUnit = async (data: SparePartUnitQueryDTO): Promise<FBR<MasterSparePartUnit[]>> => {
   return apiPost<FBR<MasterSparePartUnit[]>, SparePartUnitQueryDTO>(ENDPOINTS.find, data);
 };
 

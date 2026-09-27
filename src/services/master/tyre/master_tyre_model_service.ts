@@ -47,12 +47,13 @@ export interface MasterTyreModel extends Record<string, unknown> {
   tyre_model: string;
   description: string;
 
+  // Other Fields
   warranty_months?: number;
-  warranty_kms?: number;
+  warranty_distance_km?: number;
   tyre_size?: string;
-  tread_depth?: number;
-  recommended_min_tread_depth?: number;
-  recommended_max_run_kms?: number;
+  tread_depth_mm?: number;
+  recommended_min_tread_depth_mm?: number;
+  recommended_max_distance_km?: number;
 
   // Metadata
   status: Status;
@@ -71,7 +72,6 @@ export interface MasterTyreModel extends Record<string, unknown> {
   tyre_make?: string;
 
   // Relations - Child
-  // Child - Fleet
   // FleetTyreInventory?: FleetTyreInventory[];
 
   // Relations - Child Count
@@ -90,12 +90,15 @@ export const MasterTyreModelSchema = z.object({
   tyre_model: stringMandatory('Tyre Model', 3, 100),
   description: stringOptional('Description', 0, 300),
 
+  // Other Fields
   warranty_months: numberOptional('Warranty Months'),
-  warranty_kms: doubleOptional('Warranty Kms'),
+  warranty_distance_km: doubleOptional('Warranty Distance KM'),
   tyre_size: stringOptional('Tyre Size', 0, 100),
-  tread_depth: doubleOptional('Tread Depth'),
-  recommended_min_tread_depth: doubleOptional('Recommended Min Tread Depth'),
-  recommended_max_run_kms: doubleOptional('Recommended Max Run Kms'),
+  tread_depth_mm: doubleOptional('Tread Depth MM'),
+  recommended_min_tread_depth_mm: doubleOptional(
+    'Recommended Min Tread Depth MM',
+  ),
+  recommended_max_distance_km: doubleOptional('Recommended Max Distance KM'),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -129,11 +132,11 @@ export const toMasterTyreModelPayload = (row: MasterTyreModel): MasterTyreModelD
   description: row.description || '',
 
   warranty_months: row.warranty_months || 0,
-  warranty_kms: row.warranty_kms || 0,
+  warranty_distance_km: row.warranty_distance_km || 0,
   tyre_size: row.tyre_size || '',
-  tread_depth: row.tread_depth || 0,
-  recommended_min_tread_depth: row.recommended_min_tread_depth || 0,
-  recommended_max_run_kms: row.recommended_max_run_kms || 0,
+  tread_depth_mm: row.tread_depth_mm || 0,
+  recommended_min_tread_depth_mm: row.recommended_min_tread_depth_mm || 0,
+  recommended_max_distance_km: row.recommended_max_distance_km || 0,
 
   status: row.status || Status.Active,
 });
@@ -147,17 +150,17 @@ export const newMasterTyreModelPayload = (): MasterTyreModelDTO => ({
   description: '',
 
   warranty_months: 0,
-  warranty_kms: 0,
+  warranty_distance_km: 0,
   tyre_size: '',
-  tread_depth: 0,
-  recommended_min_tread_depth: 0,
-  recommended_max_run_kms: 0,
+  tread_depth_mm: 0,
+  recommended_min_tread_depth_mm: 0,
+  recommended_max_distance_km: 0,
 
   status: Status.Active,
 });
 
 // MasterTyreModel APIs
-export const findMasterTyreModels = async (data: MasterTyreModelQueryDTO): Promise<FBR<MasterTyreModel[]>> => {
+export const findMasterTyreModel = async (data: MasterTyreModelQueryDTO): Promise<FBR<MasterTyreModel[]>> => {
   return apiPost<FBR<MasterTyreModel[]>, MasterTyreModelQueryDTO>(ENDPOINTS.find, data);
 };
 

@@ -56,7 +56,6 @@ export interface MasterUserRole extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - User
   User?: User[];
 
   // Relations - Child Count
@@ -110,7 +109,7 @@ export const newMasterUserRolePayload = (): MasterUserRoleDTO => ({
 });
 
 // MasterUserRole APIs
-export const findMasterUserRoles = async (data: MasterUserRoleQueryDTO): Promise<FBR<MasterUserRole[]>> => {
+export const findMasterUserRole = async (data: MasterUserRoleQueryDTO): Promise<FBR<MasterUserRole[]>> => {
   return apiPost<FBR<MasterUserRole[]>, MasterUserRoleQueryDTO>(ENDPOINTS.find, data);
 };
 

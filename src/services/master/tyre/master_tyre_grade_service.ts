@@ -56,7 +56,6 @@ export interface MasterTyreGrade extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Fleet
   // FleetTyreInventory?: FleetTyreInventory[];
 
   // Relations - Child Count
@@ -112,7 +111,7 @@ export const newMasterTyreGradePayload = (): MasterTyreGradeDTO => ({
 });
 
 // MasterTyreGrade APIs
-export const findMasterTyreGrades = async (data: MasterTyreGradeQueryDTO): Promise<FBR<MasterTyreGrade[]>> => {
+export const findMasterTyreGrade = async (data: MasterTyreGradeQueryDTO): Promise<FBR<MasterTyreGrade[]>> => {
   return apiPost<FBR<MasterTyreGrade[]>, MasterTyreGradeQueryDTO>(ENDPOINTS.find, data);
 };
 

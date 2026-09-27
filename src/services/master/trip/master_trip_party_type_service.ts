@@ -55,7 +55,6 @@ export interface MasterTripPartyType extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Fleet
   // FleetTripParty?: FleetTripParty[];
 
   // Relations - Child Count
@@ -111,7 +110,7 @@ export const newMasterTripPartyTypePayload = (): MasterTripPartyTypeDTO => ({
 });
 
 // MasterTripPartyType APIs
-export const findMasterTripPartyTypes = async (data: MasterTripPartyTypeQueryDTO): Promise<FBR<MasterTripPartyType[]>> => {
+export const findMasterTripPartyType = async (data: MasterTripPartyTypeQueryDTO): Promise<FBR<MasterTripPartyType[]>> => {
   return apiPost<FBR<MasterTripPartyType[]>, MasterTripPartyTypeQueryDTO>(ENDPOINTS.find, data);
 };
 

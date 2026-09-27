@@ -58,9 +58,7 @@ export interface MasterTyreMake extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Master
   MasterTyreModel?: MasterTyreModel[];
-  // Child - Fleet
   // FleetTyreInventory?: FleetTyreInventory[];
 
   // Relations - Child Count
@@ -115,7 +113,7 @@ export const newMasterTyreMakePayload = (): MasterTyreMakeDTO => ({
 });
 
 // MasterTyreMake APIs
-export const findMasterTyreMakes = async (data: MasterTyreMakeQueryDTO): Promise<FBR<MasterTyreMake[]>> => {
+export const findMasterTyreMake = async (data: MasterTyreMakeQueryDTO): Promise<FBR<MasterTyreMake[]>> => {
   return apiPost<FBR<MasterTyreMake[]>, MasterTyreMakeQueryDTO>(ENDPOINTS.find, data);
 };
 

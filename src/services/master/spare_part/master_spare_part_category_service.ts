@@ -59,9 +59,7 @@ export interface MasterSparePartCategory extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Master
   MasterSparePartSubCategory?: MasterSparePartSubCategory[]
-  // Child - Fleet
   // FleetSpareParts?: FleetSpareParts[]
 
   // Relations - Child Count
@@ -77,8 +75,8 @@ export const MasterSparePartCategorySchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  category_name: stringMandatory('Category Name', 3, 50),
-  category_code: stringMandatory('Category Code', 2, 10),
+  category_name: stringMandatory('Category Name', 3, 100),
+  category_code: stringMandatory('Category Code', 0, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -123,7 +121,7 @@ export const newMasterSparePartCategoryPayload = (): MasterSparePartCategoryDTO 
 });
 
 // MasterSparePartCategory APIs
-export const findMasterSparePartCategories = async (data: SparePartCategoryQueryDTO): Promise<FBR<MasterSparePartCategory[]>> => {
+export const findMasterSparePartCategory = async (data: SparePartCategoryQueryDTO): Promise<FBR<MasterSparePartCategory[]>> => {
   return apiPost<FBR<MasterSparePartCategory[]>, SparePartCategoryQueryDTO>(ENDPOINTS.find, data);
 };
 
