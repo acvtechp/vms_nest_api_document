@@ -56,7 +56,6 @@ export interface MasterFleetInsuranceClaimStatus
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Fleet
   FleetIncident?: FleetIncident[]
 
   // Relations - Child Count
@@ -121,7 +120,7 @@ export const newMasterFleetInsuranceClaimStatusPayload = (): MasterFleetInsuranc
 });
 
 // MasterFleetInsuranceClaimStatus APIs
-export const findMasterFleetInsuranceClaimStatuses = async (data: MasterFleetInsuranceClaimStatusQueryDTO): Promise<FBR<MasterFleetInsuranceClaimStatus[]>> => {
+export const findMasterFleetInsuranceClaimStatus = async (data: MasterFleetInsuranceClaimStatusQueryDTO): Promise<FBR<MasterFleetInsuranceClaimStatus[]>> => {
   return apiPost<FBR<MasterFleetInsuranceClaimStatus[]>, MasterFleetInsuranceClaimStatusQueryDTO>(ENDPOINTS.find, data);
 };
 

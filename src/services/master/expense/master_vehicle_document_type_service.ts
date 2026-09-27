@@ -55,7 +55,6 @@ export interface MasterVehicleDocumentType extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Main
   FleetDocument?: FleetDocument[];
   FleetDocumentExpiry?: FleetDocumentExpiry[];
 

@@ -75,7 +75,7 @@ import { GPSTrackHistoryShareLink, GPSTrackHistoryShareLinkNotification } from '
 import { MasterMainLanguage } from 'src/services/master/main/master_main_language_service';
 import { MasterClass } from 'src/services/master/bus/master_class_service';
 import { MasterProgram } from 'src/services/master/bus/master_program_service';
-import { MasterRelationship } from 'src/services/master/bus/master_relationship_service';
+import { MasterRelationship } from 'src/services/master/bus/master_guardian_relationship_service';
 import { MasterSection } from 'src/services/master/bus/master_section_service';
 import { MasterSemester } from 'src/services/master/bus/master_semester_service';
 import { MasterStream } from 'src/services/master/bus/master_stream_service';

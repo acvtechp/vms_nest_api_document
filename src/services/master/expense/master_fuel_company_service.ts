@@ -67,7 +67,6 @@ export interface MasterFuelCompany extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Fleet
   FleetVendorFuelStation?: FleetVendorFuelStation[]
 
   // Relations - Child Count

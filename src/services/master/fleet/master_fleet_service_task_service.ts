@@ -107,12 +107,12 @@ export const newMasterFleetServiceTaskPayload = (): MasterFleetServiceTaskDTO =>
 
   fleet_service_task: '',
   description: '',
-  
+
   status: Status.Active,
 });
 
 // MasterFleetServiceTask APIs
-export const findMasterFleetServiceTasks = async (data: MasterFleetServiceTaskQueryDTO): Promise<FBR<MasterFleetServiceTask[]>> => {
+export const findMasterFleetServiceTask = async (data: MasterFleetServiceTaskQueryDTO): Promise<FBR<MasterFleetServiceTask[]>> => {
   return apiPost<FBR<MasterFleetServiceTask[]>, MasterFleetServiceTaskQueryDTO>(ENDPOINTS.find, data);
 };
 

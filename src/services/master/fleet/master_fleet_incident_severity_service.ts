@@ -55,7 +55,6 @@ export interface MasterFleetIncidentSeverity extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Fleet
   FleetIncident?: FleetIncident[];
 
   // Relations - Child Count
@@ -115,7 +114,7 @@ export const newMasterFleetIncidentSeverityPayload = (): MasterFleetIncidentSeve
 });
 
 // MasterFleetIncidentSeverity APIs
-export const findMasterFleetIncidentSeverities = async (data: MasterFleetIncidentSeverityQueryDTO): Promise<FBR<MasterFleetIncidentSeverity[]>> => {
+export const findMasterFleetIncidentSeverity = async (data: MasterFleetIncidentSeverityQueryDTO): Promise<FBR<MasterFleetIncidentSeverity[]>> => {
   return apiPost<FBR<MasterFleetIncidentSeverity[]>, MasterFleetIncidentSeverityQueryDTO>(ENDPOINTS.find, data);
 };
 

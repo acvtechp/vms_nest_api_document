@@ -44,7 +44,7 @@ import { MasterFuelCompany } from '../expense/master_fuel_company_service';
 import { MasterClass } from '../bus/master_class_service';
 import { MasterProgram } from '../bus/master_program_service';
 import { MasterSemester } from '../bus/master_semester_service';
-import { MasterRelationship } from '../bus/master_relationship_service';
+import { MasterRelationship } from '../bus/master_guardian_relationship_service';
 import { MasterSection } from '../bus/master_section_service';
 import { MasterStream } from '../bus/master_stream_service';
 import { MasterYear } from '../bus/master_year_service';

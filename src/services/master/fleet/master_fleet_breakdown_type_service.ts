@@ -55,7 +55,6 @@ export interface MasterFleetBreakdownType extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Fleet
   FleetBreakdown?: FleetBreakdown[];
 
   // Relations - Child Count

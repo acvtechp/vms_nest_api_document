@@ -55,7 +55,6 @@ export interface MasterFleetIncidentType extends Record<string, unknown> {
   organisation_logo_url?: string;
 
   // Relations - Child
-  // Child - Fleet
   FleetIncident?: FleetIncident[]
 
   // Relations - Child Count
@@ -113,7 +112,7 @@ export const newMasterFleetIncidentTypePayload = (): MasterFleetIncidentTypeDTO 
 });
 
 // MasterFleetIncidentType APIs
-export const findMasterFleetIncidentTypes = async (data: MasterFleetIncidentTypeQueryDTO): Promise<FBR<MasterFleetIncidentType[]>> => {
+export const findMasterFleetIncidentType = async (data: MasterFleetIncidentTypeQueryDTO): Promise<FBR<MasterFleetIncidentType[]>> => {
   return apiPost<FBR<MasterFleetIncidentType[]>, MasterFleetIncidentTypeQueryDTO>(ENDPOINTS.find, data);
 };
 
