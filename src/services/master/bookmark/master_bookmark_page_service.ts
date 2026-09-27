@@ -135,7 +135,7 @@ export const newMasterBookmarkPagePayload = (): MasterBookmarkPageDTO => ({
 });
 
 // MasterBookmarkPage APIs
-export const findMasterBookmarkPages = async (data: MasterBookmarkPageQueryDTO): Promise<FBR<MasterBookmarkPage[]>> => {
+export const findMasterBookmarkPage = async (data: MasterBookmarkPageQueryDTO): Promise<FBR<MasterBookmarkPage[]>> => {
   return apiPost<FBR<MasterBookmarkPage[]>, MasterBookmarkPageQueryDTO>(ENDPOINTS.find, data);
 };
 

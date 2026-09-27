@@ -53,7 +53,6 @@ export interface MasterDeviceType extends Record<string, unknown> {
   modified_date_time: string;
 
   // Relations - Child
-  // Child - Master
   MasterVehicle?: MasterVehicle[];
 
   // Relations - Child Count
@@ -102,7 +101,7 @@ export const newMasterDeviceTypePayload = (): MasterDeviceTypeDTO => ({
 });
 
 // MasterDeviceType APIs
-export const findMasterDeviceTypes = async (data: MasterDeviceTypeQueryDTO): Promise<FBR<MasterDeviceType[]>> => {
+export const findMasterDeviceType = async (data: MasterDeviceTypeQueryDTO): Promise<FBR<MasterDeviceType[]>> => {
   return apiPost<FBR<MasterDeviceType[]>, MasterDeviceTypeQueryDTO>(ENDPOINTS.find, data);
 };
 

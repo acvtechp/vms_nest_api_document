@@ -35,6 +35,10 @@ const ENDPOINTS = {
   cache: (device_manufacturer_id?: string): string => `${URL}/cache?device_manufacturer_id=${device_manufacturer_id || ''}`,
   cache_count: (device_manufacturer_id?: string): string => `${URL}/cache_count?device_manufacturer_id=${device_manufacturer_id || ''}`,
   cache_child: (device_manufacturer_id?: string): string => `${URL}/cache_child?device_manufacturer_id=${device_manufacturer_id || ''}`,
+
+  cache_multiple: (device_manufacturer_ids: string[]): string => `${URL}/cache_multiple?device_manufacturer_ids=${encodeURIComponent(device_manufacturer_ids.join(','))}`,
+  cache_count_multiple: (device_manufacturer_ids: string[]): string => `${URL}/cache_count_multiple?device_manufacturer_ids=${encodeURIComponent(device_manufacturer_ids.join(','))}`,
+  cache_child_multiple: (device_manufacturer_ids: string[]): string => `${URL}/cache_child_multiple?device_manufacturer_ids=${encodeURIComponent(device_manufacturer_ids.join(','))}`,
 };
 
 // MasterDeviceModel Interface
@@ -57,7 +61,6 @@ export interface MasterDeviceModel extends Record<string, unknown> {
   MasterDeviceManufacturer?: MasterDeviceManufacturer;
 
   // Relations - Child
-  // Child - Master
   MasterDeviceType?: MasterDeviceType[];
   MasterVehicle?: MasterVehicle[];
 
@@ -100,6 +103,11 @@ export const FindCacheSchema = z.object({
 });
 export type FindCacheDTO = z.infer<typeof FindCacheSchema>;
 
+export const FindCacheMultipleSchema = z.object({
+  device_manufacturer_ids: multi_select_optional('MasterDeviceManufacturer'),
+});
+export type FindCacheMultipleDTO = z.infer<typeof FindCacheMultipleSchema>;
+
 // Convert MasterDeviceModel Data to API Payload
 export const toMasterDeviceModelPayload = (row: MasterDeviceModel): MasterDeviceModelDTO => ({
   device_manufacturer_id: row.device_manufacturer_id || '',
@@ -123,7 +131,7 @@ export const newMasterDeviceModelPayload = (): MasterDeviceModelDTO => ({
 });
 
 // MasterDeviceModel APIs
-export const findMasterDeviceModels = async (data: MasterDeviceModelQueryDTO): Promise<FBR<MasterDeviceModel[]>> => {
+export const findMasterDeviceModel = async (data: MasterDeviceModelQueryDTO): Promise<FBR<MasterDeviceModel[]>> => {
   return apiPost<FBR<MasterDeviceModel[]>, MasterDeviceModelQueryDTO>(ENDPOINTS.find, data);
 };
 
@@ -150,5 +158,17 @@ export const getMasterDeviceModelCacheCount = async (device_manufacturer_id?: st
 
 export const getMasterDeviceModelCacheChild = async (device_manufacturer_id?: string): Promise<FBR<MasterDeviceModel[]>> => {
   return apiGet<FBR<MasterDeviceModel[]>>(ENDPOINTS.cache_child(device_manufacturer_id));
+};
+
+export const getMasterDeviceModelCacheMultiple = async (device_manufacturer_ids: string[]): Promise<FBR<MasterDeviceModel[]>> => {
+  return apiGet<FBR<MasterDeviceModel[]>>(ENDPOINTS.cache_multiple(device_manufacturer_ids));
+};
+
+export const getMasterDeviceModelCacheCountMultiple = async (device_manufacturer_ids: string[]): Promise<FBR<MasterDeviceModel[]>> => {
+  return apiGet<FBR<MasterDeviceModel[]>>(ENDPOINTS.cache_count_multiple(device_manufacturer_ids));
+};
+
+export const getMasterDeviceModelCacheChildMultiple = async (device_manufacturer_ids: string[]): Promise<FBR<MasterDeviceModel[]>> => {
+  return apiGet<FBR<MasterDeviceModel[]>>(ENDPOINTS.cache_child_multiple(device_manufacturer_ids));
 };
 

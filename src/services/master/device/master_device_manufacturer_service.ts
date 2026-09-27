@@ -51,7 +51,6 @@ export interface MasterDeviceManufacturer extends Record<string, unknown> {
   modified_date_time: string;
 
   // Relations - Child
-  // Child - Master
   MasterDeviceModel?: MasterDeviceModel[];
   MasterDeviceType?: MasterDeviceType[];
   MasterVehicle?: MasterVehicle[];
@@ -106,7 +105,7 @@ export const newMasterDeviceManufacturerPayload = (): MasterDeviceManufacturerDT
 });
 
 // MasterDeviceManufacturer APIs
-export const findMasterDeviceManufacturers = async (data: MasterDeviceManufacturerQueryDTO): Promise<FBR<MasterDeviceManufacturer[]>> => {
+export const findMasterDeviceManufacturer = async (data: MasterDeviceManufacturerQueryDTO): Promise<FBR<MasterDeviceManufacturer[]>> => {
   return apiPost<FBR<MasterDeviceManufacturer[]>, MasterDeviceManufacturerQueryDTO>(ENDPOINTS.find, data);
 };
 

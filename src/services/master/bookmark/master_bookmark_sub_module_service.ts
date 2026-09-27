@@ -11,6 +11,7 @@ import {
   multi_select_optional,
   numberMandatory,
   stringUUIDMandatory,
+  multi_select_mandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -36,6 +37,10 @@ const ENDPOINTS = {
   cache: (bookmark_module_id: string): string => `${URL}/cache?bookmark_module_id=${bookmark_module_id}`,
   cache_count: (bookmark_module_id: string): string => `${URL}/cache_count?bookmark_module_id=${bookmark_module_id}`,
   cache_child: (bookmark_module_id: string): string => `${URL}/cache_child?bookmark_module_id=${bookmark_module_id}`,
+
+  cache_multiple: (bookmark_module_ids: string[]): string => `${URL}/cache_multiple?bookmark_module_ids=${encodeURIComponent(bookmark_module_ids.join(','),)}`,
+  cache_count_multiple: (bookmark_module_ids: string[]): string => `${URL}/cache_count_multiple?bookmark_module_ids=${encodeURIComponent(bookmark_module_ids.join(','),)}`,
+  cache_child_multiple: (bookmark_module_ids: string[]): string => `${URL}/cache_child_multiple?bookmark_module_ids=${encodeURIComponent(bookmark_module_ids.join(','),)}`,
 };
 
 // MasterBookmarkSubModule Interface
@@ -101,6 +106,11 @@ export const FindCacheSchema = z.object({
 });
 export type FindCacheDTO = z.infer<typeof FindCacheSchema>;
 
+export const FindCacheMultipleSchema = z.object({
+  bookmark_module_ids: multi_select_mandatory('MasterBookmarkModule'),
+});
+export type FindCacheMultipleDTO = z.infer<typeof FindCacheMultipleSchema>;
+
 // Convert MasterBookmarkSubModule Data to API Payload
 export const toMasterBookmarkSubModulePayload = (row: MasterBookmarkSubModule): MasterBookmarkSubModuleDTO => ({
   bookmark_module_id: row.bookmark_module_id || '',
@@ -122,7 +132,7 @@ export const newMasterBookmarkSubModulePayload = (): MasterBookmarkSubModuleDTO 
 });
 
 // MasterBookmarkSubModule APIs
-export const findMasterBookmarkSubModules = async (data: MasterBookmarkSubModuleQueryDTO): Promise<FBR<MasterBookmarkSubModule[]>> => {
+export const findMasterBookmarkSubModule = async (data: MasterBookmarkSubModuleQueryDTO): Promise<FBR<MasterBookmarkSubModule[]>> => {
   return apiPost<FBR<MasterBookmarkSubModule[]>, MasterBookmarkSubModuleQueryDTO>(ENDPOINTS.find, data);
 };
 
@@ -149,4 +159,16 @@ export const getMasterBookmarkSubModuleCacheCount = async (bookmark_module_id: s
 
 export const getMasterBookmarkSubModuleCacheChild = async (bookmark_module_id: string): Promise<FBR<MasterBookmarkSubModule[]>> => {
   return apiGet<FBR<MasterBookmarkSubModule[]>>(ENDPOINTS.cache_child(bookmark_module_id));
+};
+
+export const getMasterBookmarkSubModuleCacheMultiple = async (bookmark_module_ids: string[]): Promise<FBR<MasterBookmarkSubModule[]>> => {
+  return apiGet<FBR<MasterBookmarkSubModule[]>>(ENDPOINTS.cache_multiple(bookmark_module_ids));
+};
+
+export const getMasterBookmarkSubModuleCacheCountMultiple = async (bookmark_module_ids: string[]): Promise<FBR<MasterBookmarkSubModule[]>> => {
+  return apiGet<FBR<MasterBookmarkSubModule[]>>(ENDPOINTS.cache_count_multiple(bookmark_module_ids));
+};
+
+export const getMasterBookmarkSubModuleCacheChildMultiple = async (bookmark_module_ids: string[]): Promise<FBR<MasterBookmarkSubModule[]>> => {
+  return apiGet<FBR<MasterBookmarkSubModule[]>>(ENDPOINTS.cache_child_multiple(bookmark_module_ids));
 };

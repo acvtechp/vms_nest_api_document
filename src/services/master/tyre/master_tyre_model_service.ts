@@ -13,6 +13,7 @@ import {
   stringUUIDMandatory,
   numberOptional,
   doubleOptional,
+  multi_select_mandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -34,8 +35,10 @@ const ENDPOINTS = {
   delete: (id: string): string => `${URL}/${id}`,
 
   // Cache APIs
-  cache: (organisation_id: string, tyre_make_id?: string): string => `${URL}/cache/${organisation_id}?tyre_make_id=${tyre_make_id || '0'}`,
-  cache_count: (organisation_id: string, tyre_make_id?: string): string => `${URL}/cache_count/${organisation_id}?tyre_make_id=${tyre_make_id || '0'}`,
+  cache: (organisation_id: string, tyre_make_id: string): string => `${URL}/cache/${organisation_id}?tyre_make_id=${tyre_make_id}`,
+  cache_count: (organisation_id: string, tyre_make_id: string): string => `${URL}/cache_count/${organisation_id}?tyre_make_id=${tyre_make_id}`,
+  cache_multiple: (organisation_id: string, tyre_make_ids: string[]): string => `${URL}/cache_multiple/${organisation_id}?tyre_make_ids=${encodeURIComponent(tyre_make_ids.join(','))}`,
+  cache_count_multiple: (organisation_id: string, tyre_make_ids: string[]): string => `${URL}/cache_count_multiple/${organisation_id}?tyre_make_ids=${encodeURIComponent(tyre_make_ids.join(','))}`,
 };
 
 // MasterTyreModel Interface
@@ -123,6 +126,11 @@ export const FindCacheSchema = z.object({
 });
 export type FindCacheDTO = z.infer<typeof FindCacheSchema>;
 
+export const FindCacheMultipleSchema = z.object({
+  tyre_make_ids: multi_select_mandatory('MasterTyreMake'),
+});
+export type FindCacheMultipleDTO = z.infer<typeof FindCacheMultipleSchema>;
+
 // Convert MasterTyreModel Data to API Payload
 export const toMasterTyreModelPayload = (row: MasterTyreModel): MasterTyreModelDTO => ({
   organisation_id: row.organisation_id || '',
@@ -177,11 +185,19 @@ export const deleteMasterTyreModel = async (id: string): Promise<SBR> => {
 };
 
 // Cache APIs
-export const getMasterTyreModelCache = async (organisation_id: string, tyre_make_id?: string): Promise<FBR<MasterTyreModel[]>> => {
+export const getMasterTyreModelCache = async (organisation_id: string, tyre_make_id: string): Promise<FBR<MasterTyreModel[]>> => {
   return apiGet<FBR<MasterTyreModel[]>>(ENDPOINTS.cache(organisation_id, tyre_make_id));
 };
 
-export const getMasterTyreModelCacheCount = async (organisation_id: string, tyre_make_id?: string): Promise<FBR<MasterTyreModel[]>> => {
+export const getMasterTyreModelCacheCount = async (organisation_id: string, tyre_make_id: string): Promise<FBR<MasterTyreModel[]>> => {
   return apiGet<FBR<MasterTyreModel[]>>(ENDPOINTS.cache_count(organisation_id, tyre_make_id));
+};
+
+export const getMasterTyreModelCacheMultiple = async (organisation_id: string, tyre_make_ids: string[]): Promise<FBR<MasterTyreModel[]>> => {
+  return apiGet<FBR<MasterTyreModel[]>>(ENDPOINTS.cache_multiple(organisation_id, tyre_make_ids));
+};
+
+export const getMasterTyreModelCacheCountMultiple = async (organisation_id: string, tyre_make_ids: string[]): Promise<FBR<MasterTyreModel[]>> => {
+  return apiGet<FBR<MasterTyreModel[]>>(ENDPOINTS.cache_count_multiple(organisation_id, tyre_make_ids));
 };
 

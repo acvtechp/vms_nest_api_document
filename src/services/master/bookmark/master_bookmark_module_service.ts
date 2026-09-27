@@ -68,6 +68,7 @@ export const MasterBookmarkModuleSchema = z.object({
   // Main Field Details
   module_name: stringMandatory('Module Name', 1, 100),
   sort_order: numberMandatory('Sort Order'),
+
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
 });
@@ -101,7 +102,7 @@ export const newMasterBookmarkModulePayload = (): MasterBookmarkModuleDTO => ({
 });
 
 // MasterBookmarkModule APIs
-export const findMasterBookmarkModules = async (data: MasterBookmarkModuleQueryDTO): Promise<FBR<MasterBookmarkModule[]>> => {
+export const findMasterBookmarkModule = async (data: MasterBookmarkModuleQueryDTO): Promise<FBR<MasterBookmarkModule[]>> => {
   return apiPost<FBR<MasterBookmarkModule[]>, MasterBookmarkModuleQueryDTO>(ENDPOINTS.find, data);
 };
 

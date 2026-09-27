@@ -11,6 +11,7 @@ import {
   enumMandatory,
   stringOptional,
   stringUUIDMandatory,
+  multi_select_mandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -32,8 +33,10 @@ const ENDPOINTS = {
   delete: (id: string): string => `${URL}/${id}`,
 
   // Cache APIs
-  cache: (organisation_id: string, spare_part_category_id: string = '0'): string => `${URL}/cache/${organisation_id}?spare_part_category_id=${spare_part_category_id}`,
-  cache_count: (organisation_id: string, spare_part_category_id: string = '0'): string => `${URL}/cache_count/${organisation_id}?spare_part_category_id=${spare_part_category_id}`,
+  cache: (organisation_id: string, spare_part_category_id: string): string => `${URL}/cache/${organisation_id}?spare_part_category_id=${spare_part_category_id}`,
+  cache_count: (organisation_id: string, spare_part_category_id: string): string => `${URL}/cache_count/${organisation_id}?spare_part_category_id=${spare_part_category_id}`,
+  cache_multiple: (organisation_id: string, spare_part_category_ids: string[]): string => `${URL}/cache_multiple/${organisation_id}?spare_part_category_ids=${encodeURIComponent(spare_part_category_ids.join(','))}`,
+  cache_count_multiple: (organisation_id: string, spare_part_category_ids: string[]): string => `${URL}/cache_count_multiple/${organisation_id}?spare_part_category_ids=${encodeURIComponent(spare_part_category_ids.join(','))}`,
 };
 
 // MasterSparePartSubCategory Interface
@@ -108,6 +111,11 @@ export const FindCacheSchema = z.object({
 });
 export type FindCacheDTO = z.infer<typeof FindCacheSchema>;
 
+export const FindCacheMultipleSchema = z.object({
+  spare_part_category_ids: multi_select_mandatory('MasterSparePartCategory'),
+});
+export type FindCacheMultipleDTO = z.infer<typeof FindCacheMultipleSchema>;
+
 // Convert MasterSparePartSubCategory Data to API Payload
 export const toMasterSparePartSubCategoryPayload = (row: MasterSparePartSubCategory): MasterSparePartSubCategoryDTO => ({
   organisation_id: row.organisation_id || '',
@@ -150,11 +158,19 @@ export const deleteMasterSparePartSubCategory = async (id: string): Promise<SBR>
 };
 
 // Cache APIs
-export const getMasterSparePartSubCategoryCache = async (organisation_id: string, spare_part_category_id?: string): Promise<FBR<MasterSparePartSubCategory[]>> => {
+export const getMasterSparePartSubCategoryCache = async (organisation_id: string, spare_part_category_id: string): Promise<FBR<MasterSparePartSubCategory[]>> => {
   return apiGet<FBR<MasterSparePartSubCategory[]>>(ENDPOINTS.cache(organisation_id, spare_part_category_id));
 };
 
-export const getMasterSparePartSubCategoryCacheCount = async (organisation_id: string, spare_part_category_id?: string): Promise<FBR<MasterSparePartSubCategory[]>> => {
+export const getMasterSparePartSubCategoryCacheCount = async (organisation_id: string, spare_part_category_id: string): Promise<FBR<MasterSparePartSubCategory[]>> => {
   return apiGet<FBR<MasterSparePartSubCategory[]>>(ENDPOINTS.cache_count(organisation_id, spare_part_category_id));
+};
+
+export const getMasterSparePartSubCategoryCacheMultiple = async (organisation_id: string, spare_part_category_ids: string[]): Promise<FBR<MasterSparePartSubCategory[]>> => {
+  return apiGet<FBR<MasterSparePartSubCategory[]>>(ENDPOINTS.cache_multiple(organisation_id, spare_part_category_ids));
+};
+
+export const getMasterSparePartSubCategoryCacheCountMultiple = async (organisation_id: string, spare_part_category_ids: string[]): Promise<FBR<MasterSparePartSubCategory[]>> => {
+  return apiGet<FBR<MasterSparePartSubCategory[]>>(ENDPOINTS.cache_count_multiple(organisation_id, spare_part_category_ids));
 };
 
