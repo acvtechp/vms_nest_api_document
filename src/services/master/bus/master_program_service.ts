@@ -40,7 +40,7 @@ export interface MasterProgram extends Record<string, unknown> {
   program_id: string;
 
   // Main Field Details
-  program_name: string;
+  program: string;
   description: string;
 
   // Metadata
@@ -70,7 +70,7 @@ export const MasterProgramSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  program_name: stringMandatory('Program Name', 3, 100),
+  program: stringMandatory('Program', 3, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -92,7 +92,7 @@ export type MasterProgramQueryDTO = z.infer<typeof MasterProgramQuerySchema>;
 export const toMasterProgramPayload = (row: MasterProgram): MasterProgramDTO => ({
   organisation_id: row.organisation_id || '',
 
-  program_name: row.program_name || '',
+  program: row.program || '',
   description: row.description || '',
 
   status: row.status || Status.Active,
@@ -102,7 +102,7 @@ export const toMasterProgramPayload = (row: MasterProgram): MasterProgramDTO => 
 export const newMasterProgramPayload = (): MasterProgramDTO => ({
   organisation_id: '',
 
-  program_name: '',
+  program: '',
   description: '',
 
   status: Status.Active

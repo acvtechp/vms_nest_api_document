@@ -40,7 +40,7 @@ export interface MasterSection extends Record<string, unknown> {
   section_id: string;
 
   // Main Field Details
-  section_name: string;
+  section: string;
   description: string;
 
   // Metadata
@@ -70,7 +70,7 @@ export const MasterSectionSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  section_name: stringMandatory('Section Name', 3, 100),
+  section: stringMandatory('Section', 3, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -92,7 +92,7 @@ export type MasterSectionQueryDTO = z.infer<typeof MasterSectionQuerySchema>;
 export const toMasterSectionPayload = (row: MasterSection): MasterSectionDTO => ({
   organisation_id: row.organisation_id || '',
 
-  section_name: row.section_name || '',
+  section: row.section || '',
   description: row.description || '',
 
   status: row.status || Status.Active,
@@ -102,7 +102,7 @@ export const toMasterSectionPayload = (row: MasterSection): MasterSectionDTO => 
 export const newMasterSectionPayload = (): MasterSectionDTO => ({
   organisation_id: '',
 
-  section_name: '',
+  section: '',
   description: '',
 
   status: Status.Active

@@ -41,7 +41,7 @@ export interface MasterSemester extends Record<string, unknown> {
   semester_id: string;
 
   // Main Field Details
-  semester_name: string;
+  semester: string;
   description: string;
 
   // Metadata
@@ -71,7 +71,7 @@ export const MasterSemesterSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  semester_name: stringMandatory('Semester Name', 3, 100),
+  semester: stringMandatory('Semester', 3, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -93,7 +93,7 @@ export type MasterSemesterQueryDTO = z.infer<typeof MasterSemesterQuerySchema>;
 export const toMasterSemesterPayload = (row: MasterSemester): MasterSemesterDTO => ({
   organisation_id: row.organisation_id || '',
 
-  semester_name: row.semester_name || '',
+  semester: row.semester || '',
   description: row.description || '',
 
   status: row.status || Status.Active,
@@ -103,7 +103,7 @@ export const toMasterSemesterPayload = (row: MasterSemester): MasterSemesterDTO 
 export const newMasterSemesterPayload = (): MasterSemesterDTO => ({
   organisation_id: '',
 
-  semester_name: '',
+  semester: '',
   description: '',
 
   status: Status.Active

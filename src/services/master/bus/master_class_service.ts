@@ -40,7 +40,7 @@ export interface MasterClass extends Record<string, unknown> {
   class_id: string;
 
   // Main Field Details
-  class_name: string;
+  class: string;
   description: string;
 
   // Metadata
@@ -70,7 +70,7 @@ export const MasterClassSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  class_name: stringMandatory('Class Name', 3, 100),
+  class: stringMandatory('Class', 3, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -92,7 +92,7 @@ export type MasterClassQueryDTO = z.infer<typeof MasterClassQuerySchema>;
 export const toMasterClassPayload = (row: MasterClass): MasterClassDTO => ({
   organisation_id: row.organisation_id || '',
 
-  class_name: row.class_name || '',
+  class: row.class || '',
   description: row.description || '',
 
   status: row.status || Status.Active,
@@ -102,7 +102,7 @@ export const toMasterClassPayload = (row: MasterClass): MasterClassDTO => ({
 export const newMasterClassPayload = (): MasterClassDTO => ({
   organisation_id: '',
 
-  class_name: '',
+  class: '',
   description: '',
 
   status: Status.Active

@@ -40,7 +40,7 @@ export interface MasterYear extends Record<string, unknown> {
   year_id: string;
 
   // Main Field Details
-  year_name: string;
+  year: string;
   description: string;
 
   // Metadata
@@ -70,7 +70,7 @@ export const MasterYearSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  year_name: stringMandatory('Year Name', 3, 100),
+  year: stringMandatory('Year', 3, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -92,7 +92,7 @@ export type MasterYearQueryDTO = z.infer<typeof MasterYearQuerySchema>;
 export const toMasterYearPayload = (row: MasterYear): MasterYearDTO => ({
   organisation_id: row.organisation_id || '',
 
-  year_name: row.year_name || '',
+  year: row.year || '',
   description: row.description || '',
 
   status: row.status || Status.Active,
@@ -102,7 +102,7 @@ export const toMasterYearPayload = (row: MasterYear): MasterYearDTO => ({
 export const newMasterYearPayload = (): MasterYearDTO => ({
   organisation_id: '',
 
-  year_name: '',
+  year: '',
   description: '',
 
   status: Status.Active

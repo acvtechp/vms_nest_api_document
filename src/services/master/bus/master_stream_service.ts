@@ -40,7 +40,7 @@ export interface MasterStream extends Record<string, unknown> {
   stream_id: string;
 
   // Main Field Details
-  stream_name: string;
+  stream: string;
   description: string;
 
   // Metadata
@@ -70,7 +70,7 @@ export const MasterStreamSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
   // Main Field Details
-  stream_name: stringMandatory('Stream Name', 3, 100),
+  stream: stringMandatory('Stream', 3, 100),
   description: stringOptional('Description', 0, 300),
 
   // Metadata
@@ -92,7 +92,7 @@ export type MasterStreamQueryDTO = z.infer<typeof MasterStreamQuerySchema>;
 export const toMasterStreamPayload = (row: MasterStream): MasterStreamDTO => ({
   organisation_id: row.organisation_id || '',
 
-  stream_name: row.stream_name || '',
+  stream: row.stream || '',
   description: row.description || '',
 
   status: row.status || Status.Active,
@@ -102,7 +102,7 @@ export const toMasterStreamPayload = (row: MasterStream): MasterStreamDTO => ({
 export const newMasterStreamPayload = (): MasterStreamDTO => ({
   organisation_id: '',
 
-  stream_name: '',
+  stream: '',
   description: '',
 
   status: Status.Active
