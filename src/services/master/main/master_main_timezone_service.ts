@@ -135,7 +135,7 @@ export const newMasterMainTimeZonePayload = (): MasterMainTimeZoneDTO => ({
 });
 
 // MasterMainTimeZone APIs
-export const findMasterMainTimeZones = async (data: MasterMainTimeZoneQueryDTO): Promise<FBR<MasterMainTimeZone[]>> => {
+export const findMasterMainTimeZone = async (data: MasterMainTimeZoneQueryDTO): Promise<FBR<MasterMainTimeZone[]>> => {
   return apiPost<FBR<MasterMainTimeZone[]>, MasterMainTimeZoneQueryDTO>(ENDPOINTS.find, data);
 };
 

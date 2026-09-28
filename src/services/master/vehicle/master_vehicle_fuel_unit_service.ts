@@ -105,7 +105,7 @@ export const newMasterVehicleFuelUnitPayload = (): MasterVehicleFuelUnitDTO => (
 });
 
 // MasterVehicleFuelUnit APIs
-export const findMasterVehicleFuelUnits = async (data: MasterVehicleFuelUnitQueryDTO): Promise<FBR<MasterVehicleFuelUnit[]>> => {
+export const findMasterVehicleFuelUnit = async (data: MasterVehicleFuelUnitQueryDTO): Promise<FBR<MasterVehicleFuelUnit[]>> => {
   return apiPost<FBR<MasterVehicleFuelUnit[]>, MasterVehicleFuelUnitQueryDTO>(ENDPOINTS.find, data);
 };
 

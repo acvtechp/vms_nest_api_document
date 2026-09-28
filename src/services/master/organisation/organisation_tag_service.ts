@@ -118,7 +118,7 @@ export const newOrganisationTagPayload = (): OrganisationTagDTO => ({
 });
 
 // OrganisationTag APIs
-export const findOrganisationTags = async (data: OrganisationTagQueryDTO): Promise<FBR<OrganisationTag[]>> => {
+export const findOrganisationTag = async (data: OrganisationTagQueryDTO): Promise<FBR<OrganisationTag[]>> => {
   return apiPost<FBR<OrganisationTag[]>, OrganisationTagQueryDTO>(ENDPOINTS.find, data);
 };
 

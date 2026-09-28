@@ -94,7 +94,7 @@ export const newMasterMainFasttagPayload = (): MasterMainFASTagBankDTO => ({
 });
 
 // MasterMainFasttagBank APIs
-export const findMasterMainFasttagBanks = async (data: MasterMainFASTagBankQueryDTO): Promise<FBR<MasterMainFASTagBank[]>> => {
+export const findMasterMainFasttagBank = async (data: MasterMainFASTagBankQueryDTO): Promise<FBR<MasterMainFASTagBank[]>> => {
   return apiPost<FBR<MasterMainFASTagBank[]>, MasterMainFASTagBankQueryDTO>(ENDPOINTS.find, data);
 };
 

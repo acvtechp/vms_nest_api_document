@@ -140,7 +140,7 @@ export const newMasterVehicleModelPayload = (): MasterVehicleModelDTO => ({
 });
 
 // MasterVehicleModel APIs
-export const findMasterVehicleModels = async (data: MasterVehicleModelQueryDTO): Promise<FBR<MasterVehicleModel[]>> => {
+export const findMasterVehicleModel = async (data: MasterVehicleModelQueryDTO): Promise<FBR<MasterVehicleModel[]>> => {
   return apiPost<FBR<MasterVehicleModel[]>, MasterVehicleModelQueryDTO>(ENDPOINTS.find, data);
 };
 

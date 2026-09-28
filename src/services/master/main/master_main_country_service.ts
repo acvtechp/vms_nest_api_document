@@ -117,7 +117,7 @@ export const newMasterMainCountryPayload = (): MasterMainCountryDTO => ({
 });
 
 // MasterMainCountry APIs
-export const findMasterMainCountries = async (data: MasterMainCountryQueryDTO): Promise<FBR<MasterMainCountry[]>> => {
+export const findMasterMasterMainCountry = async (data: MasterMainCountryQueryDTO): Promise<FBR<MasterMainCountry[]>> => {
   return apiPost<FBR<MasterMainCountry[]>, MasterMainCountryQueryDTO>(ENDPOINTS.find, data);
 };
 

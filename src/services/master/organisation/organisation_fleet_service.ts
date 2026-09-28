@@ -118,7 +118,7 @@ export const newOrganisationFleetPayload = (): OrganisationFleetDTO => ({
 });
 
 // OrganisationFleet APIs
-export const findOrganisationFleets = async (data: OrganisationFleetQueryDTO): Promise<FBR<OrganisationFleet[]>> => {
+export const findOrganisationFleet = async (data: OrganisationFleetQueryDTO): Promise<FBR<OrganisationFleet[]>> => {
   return apiPost<FBR<OrganisationFleet[]>, OrganisationFleetQueryDTO>(ENDPOINTS.find, data);
 };
 

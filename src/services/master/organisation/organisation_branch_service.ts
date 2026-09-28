@@ -126,7 +126,7 @@ export const newOrganisationBranchPayload = (): OrganisationBranchDTO => ({
 });
 
 // OrganisationBranch APIs
-export const findOrganisationBranchs = async (data: OrganisationBranchQueryDTO): Promise<FBR<OrganisationBranch[]>> => {
+export const findOrganisationBranch = async (data: OrganisationBranchQueryDTO): Promise<FBR<OrganisationBranch[]>> => {
   return apiPost<FBR<OrganisationBranch[]>, OrganisationBranchQueryDTO>(ENDPOINTS.find, data);
 };
 

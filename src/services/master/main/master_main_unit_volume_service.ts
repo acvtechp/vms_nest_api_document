@@ -93,7 +93,7 @@ export const newMasterMainUnitVolumePayload = (): MasterMainUnitVolumeDTO => ({
 });
 
 // MasterMainUnitVolume APIs
-export const findMasterMainUnitVolumes = async (data: MasterMainUnitVolumeQueryDTO): Promise<FBR<MasterMainUnitVolume[]>> => {
+export const findMasterMainUnitVolume = async (data: MasterMainUnitVolumeQueryDTO): Promise<FBR<MasterMainUnitVolume[]>> => {
   return apiPost<FBR<MasterMainUnitVolume[]>, MasterMainUnitVolumeQueryDTO>(ENDPOINTS.find, data);
 };
 

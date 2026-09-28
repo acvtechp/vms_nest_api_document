@@ -91,7 +91,7 @@ export const newMasterMainEwayBillProviderPayload = (): MasterMainEwayBillProvid
 });
 
 // MasterMainEwayBillProvider APIs
-export const findMasterMainEwayBillProviders = async (data: MasterMainEwayBillProviderQueryDTO): Promise<FBR<MasterMainEwayBillProvider[]>> => {
+export const findMasterMainEwayBillProvider = async (data: MasterMainEwayBillProviderQueryDTO): Promise<FBR<MasterMainEwayBillProvider[]>> => {
   return apiPost<FBR<MasterMainEwayBillProvider[]>, MasterMainEwayBillProviderQueryDTO>(ENDPOINTS.find, data);
 };
 

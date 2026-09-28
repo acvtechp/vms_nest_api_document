@@ -92,7 +92,7 @@ export const newMasterMainSimProviderPayload = (): MasterMainSimProviderDTO => (
 });
 
 // MasterMainSimProvider APIs
-export const findMasterMainSimProviders = async (data: MasterMainSimProviderQueryDTO): Promise<FBR<MasterMainSimProvider[]>> => {
+export const findMasterMainSimProvider = async (data: MasterMainSimProviderQueryDTO): Promise<FBR<MasterMainSimProvider[]>> => {
   return apiPost<FBR<MasterMainSimProvider[]>, MasterMainSimProviderQueryDTO>(ENDPOINTS.find, data);
 };
 

@@ -113,7 +113,7 @@ export const newMasterMainCurrencyPayload = (): MasterMainCurrencyDTO => ({
 });
 
 // MasterMainCurrency APIs
-export const findMasterMainCurrencies = async (data: MasterMainCurrencyQueryDTO): Promise<FBR<MasterMainCurrency[]>> => {
+export const findMasterMainCurrency = async (data: MasterMainCurrencyQueryDTO): Promise<FBR<MasterMainCurrency[]>> => {
   return apiPost<FBR<MasterMainCurrency[]>, MasterMainCurrencyQueryDTO>(ENDPOINTS.find, data);
 };
 

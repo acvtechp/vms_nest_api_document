@@ -142,7 +142,7 @@ export const newOrganisationGroupPayload = (): OrganisationGroupDTO => ({
 });
 
 // OrganisationGroup APIs
-export const findOrganisationGroups = async (data: OrganisationGroupQueryDTO): Promise<FBR<OrganisationGroup[]>> => {
+export const findOrganisationGroup = async (data: OrganisationGroupQueryDTO): Promise<FBR<OrganisationGroup[]>> => {
   return apiPost<FBR<OrganisationGroup[]>, OrganisationGroupQueryDTO>(ENDPOINTS.find, data);
 };
 

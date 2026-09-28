@@ -99,7 +99,7 @@ export const newMasterMainLanguagePayload = (): MasterMainLanguageDTO => ({
 });
 
 // MasterMainLanguage APIs
-export const findMasterMainLanguages = async (data: MasterMainLanguageQueryDTO): Promise<FBR<MasterMainLanguage[]>> => {
+export const findMasterMainLanguage = async (data: MasterMainLanguageQueryDTO): Promise<FBR<MasterMainLanguage[]>> => {
   return apiPost<FBR<MasterMainLanguage[]>, MasterMainLanguageQueryDTO>(ENDPOINTS.find, data);
 };
 

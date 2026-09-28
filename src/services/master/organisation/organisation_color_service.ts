@@ -122,7 +122,7 @@ export const newOrganisationColorPayload = (): OrganisationColorDTO => ({
 });
 
 // OrganisationColor APIs
-export const findOrganisationColors = async (data: OrganisationColorQueryDTO): Promise<FBR<OrganisationColor[]>> => {
+export const findOrganisationColor = async (data: OrganisationColorQueryDTO): Promise<FBR<OrganisationColor[]>> => {
   return apiPost<FBR<OrganisationColor[]>, OrganisationColorQueryDTO>(ENDPOINTS.find, data);
 };
 

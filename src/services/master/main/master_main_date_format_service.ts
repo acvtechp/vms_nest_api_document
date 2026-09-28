@@ -101,7 +101,7 @@ export const newMasterMainDateFormatPayload = (): MasterMainDateFormatDTO => ({
 });
 
 // MasterMainDateFormat APIs
-export const findMasterMainDateFormats = async (data: MasterMainDateFormatQueryDTO): Promise<FBR<MasterMainDateFormat[]>> => {
+export const findMasterMainDateFormat = async (data: MasterMainDateFormatQueryDTO): Promise<FBR<MasterMainDateFormat[]>> => {
   return apiPost<FBR<MasterMainDateFormat[]>, MasterMainDateFormatQueryDTO>(ENDPOINTS.find, data);
 };
 

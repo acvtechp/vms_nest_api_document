@@ -110,7 +110,7 @@ export const newMasterMainStatePayload = (): MasterMainStateDTO => ({
 });
 
 // MasterMainState APIs
-export const findMasterMainStates = async (data: MasterMainStateQueryDTO): Promise<FBR<MasterMainState[]>> => {
+export const findMasterMainState = async (data: MasterMainStateQueryDTO): Promise<FBR<MasterMainState[]>> => {
   return apiPost<FBR<MasterMainState[]>, MasterMainStateQueryDTO>(ENDPOINTS.find, data);
 };
 

@@ -93,7 +93,7 @@ export const newMasterMainUnitDistancePayload = (): MasterMainUnitDistanceDTO =>
 });
 
 // MasterMainUnitDistance APIs
-export const findMasterMainUnitDistances = async (data: MasterMainUnitDistanceQueryDTO): Promise<FBR<MasterMainUnitDistance[]>> => {
+export const findMasterMainUnitDistance = async (data: MasterMainUnitDistanceQueryDTO): Promise<FBR<MasterMainUnitDistance[]>> => {
   return apiPost<FBR<MasterMainUnitDistance[]>, MasterMainUnitDistanceQueryDTO>(ENDPOINTS.find, data);
 };
 

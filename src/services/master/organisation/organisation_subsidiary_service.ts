@@ -172,7 +172,7 @@ export const remove_organisation_subsidiary_logo = async (id: string): Promise<S
 };
 
 // OrganisationSubsidiary APIs
-export const findOrganisationSubsidiaryies = async (data: OrganisationSubsidiaryQueryDTO): Promise<FBR<OrganisationSubsidiary[]>> => {
+export const findOrganisationSubsidiary = async (data: OrganisationSubsidiaryQueryDTO): Promise<FBR<OrganisationSubsidiary[]>> => {
   return apiPost<FBR<OrganisationSubsidiary[]>, OrganisationSubsidiaryQueryDTO>(ENDPOINTS.find, data);
 };
 

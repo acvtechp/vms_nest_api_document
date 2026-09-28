@@ -93,7 +93,7 @@ export const newMasterMainUnitMileagePayload = (): MasterMainUnitMileageDTO => (
 });
 
 // MasterMainUnitMileage APIs
-export const findMasterMainUnitMileages = async (data: MasterMainUnitMileageQueryDTO): Promise<FBR<MasterMainUnitMileage[]>> => {
+export const findMasterMainUnitMileage = async (data: MasterMainUnitMileageQueryDTO): Promise<FBR<MasterMainUnitMileage[]>> => {
   return apiPost<FBR<MasterMainUnitMileage[]>, MasterMainUnitMileageQueryDTO>(ENDPOINTS.find, data);
 };
 
