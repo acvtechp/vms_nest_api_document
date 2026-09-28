@@ -63,6 +63,8 @@ export interface MasterSparePartSubCategory extends Record<string, unknown> {
 
   spare_part_category_id: string;
   MasterSparePartCategory?: MasterSparePartCategory;
+  category_name?: string;
+  category_code?: string;
 
   // Relations - Child
   // FleetSpareParts?: FleetSpareParts[];
