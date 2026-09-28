@@ -59,6 +59,8 @@ export interface MasterDeviceModel extends Record<string, unknown> {
   // Relations - Parent
   device_manufacturer_id: string;
   MasterDeviceManufacturer?: MasterDeviceManufacturer;
+  device_manufacturer_name?: string;
+  device_manufacturer_code?: string;
 
   // Relations - Child
   MasterDeviceType?: MasterDeviceType[];
