@@ -35,7 +35,6 @@ import { DriverLoginPush, MasterDriver, MasterDriverFile } from '../../../servic
 import { User, UserLoginPush } from '../../../services/main/users/user_service';
 
 // Master - Organisation
-import { OrganisationSubCompany } from '../../../services/master/organisation/organisation_sub_company_service';
 import { OrganisationSubsidiary } from '../../../services/master/organisation/organisation_subsidiary_service';
 import { OrganisationBranch } from '../../../services/master/organisation/organisation_branch_service';
 import { OrganisationColor } from '../../../services/master/organisation/organisation_color_service';
@@ -280,7 +279,6 @@ export interface UserOrganisation extends Record<string, unknown> {
   ExclusiveFeatureAccess?: ExclusiveFeatureAccess[];
 
   // Child - Master
-  OrganisationSubCompany?: OrganisationSubCompany[];
   OrganisationSubsidiary?: OrganisationSubsidiary[];
   OrganisationBranch?: OrganisationBranch[];
   OrganisationColor?: OrganisationColor[];
@@ -474,7 +472,6 @@ export interface UserOrganisation extends Record<string, unknown> {
     ExclusiveFeatureAccess?: number;
 
     // Child - Master
-    OrganisationSubCompany?: number;
     OrganisationSubsidiary?: number;
     OrganisationBranch?: number;
     OrganisationColor?: number;

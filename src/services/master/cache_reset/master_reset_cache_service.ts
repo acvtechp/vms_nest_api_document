@@ -28,7 +28,6 @@ import { MasterSparePartCategory } from '../spare_part/master_spare_part_categor
 import { MasterSparePartUnit } from '../spare_part/master_spare_part_unit_service';
 
 // Organisation
-import { OrganisationSubCompany } from '../organisation/organisation_sub_company_service';
 import { OrganisationSubsidiary } from '../organisation/organisation_subsidiary_service';
 import { OrganisationBranch } from '../organisation/organisation_branch_service';
 import { OrganisationColor } from '../organisation/organisation_color_service';
@@ -158,7 +157,6 @@ export interface SparePartAllCache extends Record<string, unknown> {
 
 // OrganisationAllCache Interface
 export interface OrganisationAllCache extends Record<string, unknown> {
-  OrganisationSubCompany: OrganisationSubCompany[];
   OrganisationSubsidiary: OrganisationSubsidiary[];
   OrganisationBranch: OrganisationBranch[];
   OrganisationColor: OrganisationColor[];

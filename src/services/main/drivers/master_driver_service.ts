@@ -22,7 +22,6 @@ import { Status, YesNo, DriverType, LoginFrom } from '../../../core/Enums';
 
 // Other Models
 import { MasterVehicle } from '../../../services/main/vehicle/master_vehicle_service';
-import { OrganisationSubCompany } from '../../../services/master/organisation/organisation_sub_company_service';
 import { OrganisationSubsidiary } from '../../../services/master/organisation/organisation_subsidiary_service';
 import { OrganisationBranch } from '../../../services/master/organisation/organisation_branch_service';
 import { OrganisationColor } from '../../../services/master/organisation/organisation_color_service';
@@ -122,10 +121,6 @@ export interface MasterDriver extends Record<string, unknown> {
   User?: User;
   user_details?: string;
   user_image_url?: string;
-
-  organisation_sub_company_id?: string;
-  OrganisationSubCompany?: OrganisationSubCompany;
-  sub_company_name?: string;
 
   organisation_subsidiary_id?: string;
   OrganisationSubsidiary?: OrganisationSubsidiary;
@@ -311,7 +306,6 @@ export const MasterDriverSchema = z.object({
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
   user_id: single_select_optional('User'), // Single-Selection -> User
 
-  organisation_sub_company_id: single_select_optional('OrganisationSubCompany'), // Single-Selection -> OrganisationSubCompany
   organisation_subsidiary_id: single_select_optional('OrganisationSubsidiary'), // Single-Selection -> OrganisationSubsidiary
   organisation_branch_id: single_select_optional('OrganisationBranch'), // Single-Selection -> OrganisationBranch
   organisation_color_id: single_select_optional('OrganisationColor'), // Single-Selection -> OrganisationColor
@@ -357,7 +351,6 @@ export const MasterDriverQuerySchema = BaseQuerySchema.extend({
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
   user_ids: multi_select_optional('User'), // Multi-Selection -> User
 
-  organisation_sub_company_ids: multi_select_optional('OrganisationSubCompany'), // Multi-Selection -> OrganisationSubCompany
   organisation_subsidiary_ids: multi_select_optional('OrganisationSubsidiary'), // Multi-Selection -> OrganisationSubsidiary
   organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
   organisation_color_ids: multi_select_optional('OrganisationColor'), // Multi-Selection -> OrganisationColor
@@ -428,7 +421,6 @@ export const toDriverPayload = (row: MasterDriver): MasterDriverDTO => ({
 
   organisation_id: row.organisation_id || '',
   user_id: row.user_id || '',
-  organisation_sub_company_id: row.organisation_sub_company_id || '',
   organisation_subsidiary_id: row.organisation_subsidiary_id || '',
   organisation_branch_id: row.organisation_branch_id || '',
   organisation_color_id: row.organisation_color_id || '',
@@ -480,7 +472,6 @@ export const newDriverPayload = (): MasterDriverDTO => ({
 
   organisation_id: '',
   user_id: '',
-  organisation_sub_company_id: '',
   organisation_subsidiary_id: '',
   organisation_branch_id: '',
   organisation_color_id: '',

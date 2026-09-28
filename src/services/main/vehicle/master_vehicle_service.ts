@@ -57,7 +57,6 @@ import { MasterMainLandMark } from '../../../services/master/main/master_main_la
 import { MasterMainSimProvider } from '../../../services/master/main/master_main_sim_provider_service';
 
 // Master - Organisation
-import { OrganisationSubCompany } from '../../../services/master/organisation/organisation_sub_company_service';
 import { OrganisationSubsidiary } from '../../../services/master/organisation/organisation_subsidiary_service';
 import { OrganisationBranch } from '../../../services/master/organisation/organisation_branch_service';
 import { OrganisationColor } from '../../../services/master/organisation/organisation_color_service';
@@ -288,10 +287,6 @@ export interface MasterVehicle extends Record<string, unknown> {
   User?: User;
   user_details?: string;
   user_image_url?: string;
-
-  organisation_sub_company_id?: string;
-  OrganisationSubCompany?: OrganisationSubCompany;
-  sub_company_name?: string;
 
   organisation_subsidiary_id?: string;
   OrganisationSubsidiary?: OrganisationSubsidiary;
@@ -1121,7 +1116,6 @@ export const VehicleSchema = z.object({
 
   user_id: single_select_optional('User'), // Single-Selection -> User
 
-  organisation_sub_company_id: single_select_optional('OrganisationSubCompany'), // Single-Selection -> OrganisationSubCompany
   organisation_subsidiary_id: single_select_optional('OrganisationSubsidiary'), // Single-Selection -> OrganisationSubsidiary
   organisation_branch_id: single_select_optional('OrganisationBranch'), // Single-Selection -> OrganisationBranch
   organisation_tag_id: single_select_optional('OrganisationTag'), // Single-Selection -> OrganisationTag
@@ -1503,7 +1497,6 @@ export const VehicleQuerySchema = BaseQuerySchema.extend({
   user_ids: multi_select_optional('User'), // Multi-Selection -> User
   driver_ids: multi_select_optional('MasterDriver'), // Multi-Selection -> MasterDriver
 
-  organisation_sub_company_ids: multi_select_optional('OrganisationSubCompany'), // Multi-Selection -> OrganisationSubCompany
   organisation_subsidiary_ids: multi_select_optional('OrganisationSubsidiary'), // Multi-Selection -> OrganisationSubsidiary
   organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
   organisation_tag_ids: multi_select_optional('OrganisationTag'), // Multi-Selection -> OrganisationTag
@@ -1636,7 +1629,6 @@ export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
   is_gps_active: row.is_gps_active || YesNo.No,
   is_trip_active: row.is_trip_active || YesNo.No,
 
-  organisation_sub_company_id: row.organisation_sub_company_id || '',
   organisation_subsidiary_id: row.organisation_subsidiary_id || '',
   organisation_branch_id: row.organisation_branch_id || '',
   organisation_tag_id: row.organisation_tag_id || '',
@@ -1712,7 +1704,6 @@ export const newVehiclePayload = (): VehicleDTO => ({
   is_gps_active: YesNo.No,
   is_trip_active: YesNo.No,
 
-  organisation_sub_company_id: '',
   organisation_subsidiary_id: '',
   organisation_branch_id: '',
   organisation_tag_id: '',

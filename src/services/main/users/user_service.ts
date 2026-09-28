@@ -53,7 +53,6 @@ import { MasterBookmarkPage } from 'src/services/master/bookmark/master_bookmark
 import { FASTagDetails } from 'src/services/account/fasttag_details';
 import { EWayBillDetails } from 'src/services/account/eway_bill_details';
 import { OrganisationColor } from 'src/services/master/organisation/organisation_color_service';
-import { OrganisationSubCompany } from 'src/services/master/organisation/organisation_sub_company_service';
 import { OrganisationSubsidiary } from 'src/services/master/organisation/organisation_subsidiary_service';
 import { OrganisationTag } from 'src/services/master/organisation/organisation_tag_service';
 
@@ -140,10 +139,6 @@ export interface User extends Record<string, unknown> {
   organisation_name?: string;
   organisation_code?: string;
   organisation_logo_url?: string;
-
-  organisation_sub_company_id?: string;
-  OrganisationSubCompany?: OrganisationSubCompany;
-  sub_company_name?: string;
 
   organisation_subsidiary_id?: string;
   OrganisationSubsidiary?: OrganisationSubsidiary;
@@ -437,7 +432,6 @@ export const UserSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
-  organisation_sub_company_id: single_select_optional('OrganisationSubCompany'), // Single-Selection -> OrganisationSubCompany
   organisation_subsidiary_id: single_select_optional('OrganisationSubsidiary'), // Single-Selection -> OrganisationSubsidiary
   organisation_branch_id: single_select_optional('OrganisationBranch'), // Single-Selection -> OrganisationBranch
   organisation_color_id: single_select_optional('OrganisationColor'), // Single-Selection -> OrganisationColor
@@ -495,7 +489,6 @@ export const UserQuerySchema = BaseQuerySchema.extend({
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
 
-  organisation_sub_company_ids: multi_select_optional('OrganisationSubCompany'), // Multi-Selection -> OrganisationSubCompany
   organisation_subsidiary_ids: multi_select_optional('OrganisationSubsidiary'), // Multi-Selection -> OrganisationSubsidiary
   organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
   organisation_color_ids: multi_select_optional('OrganisationColor'), // Multi-Selection -> OrganisationColor
@@ -674,7 +667,6 @@ export const toUserPayload = (row: User): UserDTO => ({
   user_image_name: row.user_image_name || '',
 
   organisation_id: row.organisation_id || '',
-  organisation_sub_company_id: row.organisation_sub_company_id || '',
   organisation_subsidiary_id: row.organisation_subsidiary_id || '',
   organisation_branch_id: row.organisation_branch_id || '',
   organisation_color_id: row.organisation_color_id || '',
@@ -729,7 +721,6 @@ export const newUserPayload = (): UserDTO => ({
   user_image_name: '',
 
   organisation_id: '',
-  organisation_sub_company_id: '',
   organisation_subsidiary_id: '',
   organisation_branch_id: '',
   organisation_color_id: '',

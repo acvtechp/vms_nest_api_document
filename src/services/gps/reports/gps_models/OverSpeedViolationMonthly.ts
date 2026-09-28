@@ -18,7 +18,7 @@ export interface OverSpeedSummaryData extends Record<string, unknown> {
   dr_url?: string;
 
   fleet_name?: string;
-  sub_company_name?: string;
+  subsidiary_name?: string;
   branch_name?: string;
   color_name?: string;
   tag_name?: string;
@@ -84,7 +84,7 @@ export interface OverSpeedViolationMonthly extends Record<string, unknown> {
   dr_url?: string;
 
   fleet_name?: string;
-  sub_company_name?: string;
+  subsidiary_name?: string;
   branch_name?: string;
   color_name?: string;
   tag_name?: string;
