@@ -22,7 +22,7 @@ import { Status, YesNo } from '../../../core/Enums';
 import { UserOrganisation } from '../../main/users/user_organisation_service';
 import { Student } from 'src/services/fleet/school_management/student_service';
 
-const URL = 'master/bus/year';
+const URL = 'master/bus/academic_year';
 
 const ENDPOINTS = {
   // MasterAcademicYear APIs
