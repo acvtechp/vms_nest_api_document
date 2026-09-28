@@ -10,6 +10,7 @@ import {
   enumMandatory,
   single_select_mandatory,
   multi_select_optional,
+  multi_select_mandatory,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -32,6 +33,7 @@ const ENDPOINTS = {
   // Cache APIs
   cache_all: `${URL}/cache_all`,
   cache: (country_id: string): string => `${URL}/cache?country_id=${country_id}`,
+  cache_multiple: (country_ids: string[]): string => `${URL}/cache_multiple?country_ids=${encodeURIComponent(country_ids.join(','))}`,
 };
 
 // MasterMainState Interface
@@ -54,8 +56,7 @@ export interface MasterMainState extends Record<string, unknown> {
   country_name?: string;
 
   // Relations - Child
-  // Child - User
-  UserOrganisation?: UserOrganisation[]
+  UserOrganisation?: UserOrganisation[];
 
   // Relations - Child Count
   _count?: {
@@ -88,6 +89,11 @@ export const MasterMainStateQuerySchema = BaseQuerySchema.extend({
 export type MasterMainStateQueryDTO = z.infer<
   typeof MasterMainStateQuerySchema
 >;
+
+export const FindCacheCountryMultipleSchema = z.object({
+  country_ids: multi_select_mandatory('MasterMainCountry'),
+});
+export type FindCacheCountryMultipleDTO = z.infer<typeof FindCacheCountryMultipleSchema>;
 
 // Convert MasterMainState Data to API Payload
 export const toMasterMainStatePayload = (row: MasterMainState): MasterMainStateDTO => ({
@@ -133,5 +139,9 @@ export const getMasterMainStateCacheAll = async (): Promise<FBR<MasterMainState[
 
 export const getMasterMainStateCache = async (country_id: string): Promise<FBR<MasterMainState[]>> => {
   return apiGet<FBR<MasterMainState[]>>(ENDPOINTS.cache(country_id));
+};
+
+export const getMasterMainStateCacheMultiple = async (country_ids: string[]): Promise<FBR<MasterMainState[]>> => {
+  return apiGet<FBR<MasterMainState[]>>(ENDPOINTS.cache_multiple(country_ids));
 };
 
