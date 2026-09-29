@@ -152,7 +152,7 @@ const ENDPOINTS = {
   // Cache APIs
   cache: (): string => `${URL}/cache`,
   cache_simple: (): string => `${URL}/cache_simple`,
-  find_cache_simple_vehicles: (id: string): string => `${URL}/find_cache_simple_vehicles/${id}`,
+  find_cache_simple_vehicles: (): string => `${URL}/find_cache_simple_vehicles`,
 };
 
 // UserOrganisation Interface
@@ -1037,8 +1037,8 @@ export const getUserOrganisationCacheSimple = async (): Promise<FBR<UserOrganisa
   return apiGet<FBR<UserOrganisationSimple[]>>(ENDPOINTS.cache_simple());
 };
 
-export const getUserOrganisationFindCacheSimpleVehicles = async (id: string): Promise<FBR<UserOrganisationSimpleVehicles[]>> => {
-  return apiGet<FBR<UserOrganisationSimpleVehicles[]>>(ENDPOINTS.find_cache_simple_vehicles(id));
+export const getUserOrganisationFindCacheSimpleVehicles = async (): Promise<FBR<UserOrganisationSimpleVehicles[]>> => {
+  return apiGet<FBR<UserOrganisationSimpleVehicles[]>>(ENDPOINTS.find_cache_simple_vehicles());
 };
 
 
