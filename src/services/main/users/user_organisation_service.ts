@@ -152,7 +152,7 @@ const ENDPOINTS = {
   // Cache APIs
   cache: (): string => `${URL}/cache`,
   cache_simple: (): string => `${URL}/cache_simple`,
-  find_cache_simple_vehicles: (): string => `${URL}/find_cache_simple_vehicles`,
+  find_cache_simple_vehicles: (): string => `${URL}/cache_simple_vehicles`,
 };
 
 // UserOrganisation Interface
