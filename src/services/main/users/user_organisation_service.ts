@@ -152,6 +152,7 @@ const ENDPOINTS = {
   // Cache APIs
   cache: (): string => `${URL}/cache`,
   cache_simple: (): string => `${URL}/cache_simple`,
+  find_cache_simple_vehicles: (id: string): string => `${URL}/find_cache_simple_vehicles/${id}`,
 };
 
 // UserOrganisation Interface
@@ -676,6 +677,58 @@ export interface UserOrganisationSimple extends Record<string, unknown> {
   bus_college: string
 }
 
+export interface UserOrganisationSimpleVehicles {
+  o_id: string;
+  o_name: string;
+  o_email: string;
+  o_mobile: string;
+  o_code: string;
+  u_id: string;
+
+  db_i: string;
+  db_g: string;
+  o_logo: string;
+
+  l_id: string;
+  df_id: string;
+  tz_id: string;
+  tz_name: string;
+
+  bus_college: string;
+
+  vehicles: {
+    v_id: string;
+    vn: string;
+    vehicle_name: string;
+    imei: string;
+
+    sensor_config: {
+      temperature: string;
+      dual_temperature: string;
+
+      fuel: string;
+      fuel_bluetooth: string;
+      fuel_tank_type: string;
+      fuel_tank_size: number;
+      fuel_tank_1_size: number;
+      fuel_tank_2_size: number;
+      fuel_tank_total_size: number;
+      fuel_mapping: unknown;
+
+      over_speed_kmph: number;
+      is_obd: string;
+      gps_lock_relay: string;
+      gps_door_locker: string;
+      door_sensor: string;
+      genset_sensor: string;
+      dashcam_sensor: string;
+      is_rear_cam: string;
+      is_front_cam: string;
+      camera_extra_count: number;
+    } | null;
+  }[];
+}
+
 // Next Organisation UTrack ID Interface
 export interface NextOrganisationUTrackId extends Record<string, unknown> {
   prefix: string;
@@ -983,3 +1036,9 @@ export const getUserOrganisationCache = async (): Promise<FBR<UserOrganisation[]
 export const getUserOrganisationCacheSimple = async (): Promise<FBR<UserOrganisationSimple[]>> => {
   return apiGet<FBR<UserOrganisationSimple[]>>(ENDPOINTS.cache_simple());
 };
+
+export const getUserOrganisationFindCacheSimpleVehicles = async (id: string): Promise<FBR<UserOrganisationSimpleVehicles[]>> => {
+  return apiGet<FBR<UserOrganisationSimpleVehicles[]>>(ENDPOINTS.find_cache_simple_vehicles(id));
+};
+
+
