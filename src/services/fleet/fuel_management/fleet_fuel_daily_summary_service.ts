@@ -60,6 +60,10 @@ export interface FleetFuelDailySummary extends Record<string, unknown> {
   date: string;
   date_f?: string;
   day?: string;
+  i_on_ts?: number;
+  i_off_ts?: number;
+  i_on_ts_f?: string;
+  i_off_ts_f?: string;
 
   // Metadata
   status: Status;
