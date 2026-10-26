@@ -49,6 +49,44 @@ export interface GpsAnalytics extends Record<string, unknown> {
 
 }
 
+export interface GpsAnalyticsSummary extends Record<string, unknown> {
+  org_id: string;
+  db_i: string;
+  db_g: string;
+
+  v_id: string;
+  vn_f: string;
+  vt: string;
+
+  slot: string;
+
+  fleet_name?: string;
+  subsidiary_name?: string;
+  branch_name?: string;
+  color_name?: string;
+  tag_name?: string;
+
+  vehicle_type?: string;
+  vehicle_make?: string;
+  vehicle_model?: string;
+  vehicle_sub_model?: string;
+  vehicle_status?: string;
+  vehicle_ownership?: string;
+  vehicle_associated?: string;
+  fuel_type?: string;
+  fuel_unit?: string;
+
+  total_km: number;
+  from_date: string;
+  to_date: string;
+  from_date_f: string;
+  to_date_f: string;
+
+  // processed fields
+  si: number;
+
+}
+
 export interface Device extends Record<string, unknown> {
   id: string;
   imei: string;

@@ -1,7 +1,7 @@
 // Axios
 import { apiPost } from '../../../core/apiCall';
 import { FBR } from '../../../core/BaseResponse';
-import { GpsAnalytics } from '../../../services/gps/reports/gps_models/GpsAnalytics';
+import { GpsAnalytics, GpsAnalyticsSummary } from '../../../services/gps/reports/gps_models/GpsAnalytics';
 import { GpsPacket } from '../../../services/gps/reports/gps_models/GpsPacket';
 import { GpsSensor } from '../../../services/gps/reports/gps_models/GpsSensor';
 
@@ -37,6 +37,8 @@ const URL = 'gps/reports';
 const ENDPOINTS = {
   // FBR -> GpsAnalytics
   all_vehicles_24_hours_analysis_report: `${URL}/all_vehicles_24_hours_analysis_report`,
+  all_vehicles_24_hours_analysis_summary_report: `${URL}/all_vehicles_24_hours_analysis_summary_report`,
+
   all_drivers_performance_report: `${URL}/all_drivers_performance_report`,
   // FBR -> GpsAnalytics -> KM Monthly -> Processed
   monthly_kilometers_summary_report: `${URL}/monthly_kilometers_summary_report`,
@@ -100,6 +102,24 @@ export const MultipleVehicleReportSchema = MongoBaseQuerySchema.extend({
 });
 export type MultipleVehicleReportQueryDTO = z.infer<
   typeof MultipleVehicleReportSchema
+>;
+
+// MultipleVehicleReportSummarySchema
+export const MultipleVehicleReportSummarySchema = MongoBaseQuerySchema.extend({
+  organisation_id: single_select_mandatory('Organisation'),
+  db_instance: stringMandatory('DB Instance'),
+  db_group: stringMandatory('DB Group'),
+  vehicle_ids: multi_select_mandatory('Master Vehicle'),
+  from_date: dateMandatory('From Date'),
+  to_date: dateMandatory('To Date'),
+  time_slot: enumOptional(
+    'Time Slot',
+    TimeSlot,
+    TimeSlot.TIME_SLOT_12AM_TO_12AM,
+  ),
+});
+export type MultipleVehicleReportSummaryQueryDTO = z.infer<
+  typeof MultipleVehicleReportSummarySchema
 >;
 
 // MultipleDriverReportSchema
@@ -235,6 +255,16 @@ export const all_vehicles_24_hours_analysis_report = async (
 ): Promise<FBR<GpsAnalytics[]>> => {
   return apiPost<FBR<GpsAnalytics[]>, MultipleVehicleReportQueryDTO>(
     ENDPOINTS.all_vehicles_24_hours_analysis_report,
+    data
+  );
+};
+
+// FBR -> GpsAnalyticsSummary
+export const all_vehicles_24_hours_analysis_summary_report = async (
+  data: MultipleVehicleReportSummaryQueryDTO
+): Promise<FBR<GpsAnalyticsSummary[]>> => {
+  return apiPost<FBR<GpsAnalyticsSummary[]>, MultipleVehicleReportSummaryQueryDTO>(
+    ENDPOINTS.all_vehicles_24_hours_analysis_summary_report,
     data
   );
 };
