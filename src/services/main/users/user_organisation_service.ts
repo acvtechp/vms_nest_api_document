@@ -708,6 +708,7 @@ export interface UserOrganisationSimpleVehicles {
 
       fuel: string;
       fuel_bluetooth: string;
+      fuel_analog: string;
       fuel_tank_type: string;
       fuel_tank_size: number;
       fuel_tank_1_size: number;

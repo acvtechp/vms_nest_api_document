@@ -464,6 +464,7 @@ export interface MasterVehicleDropdown extends Record<string, unknown> {
   dual_temperature: YesNo;
   fuel: YesNo;
   fuel_bluetooth: YesNo;
+  fuel_analog: YesNo;
   fuel_tank_size: number;
   fuel_tank_1_size: number;
   fuel_tank_2_size: number;
@@ -591,6 +592,7 @@ export interface VehicleDetailGPS extends Record<string, unknown> {
   dual_temperature?: YesNo;
   fuel?: YesNo;
   fuel_bluetooth?: YesNo;
+  fuel_analog?: YesNo;
   fuel_tank_type?: FuelTankType;
   fuel_tank_size?: number;
   fuel_tank_1_size?: number;
@@ -1195,6 +1197,7 @@ export const VehicleDetailGPSSensorSchema = z.object({
   dual_temperature: enumOptional('Dual Temperature', YesNo, YesNo.No),
   fuel: enumOptional('Fuel', YesNo, YesNo.No),
   fuel_bluetooth: enumOptional('Fuel Bluetooth', YesNo, YesNo.No),
+  fuel_analog: enumOptional('Fuel Analog', YesNo, YesNo.No),
   fuel_tank_type: enumOptional(
     'Fuel Tank Type',
     FuelTankType,
@@ -1747,6 +1750,7 @@ export const toVehicleDetailsGPSPayload = (vehicleGPS?: VehicleDetailGPS): Vehic
   dual_temperature: vehicleGPS?.dual_temperature || YesNo.No,
   fuel: vehicleGPS?.fuel || YesNo.No,
   fuel_bluetooth: vehicleGPS?.fuel_bluetooth || YesNo.No,
+  fuel_analog: vehicleGPS?.fuel_analog || YesNo.No,
   fuel_tank_type: vehicleGPS?.fuel_tank_type || FuelTankType.SingleTank,
   fuel_tank_size: vehicleGPS?.fuel_tank_size || 0,
   fuel_tank_1_size: vehicleGPS?.fuel_tank_1_size || 0,
