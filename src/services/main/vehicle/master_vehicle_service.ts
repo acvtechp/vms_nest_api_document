@@ -838,19 +838,19 @@ export interface VehicleDetailTrip extends Record<string, unknown> {
   vehicle_details_trip_id: string;
 
   // Main Field Details
-  trip_name?: string;
   trip_no?: string;
-  eway_bill_number?: string;
   route_name?: string;
+  trip_from?: string;
+  trip_to?: string;
+  trip_driver_name?: string;
+  trip_driver_mobile?: string;
+
+  eway_bill_data?: object;
 
   trip_start_date?: string;
   trip_start_date_f?: string;
   trip_end_date?: string;
   trip_end_date_f?: string;
-
-  trip_notes_1?: string;
-  trip_notes_2?: string;
-  trip_notes_3?: string;
 
   // Metadata
   status: Status;
@@ -1228,20 +1228,33 @@ export type VehicleDetailGPSSensorDTO = z.infer<
   typeof VehicleDetailGPSSensorSchema
 >;
 
+export const EWayBillDataSchema = z.object({
+  eway_bill_number: stringOptional('E-Way Bill Number'),
+  eway_bill_create_date_time: stringOptional('E-Way Bill Create Date Time'),
+  eway_bill_valid_till_date_time: stringOptional(
+    'E-Way Bill Valid Till Date Time',
+  ),
+});
+export type EWayBillDataDTO = z.infer<typeof EWayBillDataSchema>;
+
 // VehicleDetailTrip Schema
 export const VehicleDetailTripSchema = z.object({
   // Main Field Details
-  trip_name: stringOptional('Trip Name', 0, 100),
   trip_no: stringOptional('Trip No', 0, 100),
-  eway_bill_number: stringOptional('E-Way Bill Number', 0, 100),
   route_name: stringOptional('Route Name', 0, 100),
-
   trip_start_date: dateOptional('Trip Start Date'),
   trip_end_date: dateOptional('Trip End Date'),
 
-  trip_notes_1: stringOptional('Trip Notes 1', 0, 200),
-  trip_notes_2: stringOptional('Trip Notes 2', 0, 200),
-  trip_notes_3: stringOptional('Trip Notes 3', 0, 200),
+  trip_from: stringOptional('Trip From', 0, 100),
+  trip_to: stringOptional('Trip To', 0, 100),
+  trip_driver_name: stringOptional('Trip Driver Name', 0, 100),
+  trip_driver_mobile: stringOptional('Trip Driver Mobile', 0, 100),
+
+  eway_bill_data: nestedArrayOfObjectsOptional(
+    'E-Way Bill Data',
+    EWayBillDataSchema,
+    [],
+  ),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -1330,7 +1343,7 @@ export const VehicleDetailBodySchema = z.object({
   ),
   ground_clearance_mm: doubleOptional('Ground Clearance MM'),
   tire_size: stringOptional('Tire Size', 0, 50),
-  has_spare_tire: enumMandatory('Has Spare Tire', YesNo, YesNo.No),
+  has_spare_tire: enumMandatory('Has Spare Tire', YesNo, YesNo.Yes),
   has_all_terrain_tires: enumMandatory(
     'Has All Terrain Tires',
     YesNo,
@@ -1340,7 +1353,7 @@ export const VehicleDetailBodySchema = z.object({
   steering_type: enumMandatory(
     'Steering Type',
     SteeringType,
-    SteeringType.Manual,
+    SteeringType.Power,
   ),
   wheel_drive_type: enumMandatory(
     'Wheel Drive Type',
@@ -1500,6 +1513,7 @@ export const VehicleQuerySchema = BaseQuerySchema.extend({
   user_ids: multi_select_optional('User'), // Multi-Selection -> User
   driver_ids: multi_select_optional('MasterDriver'), // Multi-Selection -> MasterDriver
 
+  organisation_fleet_ids: multi_select_optional('OrganisationFleet'), // Multi-Selection -> OrganisationFleet
   organisation_subsidiary_ids: multi_select_optional('OrganisationSubsidiary'), // Multi-Selection -> OrganisationSubsidiary
   organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
   organisation_tag_ids: multi_select_optional('OrganisationTag'), // Multi-Selection -> OrganisationTag
@@ -1574,7 +1588,7 @@ export type UpdateGPSDeviceDetailsDTO = z.infer<
 // GPS SIM Details Schema
 export const UpdateGPSSimDetailsSchema = z.object({
   gps_sim_mobile_number: stringOptional('GPS SIM Mobile Number', 0, 100),
-  gps_sim_serial_number: stringOptional('GPS SIM Serial Number', 0, 50),
+  gps_sim_serial_number: stringOptional('GPS SIM Serial Number', 0, 100),
 
   sim_provider_id: single_select_optional('MasterMainSimProvider'),
 });
@@ -1612,7 +1626,6 @@ export const VehicleCaheMultiOrganisationQuerySchema = BaseQuerySchema.extend({
 export type VehicleCaheMultiOrganisationQueryDTO = z.infer<
   typeof VehicleCaheMultiOrganisationQuerySchema
 >;
-
 
 // Convert Vehicle Data to API Payload
 export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
@@ -1775,17 +1788,18 @@ export const toVehicleDetailsGPSPayload = (vehicleGPS?: VehicleDetailGPS): Vehic
 
 // Convert VehicleDetailTrip Data to API Payload
 export const toVehicleDetailsTripPayload = (trip?: VehicleDetailTrip): VehicleDetailTripDTO => ({
-  trip_name: trip?.trip_name || '',
   trip_no: trip?.trip_no || '',
-  eway_bill_number: trip?.eway_bill_number || '',
   route_name: trip?.route_name || '',
+
+  trip_from: trip?.trip_from || '',
+  trip_to: trip?.trip_to || '',
+  trip_driver_name: trip?.trip_driver_name || '',
+  trip_driver_mobile: trip?.trip_driver_mobile || '',
 
   trip_start_date: trip?.trip_start_date || '',
   trip_end_date: trip?.trip_end_date || '',
 
-  trip_notes_1: trip?.trip_notes_1 || '',
-  trip_notes_2: trip?.trip_notes_2 || '',
-  trip_notes_3: trip?.trip_notes_3 || '',
+  eway_bill_data: [],
 
   status: trip ? trip.status : Status.Active,
   time_zone_id: '',

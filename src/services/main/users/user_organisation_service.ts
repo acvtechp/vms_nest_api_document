@@ -207,7 +207,6 @@ export interface UserOrganisation extends Record<string, unknown> {
   country_code?: string;
 
   // Operations
-  is_sync_gps_data_from_utrack: YesNo;
   is_bus_college: YesNo;
 
   // Metadata
@@ -808,11 +807,6 @@ export const UserOrganisationSchema = z.object({
   country_code: stringOptional('Country Code', 0, 5),
 
   // Operations
-  is_sync_gps_data_from_utrack: enumOptional(
-    'Is Sync GPS Data From UTrack',
-    YesNo,
-    YesNo.No,
-  ),
   is_bus_college: enumOptional('Is Bus College', YesNo, YesNo.No),
 
   // Metadata
@@ -839,11 +833,6 @@ export const UserOrganisationQuerySchema = BaseQuerySchema.extend({
     'Fleet Size',
     FleetSize,
     getAllEnums(FleetSize),
-  ),
-  is_sync_gps_data_from_utrack: enumArrayOptional(
-    'Is Sync GPS Data From UTrack',
-    YesNo,
-    getAllEnums(YesNo),
   ),
   is_bus_college: enumArrayOptional(
     'Is Bus College',
@@ -909,7 +898,6 @@ export const toUserOrganisationPayload = (row: UserOrganisation): UserOrganisati
   country_code: row.country_code || '',
 
   // Operations
-  is_sync_gps_data_from_utrack: row.is_sync_gps_data_from_utrack || YesNo.No,
   is_bus_college: row.is_bus_college || YesNo.No,
 
   industry_id: row.industry_id,
@@ -971,7 +959,6 @@ export const newUserOrganisationPayload = (): UserOrganisationDTO => ({
   country_code: '',
 
   // Operations
-  is_sync_gps_data_from_utrack: YesNo.No,
   is_bus_college: YesNo.No,
 
   industry_id: '',
