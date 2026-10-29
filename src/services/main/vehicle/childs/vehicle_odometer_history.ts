@@ -65,16 +65,6 @@ export const VehicleOdometerHistorySchema = z.object({
 
   // Main Field Details
   odometer_reading: numberMandatory('Odometer Reading'),
-  odometer_date: dateMandatory('Odometer Date'),
-  odometer_source: enumMandatory(
-    'Odometer Source',
-    OdometerSource,
-    OdometerSource.Direct,
-  ),
-
-  // Metadata
-  status: enumMandatory('Status', Status, Status.Active),
-  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type VehicleOdometerHistoryDTO = z.infer<
   typeof VehicleOdometerHistorySchema
@@ -86,6 +76,7 @@ export const VehicleOdometerHistoryInternalSchema = z.object({
   vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
 
   // Main Field Details
+  odometer_date: dateMandatory('Date Time'),
   odometer_reading: numberMandatory('Odometer Reading'),
   odometer_source: enumMandatory(
     'Odometer Source',
@@ -119,11 +110,6 @@ export const toVehicleOdometerHistoryPayload = (history: VehicleOdometerHistory)
   vehicle_id: history.vehicle_id,
 
   odometer_reading: history.odometer_reading,
-  odometer_date: history.odometer_date,
-  odometer_source: history.odometer_source,
-
-  status: history.status,
-  time_zone_id: ''
 });
 
 // Generate a new payload with default values
@@ -132,11 +118,6 @@ export const newVehicleOdometerHistoryPayload = (): VehicleOdometerHistoryDTO =>
   vehicle_id: '',
 
   odometer_reading: 0,
-  odometer_date: new Date().toISOString(),
-  odometer_source: OdometerSource.Other,
-
-  status: Status.Active,
-  time_zone_id: ''
 });
 
 // API Methods
