@@ -43,8 +43,7 @@ import { MasterDailySchedule } from './master_daily_schedule';
 const URL = 'fleet/bus_management/day_run_daily_schedule';
 
 const ENDPOINTS = {
-    get_student_attendance_presigned_url: (file_name: string): string =>
-        `${URL}/get_student_attendance_presigned_url/${encodeURIComponent(file_name)}`,
+    get_student_attendance_presigned_url: (file_name: string): string => `${URL}/get_student_attendance_presigned_url/${encodeURIComponent(file_name)}`,
 
     find_day_run: `${URL}/run/search`,
     create_day_run: `${URL}/run`,

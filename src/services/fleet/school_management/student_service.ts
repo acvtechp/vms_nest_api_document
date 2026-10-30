@@ -53,8 +53,8 @@ const URL = 'fleet/school_management/student';
 
 const ENDPOINTS = {
     // AWS S3 PRESIGNED
-    student_presigned_url: (fileName: string): string => `${URL}/student_presigned_url/${fileName}`,
-    student_guardian_presigned_url: (fileName: string): string => `${URL}/student_guardian_presigned_url/${fileName}`,
+    student_presigned_url: (file_name: string): string => `${URL}/student_presigned_url/${encodeURIComponent(file_name)}`,
+    student_guardian_presigned_url: (file_name: string): string => `${URL}/student_guardian_presigned_url/${encodeURIComponent(file_name)}`,
 
     // File Uploads
     update_profile_picture: (id: string): string => `${URL}/update_profile_picture/${id}`,

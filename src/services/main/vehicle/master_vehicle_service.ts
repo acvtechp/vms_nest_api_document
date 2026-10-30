@@ -124,7 +124,7 @@ const URL = 'main/master_vehicle';
 const ENDPOINTS = {
   // AWS S3 PRESIGNED
   vehicle_file_presigned_url: `${URL}/vehicle_file_presigned_url`,
-  calibration_file_presigned_url: (fileName: string): string => `${URL}/calibration_file_presigned_url/${fileName}`,
+  calibration_file_presigned_url: (file_name: string): string => `${URL}/calibration_file_presigned_url/${encodeURIComponent(file_name)}`,
 
   // File Uploads
   create_vehicle_file: `${URL}/create_vehicle_file`,

@@ -133,7 +133,7 @@ const URL = 'user/organisation';
 
 const ENDPOINTS = {
   // AWS S3 PRESIGNED
-  organisation_logo_presigned_url: (fileName: string): string => `${URL}/organisation_logo_presigned_url/${fileName}`,
+  organisation_logo_presigned_url: (file_name: string): string => `${URL}/organisation_logo_presigned_url/${encodeURIComponent(file_name)}`,
 
   // File Uploads
   update_organisation_logo: (id: string): string => `${URL}/update_organisation_logo/${id}`,

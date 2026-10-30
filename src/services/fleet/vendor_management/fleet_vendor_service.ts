@@ -38,8 +38,8 @@ const URL = 'fleet/vendor_management/fleet_vendor';
 
 const ENDPOINTS = {
   // AWS S3 PRESIGNED
-  vendor_logo_presigned_url: (file_name: string): string => `${URL}/vendor_logo_presigned_url/${file_name}`,
-  vendor_contact_person_logo_presigned_url: (file_name: string): string => `${URL}/vendor_contact_person_logo_presigned_url/${file_name}`,
+  vendor_logo_presigned_url: (file_name: string): string => `${URL}/vendor_logo_presigned_url/${encodeURIComponent(file_name)}`,
+  vendor_contact_person_logo_presigned_url: (file_name: string): string => `${URL}/vendor_contact_person_logo_presigned_url/${encodeURIComponent(file_name)}`,
   vendor_document_file_presigned_url: `${URL}/vendor_document_file_presigned_url`,
 
   // File Uploads

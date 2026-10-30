@@ -60,7 +60,7 @@ const URL = 'user/user';
 
 const ENDPOINTS = {
   // AWS S3 PRESIGNED
-  get_user_image_presigned_url: (fileName: string): string => `${URL}/get_user_image_presigned_url/${fileName}`,
+  get_user_image_presigned_url: (file_name: string): string => `${URL}/get_user_image_presigned_url/${encodeURIComponent(file_name)}`,
 
   // File Uploads
   update_user_image: (id: string): string => `${URL}/update_user_image/${id}`,

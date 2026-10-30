@@ -46,7 +46,7 @@ const URL = 'main/master_driver';
 
 const ENDPOINTS = {
   // AWS S3 PRESIGNED
-  master_driver_image_presigned_url: (fileName: string): string => `${URL}/master_driver_image_presigned_url/${fileName}`,
+  master_driver_image_presigned_url: (file_name: string): string => `${URL}/master_driver_image_presigned_url/${encodeURIComponent(file_name)}`,
   master_driver_file_presigned_url: `${URL}/master_driver_file_presigned_url`,
 
   // File Uploads

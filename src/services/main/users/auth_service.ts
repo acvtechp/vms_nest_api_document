@@ -24,6 +24,7 @@ const ENDPOINTS = {
   admin_login: `${URL}/admin_login`,
   admin_logout: `${URL}/admin_logout`,
   admin_change_password: `${URL}/admin_change_password`,
+  admin_system_reset_password: `${URL}/admin_system_reset_password`,
 };
 
 export interface UserResponse extends Record<string, unknown> {
@@ -53,7 +54,7 @@ export const UserLoginSchema = z.object({
   identifier: stringMandatory('Identifier', 3, 100),
   password: stringMandatory('Password', 3, 20),
 
-  fcm_token: stringOptional('fcm_token', 0, 10000),
+  fcm_token: stringOptional('fcm_token', 0, 500),
 
   platform: enumOptional('Login From', LoginFrom, LoginFrom.Web),
 
@@ -72,7 +73,7 @@ export const UserLoginSchema = z.object({
 export type UserLoginDTO = z.infer<typeof UserLoginSchema>;
 
 export const UserLogoutSchema = z.object({
-  fcm_token: stringOptional('fcm_token', 0, 10000),
+  fcm_token: stringOptional('fcm_token', 0, 500),
   device_id: stringOptional('device_id', 0, 120),
 });
 export type UserLogoutDTO = z.infer<typeof UserLogoutSchema>;
@@ -93,7 +94,7 @@ export const DriverLoginSchema = z.object({
   identifier: stringMandatory('Identifier', 3, 100),
   password: stringMandatory('Password', 3, 20),
 
-  fcm_token: stringOptional('fcm_token', 0, 10000),
+  fcm_token: stringOptional('fcm_token', 0, 500),
 
   platform: enumOptional('Login From', LoginFrom, LoginFrom.Web),
 
@@ -112,7 +113,7 @@ export const DriverLoginSchema = z.object({
 export type DriverLoginDTO = z.infer<typeof DriverLoginSchema>;
 
 export const DriverLogoutSchema = z.object({
-  fcm_token: stringOptional('fcm_token', 0, 10000),
+  fcm_token: stringOptional('fcm_token', 0, 500),
   device_id: stringOptional('device_id', 0, 120),
 });
 export type DriverLogoutDTO = z.infer<typeof DriverLogoutSchema>;
@@ -120,16 +121,25 @@ export type DriverLogoutDTO = z.infer<typeof DriverLogoutSchema>;
 export const AdminChangePasswordSchema = z.object({
   admin_id: stringUUIDMandatory('admin_id'),
   old_password: stringMandatory('Old Password', 3, 20),
-  new_password: stringMandatory('New Password Size', 3, 20),
-  confirm_new_password: stringMandatory('New Password Size', 3, 20),
+  new_password: stringMandatory('New Password', 3, 20),
+  confirm_new_password: stringMandatory('Confirm New Password', 3, 20),
 });
 export type AdminChangePasswordDTO = z.infer<typeof AdminChangePasswordSchema>;
+
+export const AdminSystemResetPasswordSchema = z.object({
+  admin_id: stringUUIDMandatory('admin_id'),
+  password: stringMandatory('Password', 3, 20),
+});
+
+export type AdminSystemResetPasswordDTO = z.infer<
+  typeof AdminSystemResetPasswordSchema
+>;
 
 export const AdminLoginSchema = z.object({
   identifier: stringMandatory('Identifier', 3, 100),
   password: stringMandatory('Password', 3, 20),
 
-  fcm_token: stringOptional('fcm_token', 0, 10000),
+  fcm_token: stringOptional('fcm_token', 0, 500),
 
   platform: enumOptional('Login From', LoginFrom, LoginFrom.Web),
 
@@ -148,7 +158,7 @@ export const AdminLoginSchema = z.object({
 export type AdminLoginDTO = z.infer<typeof AdminLoginSchema>;
 
 export const AdminLogoutSchema = z.object({
-  fcm_token: stringOptional('fcm_token', 0, 10000),
+  fcm_token: stringOptional('fcm_token', 0, 500),
   device_id: stringOptional('device_id', 0, 120),
 });
 export type AdminLogoutDTO = z.infer<typeof AdminLogoutSchema>;
@@ -179,6 +189,10 @@ export const admin_logout = async (data: AdminLogoutDTO): Promise<SBR> => {
 
 export const admin_change_password = async (data: AdminChangePasswordDTO): Promise<SBR> => {
   return apiPost<SBR, AdminChangePasswordDTO>(ENDPOINTS.admin_change_password, data);
+};
+
+export const admin_system_reset_password = async (data: AdminSystemResetPasswordDTO): Promise<SBR> => {
+  return apiPost<SBR, AdminSystemResetPasswordDTO>(ENDPOINTS.admin_system_reset_password, data);
 };
 
 // MasterDriver

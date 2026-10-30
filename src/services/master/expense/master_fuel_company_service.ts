@@ -24,7 +24,7 @@ const URL = 'master/expense/fuel_company';
 
 const ENDPOINTS = {
   // AWS S3 PRESIGNED
-  master_fuel_company_presigned_url: (fileName: string): string => `${URL}/master_fuel_company_presigned_url/${fileName}`,
+  master_fuel_company_presigned_url: (file_name: string): string => `${URL}/master_fuel_company_presigned_url/${encodeURIComponent(file_name)}`,
 
   // File Uploads
   update_master_fuel_company_logo: (id: string): string => `${URL}/update_master_fuel_company_logo/${id}`,

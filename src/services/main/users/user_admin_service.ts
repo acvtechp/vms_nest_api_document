@@ -22,7 +22,7 @@ const URL = 'user/admin';
 
 const ENDPOINTS = {
   // AWS S3 PRESIGNED
-  get_admin_image_presigned_url: (fileName: string): string => `${URL}/get_admin_image_presigned_url/${fileName}`,
+  get_admin_image_presigned_url: (file_name: string): string => `${URL}/get_admin_image_presigned_url/${encodeURIComponent(file_name)}`,
 
   // File Uploads
   update_admin_image: (id: string): string => `${URL}/update_admin_image/${id}`,
@@ -33,8 +33,6 @@ const ENDPOINTS = {
   create: URL,
   update: (id: string): string => `${URL}/${id}`,
   delete: (id: string): string => `${URL}/${id}`,
-
-  update_profile: (id: string): string => `${URL}/update_profile/${id}`,
 
   // Cache APIs
   cache: `${URL}/cache`,
@@ -52,10 +50,9 @@ export interface UserAdmin extends Record<string, unknown> {
 
   // Main Field Details
   admin_name: string;
-  email: string;
-  password?: string;
-  mobile?: string;
   admin_role: AdminRole;
+  email: string;
+  mobile: string;
 
   admin_details?: string;
 
@@ -114,10 +111,9 @@ export const UserAdminSchema = z.object({
 
   // Main Field Details
   admin_name: stringMandatory('Admin Name', 3, 100),
-  email: stringMandatory('Email', 3, 100),
-  password: stringOptional('Password', 0, 20),
-  mobile: stringOptional('Password', 0, 15),
   admin_role: enumMandatory('Admin Role', AdminRole, AdminRole.MasterAdmin),
+  email: stringMandatory('Email', 3, 100),
+  mobile: stringMandatory('Mobile', 3, 15),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -133,20 +129,6 @@ export const UserAdminLogoSchema = z.object({
 });
 export type UserAdminLogoDTO = z.infer<typeof UserAdminLogoSchema>;
 
-// UserAdmin Update Profile Schema
-export const UserAdminProfileSchema = z.object({
-  // Profile Image/Logo
-  admin_image_url: stringOptional('Admin Image URL', 0, 300),
-  admin_image_key: stringOptional('Admin Image Key', 0, 300),
-  admin_image_name: stringOptional('Admin Image Name', 0, 300),
-
-  // Main Field Details
-  admin_name: stringMandatory('Admin Name', 3, 100),
-  email: stringMandatory('Email', 3, 100),
-  mobile: stringOptional('Password', 0, 15),
-});
-export type UserAdminProfileDTO = z.infer<typeof UserAdminProfileSchema>;
-
 // UserAdmin Query Schema
 export const UserAdminQuerySchema = BaseQuerySchema.extend({
   // Self Table
@@ -161,30 +143,32 @@ export const UserAdminQuerySchema = BaseQuerySchema.extend({
 });
 export type UserAdminQueryDTO = z.infer<typeof UserAdminQuerySchema>;
 
-// Convert UserAdminProfile Data to API Payload
-export const toUserAdminProfilePayload = (row: UserAdmin): UserAdminProfileDTO => ({
-  admin_name: row.admin_name || '',
-  email: row.email || '',
-  mobile: row.mobile || '',
-
-  admin_image_url: row.admin_image_url || '',
-  admin_image_key: row.admin_image_key || '',
-  admin_image_name: row.admin_image_name || '',
-});
-
 // Create New UserAdmin Payload
 export const newUserAdminPayload = (): UserAdminDTO => ({
-  admin_name: '',
-  email: '',
-  password: '',
-  mobile: '',
-  admin_role: AdminRole.MasterAdmin,
-
   admin_image_url: '',
   admin_image_key: '',
   admin_image_name: '',
-  
+
+  admin_name: '',
+  admin_role: AdminRole.MasterAdmin,
+  email: '',
+  mobile: '',
+
   status: Status.Active,
+});
+
+// Create New UserAdmin Payload
+export const toUserAdminPayload = (row: UserAdmin): UserAdminDTO => ({
+  admin_image_url: row.admin_image_url || "",
+  admin_image_key: row.admin_image_key || "",
+  admin_image_name: row.admin_image_name || "",
+
+  admin_name: row.admin_name || "",
+  admin_role: row.admin_role,
+  email: row.email || "",
+  mobile: row.mobile || "",
+
+  status: row.status,
 });
 
 // AWS S3 PRESIGNED
@@ -216,10 +200,6 @@ export const updateUserAdmin = async (id: string, data: UserAdminDTO): Promise<S
 
 export const deleteUserAdmin = async (id: string): Promise<SBR> => {
   return apiDelete<SBR>(ENDPOINTS.delete(id));
-};
-
-export const updateUserAdminProfile = async (id: string, data: UserAdminProfileDTO): Promise<SBR> => {
-  return apiPatch<SBR, UserAdminProfileDTO>(ENDPOINTS.update_profile(id), data);
 };
 
 // Cache APIs
