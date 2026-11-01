@@ -16,7 +16,7 @@ import {
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
 // Enums
-import { LoginFrom, Status, YesNo } from '../../../core/Enums';
+import { BusUserRole, LoginFrom, Status, YesNo } from '../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../../services/main/users/user_organisation_service';
@@ -120,6 +120,8 @@ export interface User extends Record<string, unknown> {
   show_vehicle_filters?: YesNo;
   show_temperature_filters?: YesNo;
   show_vehicle_info_columns?: YesNo;
+
+  bus_user_role: BusUserRole.MasterAdmin;
 
   default_theme_layout?: string;
   default_theme_primary_color?: string;
@@ -464,6 +466,8 @@ export const UserSchema = z.object({
   all_vehicles: enumMandatory('All Vehicles', YesNo, YesNo.No),
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi selection -> MasterVehicle
 
+  bus_user_role: enumMandatory('Bus User Role', BusUserRole, BusUserRole.MasterAdmin),
+
   show_vehicle_filters: enumMandatory('Show Vehicle Filters', YesNo, YesNo.No),
   show_temperature_filters: enumMandatory(
     'Show Temperature Filters',
@@ -507,6 +511,8 @@ export const UserQuerySchema = BaseQuerySchema.extend({
   can_login: enumArrayOptional('Can Login', YesNo),
   is_root_user: enumArrayOptional('Is Root User', YesNo),
   all_vehicles: enumArrayOptional('All Vehicles', YesNo),
+
+  bus_user_role: enumArrayOptional('Bus User Role', BusUserRole),
 });
 export type UserQueryDTO = z.infer<typeof UserQuerySchema>;
 
@@ -662,6 +668,8 @@ export const toUserPayload = (row: User): UserDTO => ({
   show_temperature_filters: row.show_temperature_filters || YesNo.No,
   show_vehicle_info_columns: row.show_vehicle_info_columns || YesNo.No,
 
+  bus_user_role: row.bus_user_role || BusUserRole.MasterAdmin,
+
   user_image_url: row.user_image_url || '',
   user_image_key: row.user_image_key || '',
   user_image_name: row.user_image_name || '',
@@ -715,6 +723,8 @@ export const newUserPayload = (): UserDTO => ({
   show_vehicle_filters: YesNo.No,
   show_temperature_filters: YesNo.No,
   show_vehicle_info_columns: YesNo.No,
+
+  bus_user_role: BusUserRole.MasterAdmin,
 
   user_image_url: '',
   user_image_key: '',

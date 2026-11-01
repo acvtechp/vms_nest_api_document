@@ -123,6 +123,14 @@ export enum EducationalType {
   College = 'College',
 }
 
+export enum BusUserRole {
+  MasterAdmin = 'MasterAdmin',
+  BranchAdmin = 'BranchAdmin',
+  OperationalManager = 'OperationalManager',
+  FleetManager = 'FleetManager',
+  FinanceManager = 'FinanceManager',
+}
+
 export enum FuelTankType {
   SingleTank = 'SingleTank',
   DualTank = 'DualTank'
