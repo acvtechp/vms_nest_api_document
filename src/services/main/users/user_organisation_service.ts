@@ -674,7 +674,8 @@ export interface UserOrganisationSimple extends Record<string, unknown> {
   tz_id: string;
   tz_name: string;
 
-  bus_college: string
+  is_bus_management_educational: string;
+  educational_type: string;
 }
 
 export interface UserOrganisationSimpleVehicles {
@@ -694,7 +695,8 @@ export interface UserOrganisationSimpleVehicles {
   tz_id: string;
   tz_name: string;
 
-  bus_college: string;
+  is_bus_management_educational: string;
+  educational_type: string;
 
   vehicles: {
     v_id: string;
