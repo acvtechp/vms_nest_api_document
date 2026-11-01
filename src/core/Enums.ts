@@ -118,6 +118,11 @@ export enum YesNo {
   No = 'No',
 }
 
+export enum EducationalType {
+  School = 'School',
+  College = 'College',
+}
+
 export enum FuelTankType {
   SingleTank = 'SingleTank',
   DualTank = 'DualTank'
@@ -323,14 +328,14 @@ export enum InspectionActionStatus {
 }
 
 export enum InspectionScheduleStatus {
-  Pending   = 'Pending',
-  OverDue   = 'OverDue',
+  Pending = 'Pending',
+  OverDue = 'OverDue',
   Completed = 'Completed',
 }
 
 export enum ServiceScheduleStatus {
-  Pending   = 'Pending',
-  OverDue   = 'OverDue',
+  Pending = 'Pending',
+  OverDue = 'OverDue',
   Completed = 'Completed',
 }
 
@@ -909,40 +914,40 @@ export enum StudentLeaveType {
 }
 
 export enum DayRunStatus {
-    Planned = 'Planned',
-    InProgress = 'InProgress',
-    Completed = 'Completed',
-    Cancelled = 'Cancelled',
+  Planned = 'Planned',
+  InProgress = 'InProgress',
+  Completed = 'Completed',
+  Cancelled = 'Cancelled',
 }
 
 export enum DayRunRunningStatus {
-    OnTime = 'OnTime',
-    Delayed = 'Delayed',
+  OnTime = 'OnTime',
+  Delayed = 'Delayed',
 }
 
 export enum DayRunStopStatus {
-    Pending = 'Pending',
-    Arrived = 'Arrived',
-    Departed = 'Departed',
-    Skipped = 'Skipped',
+  Pending = 'Pending',
+  Arrived = 'Arrived',
+  Departed = 'Departed',
+  Skipped = 'Skipped',
 }
 
 export enum StudentLegStatus {
-    Planned = 'Planned',
-    PlannedAbsent = 'PlannedAbsent',
-    UnplannedAbsent = 'UnplannedAbsent',
-    Boarded = 'Boarded',
-    Handovered = 'Handovered',
+  Planned = 'Planned',
+  PlannedAbsent = 'PlannedAbsent',
+  UnplannedAbsent = 'UnplannedAbsent',
+  Boarded = 'Boarded',
+  Handovered = 'Handovered',
 }
 
 export enum AttendanceMethod {
-    None = 'None',
-    QRCode = 'QRCode',
-    NFC = 'NFC',
-    ParentAppCode = 'ParentAppCode',
-    OTP = 'OTP',
-    Photo = 'Photo',
-    Manual = 'Manual',
+  None = 'None',
+  QRCode = 'QRCode',
+  NFC = 'NFC',
+  ParentAppCode = 'ParentAppCode',
+  OTP = 'OTP',
+  Photo = 'Photo',
+  Manual = 'Manual',
 }
 
 export enum HolidayType {

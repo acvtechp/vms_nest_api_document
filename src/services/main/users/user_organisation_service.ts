@@ -18,7 +18,7 @@ import {
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
 // Enums
-import { Status, FleetSize, YesNo } from '../../../core/Enums';
+import { Status, FleetSize, YesNo, EducationalType } from '../../../core/Enums';
 
 // Other Models
 import { MasterMainIndustry } from '../../../services/master/main/master_main_industry_service';
@@ -207,7 +207,8 @@ export interface UserOrganisation extends Record<string, unknown> {
   country_code?: string;
 
   // Operations
-  is_bus_college: YesNo;
+  is_bus_management_educational: YesNo;
+  educational_type: EducationalType;
 
   // Metadata
   status: Status;
@@ -807,7 +808,16 @@ export const UserOrganisationSchema = z.object({
   country_code: stringOptional('Country Code', 0, 5),
 
   // Operations
-  is_bus_college: enumOptional('Is Bus College', YesNo, YesNo.No),
+  is_bus_management_educational: enumOptional(
+    'Is Bus Management Educational',
+    YesNo,
+    YesNo.No,
+  ),
+  educational_type: enumOptional(
+    'Educational Type',
+    EducationalType,
+    EducationalType.School,
+  ),
 
   // Metadata
   status: enumMandatory('Status', Status, Status.Active),
@@ -834,10 +844,15 @@ export const UserOrganisationQuerySchema = BaseQuerySchema.extend({
     FleetSize,
     getAllEnums(FleetSize),
   ),
-  is_bus_college: enumArrayOptional(
-    'Is Bus College',
+  is_bus_management_educational: enumArrayOptional(
+    'Is Bus Management Educational',
     YesNo,
     getAllEnums(YesNo),
+  ),
+  educational_type: enumArrayOptional(
+    'Educational Type',
+    EducationalType,
+    getAllEnums(EducationalType),
   ),
 });
 export type UserOrganisationQueryDTO = z.infer<
@@ -898,7 +913,8 @@ export const toUserOrganisationPayload = (row: UserOrganisation): UserOrganisati
   country_code: row.country_code || '',
 
   // Operations
-  is_bus_college: row.is_bus_college || YesNo.No,
+  is_bus_management_educational: row.is_bus_management_educational || YesNo.No,
+  educational_type: row.educational_type || EducationalType.School,
 
   industry_id: row.industry_id,
   country_id: row.country_id,
@@ -959,7 +975,8 @@ export const newUserOrganisationPayload = (): UserOrganisationDTO => ({
   country_code: '',
 
   // Operations
-  is_bus_college: YesNo.No,
+  is_bus_management_educational: YesNo.No,
+  educational_type: EducationalType.School,
 
   industry_id: '',
   country_id: '',
