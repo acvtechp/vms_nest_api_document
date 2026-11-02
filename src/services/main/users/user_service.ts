@@ -466,7 +466,7 @@ export const UserSchema = z.object({
   all_vehicles: enumMandatory('All Vehicles', YesNo, YesNo.No),
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi selection -> MasterVehicle
 
-  bus_user_role: enumMandatory('Bus User Role', BusUserRole, BusUserRole.MasterAdmin),
+  bus_user_role: enumMandatory('Bus User Role', BusUserRole, BusUserRole.BranchAdmin),
 
   show_vehicle_filters: enumMandatory('Show Vehicle Filters', YesNo, YesNo.No),
   show_temperature_filters: enumMandatory(
@@ -668,7 +668,7 @@ export const toUserPayload = (row: User): UserDTO => ({
   show_temperature_filters: row.show_temperature_filters || YesNo.No,
   show_vehicle_info_columns: row.show_vehicle_info_columns || YesNo.No,
 
-  bus_user_role: row.bus_user_role || BusUserRole.MasterAdmin,
+  bus_user_role: row.bus_user_role || BusUserRole.BranchAdmin,
 
   user_image_url: row.user_image_url || '',
   user_image_key: row.user_image_key || '',
@@ -724,7 +724,7 @@ export const newUserPayload = (): UserDTO => ({
   show_temperature_filters: YesNo.No,
   show_vehicle_info_columns: YesNo.No,
 
-  bus_user_role: BusUserRole.MasterAdmin,
+  bus_user_role: BusUserRole.BranchAdmin,
 
   user_image_url: '',
   user_image_key: '',
