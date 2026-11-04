@@ -126,7 +126,7 @@ export enum EducationalType {
 export enum BusUserRole {
   MasterAdmin = 'MasterAdmin',
   BranchAdmin = 'BranchAdmin',
-  OperationalManager = 'OperationalManager',
+  TransportManager = 'TransportManager',
   FleetManager = 'FleetManager',
   FinanceManager = 'FinanceManager',
 }
