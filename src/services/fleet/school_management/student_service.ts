@@ -68,7 +68,6 @@ const ENDPOINTS = {
     create: URL,
     update: (id: string): string => `${URL}/${id}`,
     remove: (id: string): string => `${URL}/${id}`,
-    school_dashboard: `${URL}/school_dashboard`,
     find_students_with_no_fixed_schedule_pickup: `${URL}/students_with_no_fixed_schedule_pickup/search`,
     find_students_with_no_fixed_schedule_drop: `${URL}/students_with_no_fixed_schedule_drop/search`,
 
@@ -103,15 +102,6 @@ const ENDPOINTS = {
     // StudentTransportPlanTypeChangeHistory APIs
     find_student_transport_plan_type_change_history: `${URL}/student_transport_plan_type_change_history/search`,
 };
-
-export interface SchoolDashboard {
-    main_counts: {
-        noticeboard: number;
-        students: number;
-        leave_requests: number;
-        route_change_requests: number;
-    };
-}
 
 // Student Interface
 export interface Student extends Record<string, unknown> {
@@ -891,15 +881,6 @@ export type StudentTransportPlanTypeChangeHistoryQueryDTO = z.infer<
     typeof StudentTransportPlanTypeChangeHistoryQuerySchema
 >;
 
-// SchoolDashBoard Query Schema
-export const SchoolDashBoardQuerySchema = BaseQuerySchema.extend({
-    organisation_ids: multi_select_mandatory('UserOrganisation'), // Multi-Selection -> UserOrganisation
-    organisation_branch_ids: multi_select_mandatory('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
-});
-export type SchoolDashBoardQueryDTO = z.infer<
-    typeof SchoolDashBoardQuerySchema
->;
-
 // Convert Student Data to API Payload
 export const toStudentPayload = (row: Student): StudentDTO => ({
     organisation_id: row.organisation_id || '',
@@ -1183,10 +1164,6 @@ export const updateStudent = async (id: string, data: StudentDTO): Promise<SBR> 
 
 export const deleteStudent = async (id: string): Promise<SBR> => {
     return apiDelete<SBR>(ENDPOINTS.remove(id));
-};
-
-export const school_dashboard = async (data: SchoolDashBoardQueryDTO,): Promise<FBR<SchoolDashboard[]>> => {
-    return apiPost<FBR<SchoolDashboard[]>, SchoolDashBoardQueryDTO>(ENDPOINTS.school_dashboard, data);
 };
 
 export const find_students_with_no_fixed_schedule_pickup = async (data: StudentNoFixedScheduleQueryDTO): Promise<FBR<Student[]>> => {
