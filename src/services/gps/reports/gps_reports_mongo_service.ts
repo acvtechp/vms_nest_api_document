@@ -62,8 +62,6 @@ const ENDPOINTS = {
 
   // FBR -> GpsPacket
   vehicle_gps_raw_data_report: `${URL}/vehicle_gps_raw_data_report`,
-  vehicle_fuel_raw_data_report: `${URL}/vehicle_fuel_raw_data_report`,
-  vehicle_temperature_raw_data_report: `${URL}/vehicle_temperature_raw_data_report`,
   vehicle_track_history_report: `${URL}/vehicle_track_history_report`,
 
   // FBR -> GpsPacket -> Processed Cumulative Distance
@@ -385,26 +383,6 @@ export const vehicle_gps_raw_data_report = async (
 ): Promise<FBR<GpsPacket[]>> => {
   return apiPost<FBR<GpsPacket[]>, SingleVehicleReportQueryDTO>(
     ENDPOINTS.vehicle_gps_raw_data_report,
-    data
-  );
-};
-
-// FBR -> GpsPacket
-export const temperature_report = async (
-  data: SingleVehicleReportQueryDTO
-): Promise<FBR<GpsPacket[]>> => {
-  return apiPost<FBR<GpsPacket[]>, SingleVehicleReportQueryDTO>(
-    ENDPOINTS.vehicle_temperature_raw_data_report,
-    data
-  );
-};
-
-// FBR -> GpsPacket
-export const fuel_raw_data_report = async (
-  data: SingleVehicleReportQueryDTO
-): Promise<FBR<GpsPacket[]>> => {
-  return apiPost<FBR<GpsPacket[]>, SingleVehicleReportQueryDTO>(
-    ENDPOINTS.vehicle_fuel_raw_data_report,
     data
   );
 };
