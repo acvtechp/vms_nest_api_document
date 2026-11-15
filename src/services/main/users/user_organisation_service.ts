@@ -14,6 +14,7 @@ import {
   enumArrayOptional,
   getAllEnums,
   enumOptional,
+  numberOptional,
 } from '../../../zod_utils/zod_utils';
 import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
@@ -174,6 +175,7 @@ export interface UserOrganisation extends Record<string, unknown> {
   organisation_utrack_id?: string;
 
   fleet_size: FleetSize;
+  distance_correction: number;
 
   // Database Details
   db_instance: string;
@@ -773,6 +775,7 @@ export const UserOrganisationSchema = z.object({
     FleetSize,
     FleetSize.Fleet_1_to_50_Vehicles,
   ),
+  distance_correction: numberOptional('Distance Correction', 0, 10, 1),
 
   company_cin: stringOptional('Company CIN', 0, 50),
   company_tin_gstin: stringOptional('Company TIN/GSTIN', 0, 50),
@@ -882,6 +885,7 @@ export const toUserOrganisationPayload = (row: UserOrganisation): UserOrganisati
   organisation_utrack_id: row.organisation_utrack_id || '',
 
   fleet_size: row.fleet_size || FleetSize.Fleet_1_to_50_Vehicles,
+  distance_correction: row.distance_correction,
 
   logo_url: row.logo_url || '',
   logo_key: row.logo_key || '',
@@ -944,6 +948,7 @@ export const newUserOrganisationPayload = (): UserOrganisationDTO => ({
   organisation_utrack_id: '',
 
   fleet_size: FleetSize.Fleet_1_to_50_Vehicles,
+  distance_correction: 1,
 
   logo_url: '',
   logo_key: '',
