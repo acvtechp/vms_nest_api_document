@@ -81,7 +81,7 @@ export interface KilometerYearly extends Record<string, unknown> {
   "12": string;
 
   si: number;
-  year: string; // 2024-06-
+  year: string; // 2024
   total_km: string;
 
   slot: string;
