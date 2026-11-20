@@ -65,3 +65,52 @@ export interface KilometerMonthly extends Record<string, unknown> {
   dr_f?: string;
   dr_url?: string;
 }
+
+export interface KilometerYearly extends Record<string, unknown> {
+  "01": string;
+  "02": string;
+  "03": string;
+  "04": string;
+  "05": string;
+  "06": string;
+  "07": string;
+  "08": string;
+  "09": string;
+  "10": string;
+  "11": string;
+  "12": string;
+
+  si: number;
+  year_month: string; // 2024-06-
+  total_km: string;
+
+  slot: string;
+
+  org_id: string;
+  db_i: string;
+  db_g: string;
+
+  v_id: string;
+  vn_f: string;
+  vt: string;
+
+  fleet_name?: string;
+  subsidiary_name?: string;
+  branch_name?: string;
+  color_name?: string;
+  tag_name?: string;
+
+  vehicle_type?: string;
+  vehicle_make?: string;
+  vehicle_model?: string;
+  vehicle_sub_model?: string;
+  vehicle_status?: string;
+  vehicle_ownership?: string;
+  vehicle_associated?: string;
+  fuel_type?: string;
+  fuel_unit?: string;
+
+  d_id: string;
+  dr_f?: string;
+  dr_url?: string;
+}

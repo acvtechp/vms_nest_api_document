@@ -16,20 +16,18 @@ import {
   enumOptional,
   dateTimeMandatory,
   enumMandatory,
-  numberOptional,
   multi_select_optional,
   enumArrayOptional,
   getAllEnums,
 } from '../../../zod_utils/zod_utils';
-import { MongoBaseQuerySchema } from '../../../zod_utils/zod_base_schema';
+import { BaseQuerySchema, MongoBaseQuerySchema } from '../../../zod_utils/zod_base_schema';
 
-import { TimeSlot, NightDriving, OverSpeed, GPSType, YesNo, BooleanType, Is12AM, Module, AlertType, AlertSubType } from '../../../core/Enums';
+import { TimeSlot, NightDriving, OverSpeed, GPSType, YesNo, BooleanType, Module, AlertType, AlertSubType } from '../../../core/Enums';
 import { GPSOverSpeedViolation } from './gps_models/GPSOverSpeedViolation';
-import { Last24HoursKmReport } from './gps_models/Last24HoursKmReport';
 import { OverSpeedViolationMonthly } from './gps_models/OverSpeedViolationMonthly';
 import { HourlyKmAnalysis } from './gps_models/HourlyKmAnalysis';
 import { DashboardSummaryReport } from './gps_models/DashboardSummaryReport';
-import { KilometerMonthly } from './gps_models/KilometerMonthly';
+import { KilometerMonthly, KilometerYearly } from './gps_models/KilometerMonthly';
 import { GpsAlert } from './gps_models/GpsAlert';
 
 const URL = 'gps/reports';
@@ -38,17 +36,14 @@ const ENDPOINTS = {
   // FBR -> GpsAnalytics
   all_vehicles_24_hours_analysis_report: `${URL}/all_vehicles_24_hours_analysis_report`,
   all_vehicles_24_hours_analysis_summary_report: `${URL}/all_vehicles_24_hours_analysis_summary_report`,
-
   all_drivers_performance_report: `${URL}/all_drivers_performance_report`,
-  // FBR -> GpsAnalytics -> KM Monthly -> Processed
   monthly_kilometers_summary_report: `${URL}/monthly_kilometers_summary_report`,
-  // FBR -> GpsAnalytics -> Hourly KM -> Processed
+  yearly_kilometers_summary_report: `${URL}/yearly_kilometers_summary_report`,
   vehicle_hourly_kilometers_report: `${URL}/vehicle_hourly_kilometers_report`,
 
-  // FBR -> GpsAnalytics
+  // FBR -> GpsAnalytics -> OverSpeed
   all_vehicles_over_speed_violation_report: `${URL}/all_vehicles_over_speed_violation_report`,
   all_drivers_over_speed_violation_report: `${URL}/all_drivers_over_speed_violation_report`,
-  // FBR -> GpsAnalytics -> Monthly Over Speed -> Processed
   monthly_over_speed_summary_report: `${URL}/monthly_over_speed_summary_report`,
 
   // FBR -> GpsSensor
@@ -64,13 +59,8 @@ const ENDPOINTS = {
   vehicle_gps_raw_data_report: `${URL}/vehicle_gps_raw_data_report`,
   vehicle_track_history_report: `${URL}/vehicle_track_history_report`,
 
-  // FBR -> GpsPacket -> Processed Cumulative Distance
-  all_vehicles_last_24_hours_km_report: `${URL}/all_vehicles_last_24_hours_km_report`,
-
-  // SBR -> Dashboard Summary
+  // SBR -> GpsPacket and GpsAnalytics
   vehicle_dashboard_summary_report: `${URL}/vehicle_dashboard_summary_report`,
-
-  find: `${URL}/search`,
 };
 
 // MultipleVehicleReportSchema
@@ -96,7 +86,7 @@ export const MultipleVehicleReportSchema = MongoBaseQuerySchema.extend({
   raw_data: enumOptional('Raw Data', YesNo, YesNo.No),
   day_summary: enumOptional('Day Summary', YesNo, YesNo.No),
   vehicle_summary: enumOptional('Vehicle Summary', YesNo, YesNo.No),
-  driver_summary: enumOptional('Vehicle Summary', YesNo, YesNo.No),
+  driver_summary: enumOptional('Driver Summary', YesNo, YesNo.No),
 });
 export type MultipleVehicleReportQueryDTO = z.infer<
   typeof MultipleVehicleReportSchema
@@ -143,13 +133,13 @@ export const MultipleDriverReportSchema = MongoBaseQuerySchema.extend({
   raw_data: enumOptional('Raw Data', YesNo, YesNo.No),
   day_summary: enumOptional('Day Summary', YesNo, YesNo.No),
   vehicle_summary: enumOptional('Vehicle Summary', YesNo, YesNo.No),
-  driver_summary: enumOptional('Vehicle Summary', YesNo, YesNo.No),
+  driver_summary: enumOptional('Driver Summary', YesNo, YesNo.No),
 });
 export type MultipleDriverReportQueryDTO = z.infer<
   typeof MultipleDriverReportSchema
 >;
 
-// ✅ SimpleReportSchema
+// SimpleReportSchema
 export const SimpleReportSchema = MongoBaseQuerySchema.extend({
   organisation_id: single_select_mandatory('Organisation'),
   db_instance: stringMandatory('DB Instance'),
@@ -158,26 +148,40 @@ export const SimpleReportSchema = MongoBaseQuerySchema.extend({
   from_date: dateMandatory('From Date'),
   to_date: dateMandatory('To Date'),
   gps_type: enumMandatory('GPS Type', GPSType, GPSType.Ignition),
-  interval_seconds: numberOptional('Interval Seconds', 0, 100000),
+  interval_seconds: numberMandatory('Interval Seconds', 0, 100000),
   boolean_type: enumMandatory('Boolean Type', BooleanType, BooleanType.Both),
 });
 export type SimpleReportQueryDTO = z.infer<typeof SimpleReportSchema>;
 
-// ✅ MultipleVehicleReportSchema
-export const MultipleVehicleLast24HoursReportSchema =
-  MongoBaseQuerySchema.extend({
-    organisation_id: single_select_mandatory('Organisation'),
-    db_instance: stringMandatory('DB Instance'),
-    db_group: stringMandatory('DB Group'),
-    vehicle_ids: multi_select_mandatory('Master Vehicle'),
-    utilization_km: numberMandatory('Utilization KM'),
-    is12am: enumMandatory('Is 12AM', Is12AM, Is12AM.No),
-  });
-export type MultipleVehicleLast24HoursReportQueryDTO = z.infer<
-  typeof MultipleVehicleLast24HoursReportSchema
->;
+// AlertReportSchema
+export const AlertReportSchema = MongoBaseQuerySchema.extend({
+  organisation_id: single_select_mandatory('UserOrganisation'),
+  db_instance: stringMandatory('DBInstance'),
+  db_group: stringMandatory('DBGroup'),
 
-// ✅ SingleVehicleReportSchema
+  user_ids: multi_select_optional('User'), // Multi-selection -> User
+  vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
+  driver_ids: multi_select_optional('MasterDriver'), // Multi-selection -> MasterDriver
+  gps_geofence_ids: multi_select_optional('GPSGeofence'), // Multi-selection -> GPSGeofence
+
+  modules: enumArrayOptional('Modules', Module, getAllEnums(Module)),
+  alert_types: enumArrayOptional(
+    'Alert Types',
+    AlertType,
+    getAllEnums(AlertType),
+  ),
+  alert_sub_types: enumArrayOptional(
+    'Alert Sub Types',
+    AlertSubType,
+    getAllEnums(AlertSubType),
+  ),
+
+  from_date: dateMandatory('From Date'),
+  to_date: dateMandatory('To Date'),
+});
+export type AlertReportQueryDTO = z.infer<typeof AlertReportSchema>;
+
+// SingleVehicleReportSchema
 export const SingleVehicleReportSchema = MongoBaseQuerySchema.extend({
   organisation_id: single_select_mandatory('Organisation'),
   db_instance: stringMandatory('DB Instance'),
@@ -191,7 +195,7 @@ export type SingleVehicleReportQueryDTO = z.infer<
   typeof SingleVehicleReportSchema
 >;
 
-// ✅ SingleVehicleReportSchema
+// SingleVehicleReportSchema
 export const VehicleDashboardSummaryQuerySchema = MongoBaseQuerySchema.extend({
   organisation_id: single_select_mandatory('Organisation'),
   db_instance: stringMandatory('DB Instance'),
@@ -202,217 +206,105 @@ export type VehicleDashboardSummaryQueryDTO = z.infer<
   typeof VehicleDashboardSummaryQuerySchema
 >;
 
-// ✅ AlertReportSchema
-export const AlertReportSchema = MongoBaseQuerySchema.extend({
+// UserOrganisationVehicleGPSResyncSchema
+export const UserOrganisationVehicleGPSResyncSchema = BaseQuerySchema.extend({
   organisation_id: single_select_mandatory('UserOrganisation'),
-  db_instance: stringMandatory('DBInstance'),
-  db_group: stringMandatory('DBGroup'),
-
-  user_ids: multi_select_optional('User'), // ✅ Multi-selection -> User
-  vehicle_ids: multi_select_optional('MasterVehicle'), // ✅ Multi-selection -> MasterVehicle
-  driver_ids: multi_select_optional('MasterDriver'), // ✅ Multi-selection -> MasterDriver
-  gps_geofence_ids: multi_select_optional('GPSGeofenceData'), // ✅ Multi-selection -> GPSGeofenceData
-
-  modules: enumArrayOptional('Modules', Module, getAllEnums(Module)),
-  alert_types: enumArrayOptional(
-    'Alert Types',
-    AlertType,
-    getAllEnums(AlertType),
-  ),
-  alert_sub_types: enumArrayOptional(
-    'Alert Sub Types',
-    AlertSubType,
-    getAllEnums(AlertSubType),
-  ),
+  vehicle_ids: multi_select_optional('MasterVehicle'),
+  is_all_vehicles: enumMandatory('Is All Vehicles', YesNo, YesNo.No),
   from_date: dateMandatory('From Date'),
   to_date: dateMandatory('To Date'),
 });
-export type AlertReportQueryDTO = z.infer<typeof AlertReportSchema>;
+export type UserOrganisationVehicleGPSResyncDTO = z.infer<
+  typeof UserOrganisationVehicleGPSResyncSchema
+>;
 
-export const find_test_api = async (
-  data: MultipleVehicleReportQueryDTO
-): Promise<FBR<GpsAnalytics[]>> => {
-  return apiPost<FBR<GpsAnalytics[]>, MultipleVehicleReportQueryDTO>(
-    ENDPOINTS.find,
-    data
-  );
-};
-
-export const find_test_api_2 = async (
-  data: SingleVehicleReportQueryDTO
-): Promise<FBR<GpsAnalytics[]>> => {
-  return apiPost<FBR<GpsAnalytics[]>, SingleVehicleReportQueryDTO>(
-    ENDPOINTS.find,
-    data
-  );
-};
-
-// FBR -> GpsAnalytics
-export const all_vehicles_24_hours_analysis_report = async (
-  data: MultipleVehicleReportQueryDTO
-): Promise<FBR<GpsAnalytics[]>> => {
-  return apiPost<FBR<GpsAnalytics[]>, MultipleVehicleReportQueryDTO>(
-    ENDPOINTS.all_vehicles_24_hours_analysis_report,
-    data
-  );
-};
-
-// FBR -> GpsAnalyticsSummary
-export const all_vehicles_24_hours_analysis_summary_report = async (
-  data: MultipleVehicleReportSummaryQueryDTO
-): Promise<FBR<GpsAnalyticsSummary[]>> => {
-  return apiPost<FBR<GpsAnalyticsSummary[]>, MultipleVehicleReportSummaryQueryDTO>(
-    ENDPOINTS.all_vehicles_24_hours_analysis_summary_report,
-    data
-  );
-};
+// YearlyVehicleReportSchema
+export const YearlyVehicleReportSchema = MongoBaseQuerySchema.extend({
+  organisation_id: single_select_mandatory('Organisation'),
+  db_instance: stringMandatory('DB Instance'),
+  db_group: stringMandatory('DB Group'),
+  vehicle_ids: multi_select_mandatory('Master Vehicle'),
+  year: numberMandatory('Year', 2000, 2100),
+  time_slot: enumOptional(
+    'Time Slot',
+    TimeSlot,
+    TimeSlot.TIME_SLOT_12AM_TO_12AM,
+  ),
+});
+export type YearlyVehicleReportQueryDTO = z.infer<
+  typeof YearlyVehicleReportSchema
+>;
 
 // FBR -> GpsAnalytics
-export const driver_performance_report = async (
-  data: MultipleDriverReportQueryDTO
-): Promise<FBR<GpsAnalytics[]>> => {
-  return apiPost<FBR<GpsAnalytics[]>, MultipleDriverReportQueryDTO>(
-    ENDPOINTS.all_drivers_performance_report,
-    data
-  );
+export const all_vehicles_24_hours_analysis_report = async (data: MultipleVehicleReportQueryDTO): Promise<FBR<GpsAnalytics[]>> => {
+  return apiPost<FBR<GpsAnalytics[]>, MultipleVehicleReportQueryDTO>(ENDPOINTS.all_vehicles_24_hours_analysis_report, data);
 };
 
-// FBR -> GpsAnalytics -> KM Monthly -> Processed
-export const monthly_kilometers_summary = async (
-  data: MultipleVehicleReportQueryDTO
-): Promise<FBR<KilometerMonthly[]>> => {
-  return apiPost<FBR<KilometerMonthly[]>, MultipleVehicleReportQueryDTO>(
-    ENDPOINTS.monthly_kilometers_summary_report,
-    data
-  );
+export const all_vehicles_24_hours_analysis_summary_report = async (data: MultipleVehicleReportSummaryQueryDTO): Promise<FBR<GpsAnalyticsSummary[]>> => {
+  return apiPost<FBR<GpsAnalyticsSummary[]>, MultipleVehicleReportSummaryQueryDTO>(ENDPOINTS.all_vehicles_24_hours_analysis_summary_report, data);
 };
 
-// FBR -> GpsAnalytics -> Hourly KM -> Processed
-export const vehicle_hourly_km_report = async (
-  data: MultipleVehicleReportQueryDTO
-): Promise<FBR<HourlyKmAnalysis[]>> => {
-  return apiPost<FBR<HourlyKmAnalysis[]>, MultipleVehicleReportQueryDTO>(
-    ENDPOINTS.vehicle_hourly_kilometers_report,
-    data
-  );
+export const driver_performance_report = async (data: MultipleDriverReportQueryDTO): Promise<FBR<GpsAnalytics[]>> => {
+  return apiPost<FBR<GpsAnalytics[]>, MultipleDriverReportQueryDTO>(ENDPOINTS.all_drivers_performance_report, data);
 };
 
-// FBR -> GpsAnalytics
-export const all_vehicles_over_speed_violation_report = async (
-  data: MultipleVehicleReportQueryDTO
-): Promise<FBR<GPSOverSpeedViolation[]>> => {
-  return apiPost<FBR<GPSOverSpeedViolation[]>, MultipleVehicleReportQueryDTO>(
-    ENDPOINTS.all_vehicles_over_speed_violation_report,
-    data
-  );
+export const monthly_kilometers_summary = async (data: MultipleVehicleReportQueryDTO): Promise<FBR<KilometerMonthly[]>> => {
+  return apiPost<FBR<KilometerMonthly[]>, MultipleVehicleReportQueryDTO>(ENDPOINTS.monthly_kilometers_summary_report, data);
 };
 
-// FBR -> GpsAnalytics
-export const all_drivers_over_speed_violation_report = async (
-  data: MultipleDriverReportQueryDTO
-): Promise<FBR<GPSOverSpeedViolation[]>> => {
-  return apiPost<FBR<GPSOverSpeedViolation[]>, MultipleDriverReportQueryDTO>(
-    ENDPOINTS.all_drivers_over_speed_violation_report,
-    data
-  );
+export const yearly_kilometers_summary_report = async (data: YearlyVehicleReportQueryDTO): Promise<FBR<KilometerYearly[]>> => {
+  return apiPost<FBR<KilometerYearly[]>, YearlyVehicleReportQueryDTO>(ENDPOINTS.yearly_kilometers_summary_report, data);
 };
 
-// FBR -> GpsAnalytics -> Monthly Over Speed -> Processed
-export const monthly_over_speed_summary_report = async (
-  data: MultipleVehicleReportQueryDTO
-): Promise<FBR<OverSpeedViolationMonthly[]>> => {
-  return apiPost<
-    FBR<OverSpeedViolationMonthly[]>,
-    MultipleVehicleReportQueryDTO
-  >(ENDPOINTS.monthly_over_speed_summary_report, data);
+export const vehicle_hourly_km_report = async (data: MultipleVehicleReportQueryDTO): Promise<FBR<HourlyKmAnalysis[]>> => {
+  return apiPost<FBR<HourlyKmAnalysis[]>, MultipleVehicleReportQueryDTO>(ENDPOINTS.vehicle_hourly_kilometers_report, data);
+};
+
+// FBR -> GpsAnalytics -> OverSpeed
+export const all_vehicles_over_speed_violation_report = async (data: MultipleVehicleReportQueryDTO): Promise<FBR<GPSOverSpeedViolation[]>> => {
+  return apiPost<FBR<GPSOverSpeedViolation[]>, MultipleVehicleReportQueryDTO>(ENDPOINTS.all_vehicles_over_speed_violation_report, data);
+};
+
+export const all_drivers_over_speed_violation_report = async (data: MultipleDriverReportQueryDTO): Promise<FBR<GPSOverSpeedViolation[]>> => {
+  return apiPost<FBR<GPSOverSpeedViolation[]>, MultipleDriverReportQueryDTO>(ENDPOINTS.all_drivers_over_speed_violation_report, data);
+};
+
+export const monthly_over_speed_summary_report = async (data: MultipleVehicleReportQueryDTO): Promise<FBR<OverSpeedViolationMonthly[]>> => {
+  return apiPost<FBR<OverSpeedViolationMonthly[]>, MultipleVehicleReportQueryDTO>(ENDPOINTS.monthly_over_speed_summary_report, data);
 };
 
 // FBR -> GpsSensor
-export const vehicle_stoppage_track_report = async (
-  data: SimpleReportQueryDTO
-): Promise<FBR<GpsSensor[]>> => {
-  return apiPost<FBR<GpsSensor[]>, SimpleReportQueryDTO>(
-    ENDPOINTS.vehicle_stoppage_track_report,
-    data
-  );
+export const vehicle_stoppage_track_report = async (data: SimpleReportQueryDTO): Promise<FBR<GpsSensor[]>> => {
+  return apiPost<FBR<GpsSensor[]>, SimpleReportQueryDTO>(ENDPOINTS.vehicle_stoppage_track_report, data);
 };
 
-// FBR -> GpsSensor
-export const ignition_sensor_report = async (
-  data: SimpleReportQueryDTO
-): Promise<FBR<GpsSensor[]>> => {
-  return apiPost<FBR<GpsSensor[]>, SimpleReportQueryDTO>(
-    ENDPOINTS.ignition_sensor_report,
-    data
-  );
+export const ignition_sensor_report = async (data: SimpleReportQueryDTO): Promise<FBR<GpsSensor[]>> => {
+  return apiPost<FBR<GpsSensor[]>, SimpleReportQueryDTO>(ENDPOINTS.ignition_sensor_report, data);
 };
 
-// FBR -> GpsSensor
-export const genset_sensor_report = async (
-  data: SimpleReportQueryDTO
-): Promise<FBR<GpsSensor[]>> => {
-  return apiPost<FBR<GpsSensor[]>, SimpleReportQueryDTO>(
-    ENDPOINTS.genset_sensor_report,
-    data
-  );
+export const genset_sensor_report = async (data: SimpleReportQueryDTO): Promise<FBR<GpsSensor[]>> => {
+  return apiPost<FBR<GpsSensor[]>, SimpleReportQueryDTO>(ENDPOINTS.genset_sensor_report, data);
 };
 
-// FBR -> GpsSensor
-export const door_sensor_report = async (
-  data: SimpleReportQueryDTO
-): Promise<FBR<GpsSensor[]>> => {
-  return apiPost<FBR<GpsSensor[]>, SimpleReportQueryDTO>(
-    ENDPOINTS.door_sensor_report,
-    data
-  );
+export const door_sensor_report = async (data: SimpleReportQueryDTO): Promise<FBR<GpsSensor[]>> => {
+  return apiPost<FBR<GpsSensor[]>, SimpleReportQueryDTO>(ENDPOINTS.door_sensor_report, data);
 };
 
 // FBR -> GPSAlert
-export const gps_alert_notifications = async (
-  data: AlertReportQueryDTO
-): Promise<FBR<GpsAlert[]>> => {
-  return apiPost<
-    FBR<GpsAlert[]>,
-    AlertReportQueryDTO
-  >(ENDPOINTS.gps_alert_notifications, data);
+export const gps_alert_notifications = async (data: AlertReportQueryDTO): Promise<FBR<GpsAlert[]>> => {
+  return apiPost<FBR<GpsAlert[]>, AlertReportQueryDTO>(ENDPOINTS.gps_alert_notifications, data);
 };
 
 // FBR -> GpsPacket
-export const vehicle_gps_raw_data_report = async (
-  data: SingleVehicleReportQueryDTO
-): Promise<FBR<GpsPacket[]>> => {
-  return apiPost<FBR<GpsPacket[]>, SingleVehicleReportQueryDTO>(
-    ENDPOINTS.vehicle_gps_raw_data_report,
-    data
-  );
+export const vehicle_gps_raw_data_report = async (data: SingleVehicleReportQueryDTO): Promise<FBR<GpsPacket[]>> => {
+  return apiPost<FBR<GpsPacket[]>, SingleVehicleReportQueryDTO>(ENDPOINTS.vehicle_gps_raw_data_report, data);
 };
 
-// FBR -> GpsPacket
-export const vehicle_track_history_report = async (
-  data: SingleVehicleReportQueryDTO
-): Promise<FBR<GpsPacket[]>> => {
-  return apiPost<FBR<GpsPacket[]>, SingleVehicleReportQueryDTO>(
-    ENDPOINTS.vehicle_track_history_report,
-    data
-  );
+export const vehicle_track_history_report = async (data: SingleVehicleReportQueryDTO): Promise<FBR<GpsPacket[]>> => {
+  return apiPost<FBR<GpsPacket[]>, SingleVehicleReportQueryDTO>(ENDPOINTS.vehicle_track_history_report, data);
 };
 
-// FBR -> GpsPacket -> Processed Cumulative Distance
-export const all_vehicles_last_24_hours_km_report = async (
-  data: MultipleVehicleLast24HoursReportQueryDTO
-): Promise<FBR<Last24HoursKmReport[]>> => {
-  return apiPost<
-    FBR<Last24HoursKmReport[]>,
-    MultipleVehicleLast24HoursReportQueryDTO
-  >(ENDPOINTS.all_vehicles_last_24_hours_km_report, data);
-};
-
-// FBR -> Dashboard Summary
-export const vehicle_dashboard_summary_report = async (
-  data: VehicleDashboardSummaryQueryDTO
-): Promise<FBR<DashboardSummaryReport[]>> => {
-  return apiPost<
-    FBR<DashboardSummaryReport[]>,
-    VehicleDashboardSummaryQueryDTO
-  >(ENDPOINTS.vehicle_dashboard_summary_report, data);
+// SBR -> GpsPacket and GpsAnalytics
+export const vehicle_dashboard_summary_report = async (data: VehicleDashboardSummaryQueryDTO): Promise<FBR<DashboardSummaryReport[]>> => {
+  return apiPost<FBR<DashboardSummaryReport[]>, VehicleDashboardSummaryQueryDTO>(ENDPOINTS.vehicle_dashboard_summary_report, data);
 };
