@@ -1,6 +1,6 @@
 // Axios
-import { apiPost, apiPatch, apiDelete } from '../../../core/apiCall';
-import { SBR, FBR } from '../../../core/BaseResponse';
+import { apiPost, apiPatch, apiDelete } from '../../../../core/apiCall';
+import { SBR, FBR } from '../../../../core/BaseResponse';
 
 // Zod
 import { z } from 'zod';
@@ -12,15 +12,15 @@ import {
     multi_select_optional,
     enumMandatory,
     dateTimeMandatory,
-} from '../../../zod_utils/zod_utils';
-import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
+} from '../../../../zod_utils/zod_utils';
+import { BaseQuerySchema } from '../../../../zod_utils/zod_base_schema';
 
 // Enums
-import { Status } from '../../../core/Enums';
+import { Status } from '../../../../core/Enums';
 
 // Other Models
-import { UserOrganisation } from '../../main/users/user_organisation_service';
-import { OrganisationBranch } from 'src/services/master/organisation/organisation_branch_service';
+import { UserOrganisation } from '../../../main/users/user_organisation_service';
+import { OrganisationBranch } from '../../../master/organisation/organisation_branch_service';
 
 const URL = 'fleet/school_management/notice_board';
 

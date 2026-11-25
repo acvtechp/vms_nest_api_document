@@ -43,15 +43,15 @@ import { OrganisationFleet } from 'src/services/master/organisation/organisation
 import { OrganisationTag } from '../../../services/master/organisation/organisation_tag_service';
 import { OrganisationGroup } from 'src/services/master/organisation/organisation_group_service';
 
-import { OrganisationCalendar } from 'src/services/fleet/school_management/calendar_service';
+import { OrganisationCalendar } from 'src/services/bus/educational/institution_management/calendar_service';
 
 import { OrganisationNotificationPreference } from 'src/services/account/notification_preferences.service';
 import { OrganisationReportPreference, OrganisationReportAutomationMail } from 'src/services/account/report_preferences.service';
 import { Ticket, TicketFile } from 'src/services/account/ticket_service';
-import { BusStop } from 'src/services/fleet/bus_mangement/bus_stop';
-import { MasterRoute, MasterRouteStop } from 'src/services/fleet/bus_mangement/master_route';
-import { OrganisationNoticeBoard } from 'src/services/fleet/school_management/notice_board_service';
-import { Student, StudentAddress, StudentGuardian, StudentGuardianLink, StudentGuardianLoginPush, StudentLeaveRequest, StudentLoginPush, StudentStopChangeRequest, StudentTransportPlanTypeChangeHistory } from 'src/services/fleet/school_management/student_service';
+import { BusStop } from 'src/services/bus/educational/transport_management/bus_stop';
+import { MasterRoute, MasterRouteStop } from 'src/services/bus/educational/transport_management/master_route';
+import { OrganisationNoticeBoard } from 'src/services/bus/educational/institution_management/notice_board_service';
+import { Student, StudentAddress, StudentGuardian, StudentGuardianLink, StudentGuardianLoginPush, StudentLeaveRequest, StudentLoginPush, StudentStopChangeRequest, StudentTransportPlanTypeChangeHistory } from 'src/services/bus/educational/institution_management/student_service';
 
 import { FleetFuelDailySummary } from 'src/services/fleet/fuel_management/fleet_fuel_daily_summary_service';
 import { FleetFuelRefill, FleetFuelRefillFile } from 'src/services/fleet/fuel_management/fleet_fuel_refill_service';
@@ -123,8 +123,8 @@ import { FleetDocument, FleetDocumentExpiry, FleetDocumentFile } from 'src/servi
 import { FleetBreakdown, FleetBreakdownCost, FleetBreakdownFile } from 'src/services/fleet/breakdown_management/breakdown_management_service';
 import { FleetServiceSchedule } from 'src/services/fleet/service_management/fleet_service_schedule_service';
 import { FleetWorkshop } from 'src/services/fleet/workshop_management/fleet_workshop_service';
-import { MasterDailySchedule, MasterDailyScheduleStudent } from 'src/services/fleet/bus_mangement/master_daily_schedule';
-import { MasterSpecialSchedule, MasterSpecialScheduleStudent } from 'src/services/fleet/bus_mangement/master_special_schedule';
+import { MasterDailySchedule, MasterDailyScheduleStudent } from 'src/services/bus/educational/transport_management/master_daily_schedule';
+import { MasterSpecialSchedule, MasterSpecialScheduleStudent } from 'src/services/bus/educational/transport_management/master_special_schedule';
 import { MasterFuelRemovalReason } from 'src/services/master/expense/master_fuel_removal_reason_service';
 import { MasterExpenseItem } from 'src/services/master/expense/master_expense_item_service';
 import { MasterVehicleDocumentType } from 'src/services/master/expense/master_vehicle_document_type_service';

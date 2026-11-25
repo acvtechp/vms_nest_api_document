@@ -1,8 +1,8 @@
 // student_service.ts
 
 // Axios
-import { apiGet, apiPost, apiPatch, apiDelete } from '../../../core/apiCall';
-import { SBR, FBR, AWSPresignedUrl, BR } from '../../../core/BaseResponse';
+import { apiGet, apiPost, apiPatch, apiDelete } from '../../../../core/apiCall';
+import { SBR, FBR, AWSPresignedUrl, BR } from '../../../../core/BaseResponse';
 
 // Zod
 import { z } from 'zod';
@@ -20,8 +20,8 @@ import {
     doubleOptionalLatLng,
     getAllEnums,
     multi_select_mandatory,
-} from '../../../zod_utils/zod_utils';
-import { BaseQuerySchema } from '../../../zod_utils/zod_base_schema';
+} from '../../../../zod_utils/zod_utils';
+import { BaseQuerySchema } from '../../../../zod_utils/zod_base_schema';
 
 // Enums
 import {
@@ -33,11 +33,11 @@ import {
     LoginFrom,
     Gender,
     BloodGroup,
-} from '../../../core/Enums';
+} from '../../../../core/Enums';
 
 // Other Models
-import { UserOrganisation } from '../../main/users/user_organisation_service';
-import { OrganisationBranch } from '../../master/organisation/organisation_branch_service';
+import { UserOrganisation } from '../../../main/users/user_organisation_service';
+import { OrganisationBranch } from '../../../master/organisation/organisation_branch_service';
 import { MasterClass } from 'src/services/master/bus/master_class_service';
 import { MasterProgram } from 'src/services/master/bus/master_program_service';
 import { MasterSection } from 'src/services/master/bus/master_section_service';
@@ -45,9 +45,9 @@ import { MasterSemester } from 'src/services/master/bus/master_semester_service'
 import { MasterStream } from 'src/services/master/bus/master_stream_service';
 import { MasterYear } from 'src/services/master/bus/master_year_service';
 import { MasterGuardianRelationship } from 'src/services/master/bus/master_guardian_relationship_service';
-import { MasterRoute, MasterRouteStop } from '../bus_mangement/master_route';
+import { MasterRoute, MasterRouteStop } from '../transport_management/master_route';
 import { MasterMainLandMark } from 'src/services/master/main/master_main_landmark_service';
-import { MasterDailySchedule, MasterDailyScheduleStudent } from '../bus_mangement/master_daily_schedule';
+import { MasterDailySchedule, MasterDailyScheduleStudent } from '../transport_management/master_daily_schedule';
 
 const URL = 'fleet/school_management/student';
 

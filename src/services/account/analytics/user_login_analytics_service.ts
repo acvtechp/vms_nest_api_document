@@ -1,13 +1,12 @@
 // Axios
 import { apiPost } from '../../../core/apiCall';
-import { SBR, FBR } from '../../../core/BaseResponse';
+import { FBR } from '../../../core/BaseResponse';
 
 // Zod
 import { z } from 'zod';
 import {
   dateMandatory,
   enumArrayOptional,
-  enumMandatory,
   getAllEnums,
   multi_select_optional,
   single_select_mandatory,

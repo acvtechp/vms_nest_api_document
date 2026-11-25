@@ -25,7 +25,7 @@ import { FleetFuelRefill } from 'src/services/fleet/fuel_management/fleet_fuel_r
 import { FleetFuelRemoval } from 'src/services/fleet/fuel_management/fleet_fuel_removal_service';
 import { FleetIncident } from 'src/services/fleet/incident_management/incident_management_service';
 import { FleetInspection } from 'src/services/fleet/inspection_management/fleet_inspection_management_service';
-import { StudentAddress } from 'src/services/fleet/school_management/student_service';
+import { StudentAddress } from 'src/services/bus/educational/institution_management/student_service';
 import { FleetVendorFuelStation } from 'src/services/fleet/vendor_management/fleet_vendor_fuel_station';
 import { FleetVendorAddress } from 'src/services/fleet/vendor_management/fleet_vendor_service';
 import { FleetVendorServiceCenter } from 'src/services/fleet/vendor_management/fleet_vendor_service_center';

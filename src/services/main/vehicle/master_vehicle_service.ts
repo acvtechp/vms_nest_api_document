@@ -100,7 +100,7 @@ import { FleetIssue } from '../../../services/fleet/issue_management/issue_manag
 import { FleetIncident } from '../../../services/fleet/incident_management/incident_management_service';
 
 // Fleet - Bus Management
-import { MasterDailySchedule } from '../../../services/fleet/bus_mangement/master_daily_schedule';
+import { MasterDailySchedule } from '../../../services/bus/educational/transport_management/master_daily_schedule';
 
 // GPS - Geofence
 import { GPSGeofenceTransaction } from '../../../services/gps/features/geofence/gps_geofence_transaction_service';
