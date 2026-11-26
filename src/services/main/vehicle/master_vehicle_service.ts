@@ -118,6 +118,7 @@ import {
   OrganisationReportAutomationMailVehicleLink,
 } from '../../../services/account/report_preferences.service';
 import { OrganisationFleet } from 'src/services/master/organisation/organisation_fleet_service';
+import { InstitutionBranch } from 'src/services/bus/educational/institution_management/institution_branch_service';
 
 const URL = 'main/master_vehicle';
 
@@ -287,6 +288,11 @@ export interface MasterVehicle extends Record<string, unknown> {
   User?: User;
   user_details?: string;
   user_image_url?: string;
+
+  institution_branch_id?: string;
+  InstitutionBranch?: InstitutionBranch;
+  branch?: string;
+  city?: string;
 
   organisation_subsidiary_id?: string;
   OrganisationSubsidiary?: OrganisationSubsidiary;
@@ -1124,6 +1130,8 @@ export const VehicleSchema = z.object({
   organisation_color_id: single_select_optional('OrganisationColor'), // Single-Selection -> OrganisationColor
   organisation_group_ids: multi_select_optional('OrganisationGroup'), // Multi selection -> OrganisationGroup
 
+  institution_branch_id: single_select_optional('InstitutionBranch'), // Single-Selection -> InstitutionBranch
+
   vehicle_type_id: single_select_mandatory('MasterVehicleType'), // Single-Selection -> MasterVehicleType
   vehicle_make_id: single_select_optional('MasterVehicleMake'), // Single-Selection -> MasterVehicleMake
   vehicle_model_id: single_select_optional('MasterVehicleModel'), // Single-Selection -> MasterVehicleModel
@@ -1519,6 +1527,8 @@ export const VehicleQuerySchema = BaseQuerySchema.extend({
   organisation_tag_ids: multi_select_optional('OrganisationTag'), // Multi-Selection -> OrganisationTag
   organisation_color_ids: multi_select_optional('OrganisationColor'), // Multi-Selection -> OrganisationColor
 
+  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-Selection -> InstitutionBranch
+
   vehicle_type_ids: multi_select_optional('MasterVehicleType'), // Multi-Selection -> MasterVehicleType
   vehicle_make_ids: multi_select_optional('MasterVehicleMake'), // Multi-Selection -> MasterVehicleMake
   vehicle_model_ids: multi_select_optional('MasterVehicleModel'), // Multi-Selection -> MasterVehicleModel
@@ -1645,6 +1655,7 @@ export const toVehiclePayload = (row: MasterVehicle): VehicleDTO => ({
   is_gps_active: row.is_gps_active || YesNo.No,
   is_trip_active: row.is_trip_active || YesNo.No,
 
+  institution_branch_id: row.institution_branch_id || '',
   organisation_subsidiary_id: row.organisation_subsidiary_id || '',
   organisation_branch_id: row.organisation_branch_id || '',
   organisation_tag_id: row.organisation_tag_id || '',
@@ -1720,6 +1731,7 @@ export const newVehiclePayload = (): VehicleDTO => ({
   is_gps_active: YesNo.No,
   is_trip_active: YesNo.No,
 
+  institution_branch_id: '',
   organisation_subsidiary_id: '',
   organisation_branch_id: '',
   organisation_tag_id: '',

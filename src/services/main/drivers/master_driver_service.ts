@@ -41,6 +41,7 @@ import { GPSGeofenceTransactionSummary } from 'src/services/gps/features/geofenc
 import { TripGeofenceToGeofence } from 'src/services/gps/features/geofence/trip_geofence_to_geofence_service';
 import { User } from '../users/user_service';
 import { FleetBreakdown } from 'src/services/fleet/breakdown_management/breakdown_management_service';
+import { InstitutionBranch } from 'src/services/bus/educational/institution_management/institution_branch_service';
 
 const URL = 'main/master_driver';
 
@@ -121,6 +122,11 @@ export interface MasterDriver extends Record<string, unknown> {
   User?: User;
   user_details?: string;
   user_image_url?: string;
+
+  institution_branch_id?: string;
+  InstitutionBranch?: InstitutionBranch;
+  branch?: string;
+  city?: string;
 
   organisation_subsidiary_id?: string;
   OrganisationSubsidiary?: OrganisationSubsidiary;
@@ -311,6 +317,8 @@ export const MasterDriverSchema = z.object({
   organisation_color_id: single_select_optional('OrganisationColor'), // Single-Selection -> OrganisationColor
   organisation_tag_id: single_select_optional('OrganisationTag'), // Single-Selection -> OrganisationTag
 
+  institution_branch_id: single_select_optional('InstitutionBranch'), // Single-Selection -> InstitutionBranch
+
   // Profile Image/Logo
   driver_image_url: stringOptional('Driver Image URL', 0, 300),
   driver_image_key: stringOptional('Driver Image Key', 0, 300),
@@ -356,6 +364,8 @@ export const MasterDriverQuerySchema = BaseQuerySchema.extend({
   organisation_color_ids: multi_select_optional('OrganisationColor'), // Multi-Selection -> OrganisationColor
   organisation_tag_ids: multi_select_optional('OrganisationTag'), // Multi-Selection -> OrganisationTag
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-Selection -> MasterVehicle
+
+  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-Selection -> InstitutionBranch
 
   // Enums
   can_login: enumArrayOptional('Can Login', YesNo, getAllEnums(YesNo)),
@@ -421,6 +431,7 @@ export const toDriverPayload = (row: MasterDriver): MasterDriverDTO => ({
 
   organisation_id: row.organisation_id || '',
   user_id: row.user_id || '',
+  institution_branch_id: row.institution_branch_id || '',
   organisation_subsidiary_id: row.organisation_subsidiary_id || '',
   organisation_branch_id: row.organisation_branch_id || '',
   organisation_color_id: row.organisation_color_id || '',
@@ -472,6 +483,7 @@ export const newDriverPayload = (): MasterDriverDTO => ({
 
   organisation_id: '',
   user_id: '',
+  institution_branch_id: '',
   organisation_subsidiary_id: '',
   organisation_branch_id: '',
   organisation_color_id: '',
