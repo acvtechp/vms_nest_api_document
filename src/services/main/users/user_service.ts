@@ -55,6 +55,7 @@ import { EWayBillDetails } from 'src/services/account/eway_bill_details';
 import { OrganisationColor } from 'src/services/master/organisation/organisation_color_service';
 import { OrganisationSubsidiary } from 'src/services/master/organisation/organisation_subsidiary_service';
 import { OrganisationTag } from 'src/services/master/organisation/organisation_tag_service';
+import { InstitutionBranch } from 'src/services/bus/educational/institution_management/institution_branch_service';
 
 const URL = 'user/user';
 
@@ -141,6 +142,11 @@ export interface User extends Record<string, unknown> {
   organisation_name?: string;
   organisation_code?: string;
   organisation_logo_url?: string;
+
+  institution_branch_id?: string;
+  InstitutionBranch?: InstitutionBranch;
+  branch?: string;
+  city?: string;
 
   organisation_subsidiary_id?: string;
   OrganisationSubsidiary?: OrganisationSubsidiary;
@@ -434,14 +440,21 @@ export const UserSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
 
+  user_role_id: single_select_optional('MasterUserRole'), // Single-Selection -> MasterUserRole
+  user_status_id: single_select_optional('MasterUserStatus'), // Single-Selection -> MasterUserStatus
+
   organisation_subsidiary_id: single_select_optional('OrganisationSubsidiary'), // Single-Selection -> OrganisationSubsidiary
   organisation_branch_id: single_select_optional('OrganisationBranch'), // Single-Selection -> OrganisationBranch
   organisation_color_id: single_select_optional('OrganisationColor'), // Single-Selection -> OrganisationColor
   organisation_tag_id: single_select_optional('OrganisationTag'), // Single-Selection -> OrganisationTag
   assigned_workshop_id: single_select_optional('FleetWorkshop'), // Single-Selection -> FleetWorkshop
 
-  user_role_id: single_select_optional('MasterUserRole'), // Single-Selection -> MasterUserRole
-  user_status_id: single_select_optional('MasterUserStatus'), // Single-Selection -> MasterUserStatus
+  bus_user_role: enumMandatory(
+    'Bus User Role',
+    BusUserRole,
+    BusUserRole.MasterAdmin,
+  ),
+  institution_branch_id: single_select_optional('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 
   language_id: single_select_optional('MasterMainLanguage'), // Single-Selection -> MasterMainLanguage
   time_zone_id: single_select_optional('MasterMainTimeZone'), // Single-Selection -> MasterMainTimeZone
@@ -465,8 +478,6 @@ export const UserSchema = z.object({
   is_root_user: enumMandatory('Is Root User', YesNo, YesNo.No),
   all_vehicles: enumMandatory('All Vehicles', YesNo, YesNo.No),
   vehicle_ids: multi_select_optional('MasterVehicle'), // Multi selection -> MasterVehicle
-
-  bus_user_role: enumMandatory('Bus User Role', BusUserRole, BusUserRole.BranchAdmin),
 
   show_vehicle_filters: enumMandatory('Show Vehicle Filters', YesNo, YesNo.No),
   show_temperature_filters: enumMandatory(
@@ -493,14 +504,16 @@ export const UserQuerySchema = BaseQuerySchema.extend({
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-Selection -> UserOrganisation
 
+  user_role_ids: multi_select_optional('MasterUserRole'), // Multi-Selection -> MasterUserRole
+  user_status_ids: multi_select_optional('MasterUserStatus'), // Multi-Selection -> MasterUserStatus
+
   organisation_subsidiary_ids: multi_select_optional('OrganisationSubsidiary'), // Multi-Selection -> OrganisationSubsidiary
   organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
   organisation_color_ids: multi_select_optional('OrganisationColor'), // Multi-Selection -> OrganisationColor
   organisation_tag_ids: multi_select_optional('OrganisationTag'), // Multi-Selection -> OrganisationTag
   assigned_workshop_ids: multi_select_optional('FleetWorkshop'), // Multi-Selection -> FleetWorkshop
 
-  user_role_ids: multi_select_optional('MasterUserRole'), // Multi-Selection -> MasterUserRole
-  user_status_ids: multi_select_optional('MasterUserStatus'), // Multi-Selection -> MasterUserStatus
+  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-Selection -> InstitutionBranch
 
   language_ids: multi_select_optional('MasterMainLanguage'), // Multi-Selection -> MasterMainLanguage
   time_zone_ids: multi_select_optional('MasterMainTimeZone'), // Multi-Selection -> MasterMainTimeZone
@@ -675,6 +688,7 @@ export const toUserPayload = (row: User): UserDTO => ({
   user_image_name: row.user_image_name || '',
 
   organisation_id: row.organisation_id || '',
+  institution_branch_id: row.institution_branch_id || '',
   organisation_subsidiary_id: row.organisation_subsidiary_id || '',
   organisation_branch_id: row.organisation_branch_id || '',
   organisation_color_id: row.organisation_color_id || '',
@@ -731,6 +745,7 @@ export const newUserPayload = (): UserDTO => ({
   user_image_name: '',
 
   organisation_id: '',
+  institution_branch_id: '',
   organisation_subsidiary_id: '',
   organisation_branch_id: '',
   organisation_color_id: '',
