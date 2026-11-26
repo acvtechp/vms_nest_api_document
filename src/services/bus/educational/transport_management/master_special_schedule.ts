@@ -82,7 +82,7 @@ export interface MasterSpecialSchedule extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -133,7 +133,7 @@ export interface MasterSpecialScheduleStudent extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;

@@ -118,7 +118,7 @@ export interface DailyScheduleDayRun extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -191,7 +191,7 @@ export interface DailyScheduleDayRunStop extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -250,7 +250,7 @@ export interface DailyScheduleDayRunStudent extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;

@@ -118,7 +118,7 @@ export interface SpecialScheduleDayRun extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -191,7 +191,7 @@ export interface SpecialScheduleDayRunStop extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -250,7 +250,7 @@ export interface SpecialScheduleDayRunStudent extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -282,290 +282,290 @@ export interface SpecialScheduleDayRunStudent extends Record<string, unknown> {
 
 // SpecialScheduleDayRun Create/Update Schema
 export const SpecialScheduleDayRunSchema = z.object({
-  run_date: dateMandatory('Run Date'),
-  schedule_type: enumMandatory('Schedule Type', BusLeg, BusLeg.Pickup),
+    run_date: dateMandatory('Run Date'),
+    schedule_type: enumMandatory('Schedule Type', BusLeg, BusLeg.Pickup),
 
-  start_planned_date_time: stringOptional('Start Planned Date Time'),
-  end_planned_date_time: stringOptional('End Planned Date Time'),
-  start_actual_date_time: stringOptional('Start Actual Date Time'),
-  end_actual_date_time: stringOptional('End Actual Date Time'),
+    start_planned_date_time: stringOptional('Start Planned Date Time'),
+    end_planned_date_time: stringOptional('End Planned Date Time'),
+    start_actual_date_time: stringOptional('Start Actual Date Time'),
+    end_actual_date_time: stringOptional('End Actual Date Time'),
 
-  planned_stops_count: numberOptional('Planned Stops Count'),
-  covered_stops_count: numberOptional('Covered Stops Count'),
-  planned_student_count: numberOptional('Planned Student Count'),
-  marked_student_count: numberOptional('Marked Student Count'),
+    planned_stops_count: numberOptional('Planned Stops Count'),
+    covered_stops_count: numberOptional('Covered Stops Count'),
+    planned_student_count: numberOptional('Planned Student Count'),
+    marked_student_count: numberOptional('Marked Student Count'),
 
-  day_run_status: enumMandatory(
-    'Day Run Status',
-    DayRunStatus,
-    DayRunStatus.Planned,
-  ),
-  running_status: enumMandatory(
-    'Running Status',
-    DayRunRunningStatus,
-    DayRunRunningStatus.OnTime,
-  ),
-  running_delay_seconds: numberOptional('Running Delay Seconds'),
-  notes: stringOptional('Notes', 0, 500),
-  cancel_reason: stringOptional('Cancel Reason', 0, 500),
+    day_run_status: enumMandatory(
+        'Day Run Status',
+        DayRunStatus,
+        DayRunStatus.Planned,
+    ),
+    running_status: enumMandatory(
+        'Running Status',
+        DayRunRunningStatus,
+        DayRunRunningStatus.OnTime,
+    ),
+    running_delay_seconds: numberOptional('Running Delay Seconds'),
+    notes: stringOptional('Notes', 0, 500),
+    cancel_reason: stringOptional('Cancel Reason', 0, 500),
 
-  organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-  institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
-  route_id: single_select_mandatory('MasterRoute'),
-  special_schedule_id: single_select_mandatory('MasterSpecialSchedule'),
-  vehicle_id: single_select_mandatory('MasterVehicle'),
-  driver_id: single_select_optional('Driver'),
-  attendant_id: single_select_optional('Attendant'),
+    organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
+    route_id: single_select_mandatory('MasterRoute'),
+    special_schedule_id: single_select_mandatory('MasterSpecialSchedule'),
+    vehicle_id: single_select_mandatory('MasterVehicle'),
+    driver_id: single_select_optional('Driver'),
+    attendant_id: single_select_optional('Attendant'),
 
-  status: enumMandatory('Status', Status, Status.Active),
-  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
+    status: enumMandatory('Status', Status, Status.Active),
+    time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type SpecialScheduleDayRunDTO = z.infer<
-  typeof SpecialScheduleDayRunSchema
+    typeof SpecialScheduleDayRunSchema
 >;
 
 // SpecialScheduleDayRun Query Schema
 export const SpecialScheduleDayRunQuerySchema = BaseQuerySchema.extend({
-  special_schedule_day_run_ids: multi_select_optional('SpecialScheduleDayRun'),
+    special_schedule_day_run_ids: multi_select_optional('SpecialScheduleDayRun'),
 
-  organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
-  route_ids: multi_select_optional('MasterRoute'),
-  special_schedule_ids: multi_select_optional('MasterSpecialSchedule'),
-  vehicle_ids: multi_select_optional('MasterVehicle'),
-  driver_ids: multi_select_optional('Driver'),
-  attendant_ids: multi_select_optional('Attendant'),
+    route_ids: multi_select_optional('MasterRoute'),
+    special_schedule_ids: multi_select_optional('MasterSpecialSchedule'),
+    vehicle_ids: multi_select_optional('MasterVehicle'),
+    driver_ids: multi_select_optional('Driver'),
+    attendant_ids: multi_select_optional('Attendant'),
 
-  schedule_type: enumArrayOptional(
-    'Schedule Type',
-    BusLeg,
-    getAllEnums(BusLeg),
-  ),
-  day_run_status: enumArrayOptional(
-    'Day Run Status',
-    DayRunStatus,
-    getAllEnums(DayRunStatus),
-  ),
-  running_status: enumArrayOptional(
-    'Running Status',
-    DayRunRunningStatus,
-    getAllEnums(DayRunRunningStatus),
-  ),
+    schedule_type: enumArrayOptional(
+        'Schedule Type',
+        BusLeg,
+        getAllEnums(BusLeg),
+    ),
+    day_run_status: enumArrayOptional(
+        'Day Run Status',
+        DayRunStatus,
+        getAllEnums(DayRunStatus),
+    ),
+    running_status: enumArrayOptional(
+        'Running Status',
+        DayRunRunningStatus,
+        getAllEnums(DayRunRunningStatus),
+    ),
 
-  run_date_from: dateOptional('Run Date From'),
-  run_date_to: dateOptional('Run Date To'),
+    run_date_from: dateOptional('Run Date From'),
+    run_date_to: dateOptional('Run Date To'),
 });
 export type SpecialScheduleDayRunQueryDTO = z.infer<
-  typeof SpecialScheduleDayRunQuerySchema
+    typeof SpecialScheduleDayRunQuerySchema
 >;
 
 // SpecialScheduleDayRunStop Create/Update Schema
 export const SpecialScheduleDayRunStopSchema = z.object({
-  special_schedule_day_run_id: single_select_mandatory('SpecialScheduleDayRun'),
-  bus_stop_id: single_select_mandatory('BusStop'),
+    special_schedule_day_run_id: single_select_mandatory('SpecialScheduleDayRun'),
+    bus_stop_id: single_select_mandatory('BusStop'),
 
-  order_no: numberMandatory('Order No'),
+    order_no: numberMandatory('Order No'),
 
-  planned_arrival_time: stringOptional('Planned Arrival Time'),
-  planned_departure_time: stringOptional('Planned Departure Time'),
-  planned_stop_duration_seconds: numberOptional(
-    'Planned Stop Duration Seconds',
-  ),
+    planned_arrival_time: stringOptional('Planned Arrival Time'),
+    planned_departure_time: stringOptional('Planned Departure Time'),
+    planned_stop_duration_seconds: numberOptional(
+        'Planned Stop Duration Seconds',
+    ),
 
-  actual_arrival_time: stringOptional('Actual Arrival Time'),
-  actual_departure_time: stringOptional('Actual Departure Time'),
-  actual_stop_duration_seconds: numberOptional('Actual Stop Duration Seconds'),
+    actual_arrival_time: stringOptional('Actual Arrival Time'),
+    actual_departure_time: stringOptional('Actual Departure Time'),
+    actual_stop_duration_seconds: numberOptional('Actual Stop Duration Seconds'),
 
-  stop_status: enumMandatory(
-    'Stop Status',
-    DayRunStopStatus,
-    DayRunStopStatus.Pending,
-  ),
-  planned_student_count: numberOptional('Planned Student Count'),
-  marked_student_count: numberOptional('Marked Student Count'),
+    stop_status: enumMandatory(
+        'Stop Status',
+        DayRunStopStatus,
+        DayRunStopStatus.Pending,
+    ),
+    planned_student_count: numberOptional('Planned Student Count'),
+    marked_student_count: numberOptional('Marked Student Count'),
 
-  status: enumMandatory('Status', Status, Status.Active),
+    status: enumMandatory('Status', Status, Status.Active),
 
-  time_zone_id: single_select_optional('MasterMainTimeZone'),
+    time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
 export type SpecialScheduleDayRunStopDTO = z.infer<
-  typeof SpecialScheduleDayRunStopSchema
+    typeof SpecialScheduleDayRunStopSchema
 >;
 
 // SpecialScheduleDayRunStop Query Schema
 export const SpecialScheduleDayRunStopQuerySchema = BaseQuerySchema.extend({
-  special_schedule_day_run_stop_ids: multi_select_optional(
-    'SpecialScheduleDayRunStop',
-  ),
+    special_schedule_day_run_stop_ids: multi_select_optional(
+        'SpecialScheduleDayRunStop',
+    ),
 
-  organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
-  route_ids: multi_select_optional('MasterRoute'),
-  special_schedule_ids: multi_select_optional('MasterSpecialSchedule'),
-  special_schedule_day_run_ids: multi_select_optional('SpecialScheduleDayRun'),
-  bus_stop_ids: multi_select_optional('BusStop'),
+    route_ids: multi_select_optional('MasterRoute'),
+    special_schedule_ids: multi_select_optional('MasterSpecialSchedule'),
+    special_schedule_day_run_ids: multi_select_optional('SpecialScheduleDayRun'),
+    bus_stop_ids: multi_select_optional('BusStop'),
 
-  stop_status: enumArrayOptional(
-    'Stop Status',
-    DayRunStopStatus,
-    getAllEnums(DayRunStopStatus),
-  ),
+    stop_status: enumArrayOptional(
+        'Stop Status',
+        DayRunStopStatus,
+        getAllEnums(DayRunStopStatus),
+    ),
 });
 export type SpecialScheduleDayRunStopQueryDTO = z.infer<
-  typeof SpecialScheduleDayRunStopQuerySchema
+    typeof SpecialScheduleDayRunStopQuerySchema
 >;
 
 // SpecialScheduleDayRunStudent Create/Update Schema
 export const SpecialScheduleDayRunStudentSchema = z.object({
-  special_schedule_day_run_id: single_select_mandatory('SpecialScheduleDayRun'),
-  student_id: single_select_mandatory('Student'),
+    special_schedule_day_run_id: single_select_mandatory('SpecialScheduleDayRun'),
+    student_id: single_select_mandatory('Student'),
 
-  planned_special_schedule_day_run_stop_id: single_select_optional(
-    'Planned_SpecialScheduleDayRunStop',
-  ),
-  actual_special_schedule_day_run_stop_id: single_select_optional(
-    'Actual_SpecialScheduleDayRunStop',
-  ),
+    planned_special_schedule_day_run_stop_id: single_select_optional(
+        'Planned_SpecialScheduleDayRunStop',
+    ),
+    actual_special_schedule_day_run_stop_id: single_select_optional(
+        'Actual_SpecialScheduleDayRunStop',
+    ),
 
-  student_boarding_status: enumMandatory(
-    'Student Boarding Status',
-    StudentLegStatus,
-    StudentLegStatus.Planned,
-  ),
-  method: enumMandatory(
-    'Attendance Method',
-    AttendanceMethod,
-    AttendanceMethod.None,
-  ),
-  mark_time: stringOptional('Mark Time'),
-  note: stringOptional('Note', 0, 500),
+    student_boarding_status: enumMandatory(
+        'Student Boarding Status',
+        StudentLegStatus,
+        StudentLegStatus.Planned,
+    ),
+    method: enumMandatory(
+        'Attendance Method',
+        AttendanceMethod,
+        AttendanceMethod.None,
+    ),
+    mark_time: stringOptional('Mark Time'),
+    note: stringOptional('Note', 0, 500),
 
-  student_attendance_image_url: stringOptional(
-    'Student Attendance Image URL',
-    0,
-    300,
-  ),
-  student_attendance_image_key: stringOptional(
-    'Student Attendance Image Key',
-    0,
-    300,
-  ),
-  student_attendance_image_name: stringOptional(
-    'Student Attendance Image Name',
-    0,
-    300,
-  ),
+    student_attendance_image_url: stringOptional(
+        'Student Attendance Image URL',
+        0,
+        300,
+    ),
+    student_attendance_image_key: stringOptional(
+        'Student Attendance Image Key',
+        0,
+        300,
+    ),
+    student_attendance_image_name: stringOptional(
+        'Student Attendance Image Name',
+        0,
+        300,
+    ),
 
-  status: enumMandatory('Status', Status, Status.Active),
+    status: enumMandatory('Status', Status, Status.Active),
 
-  time_zone_id: single_select_optional('MasterMainTimeZone'),
+    time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
 export type SpecialScheduleDayRunStudentDTO = z.infer<
-  typeof SpecialScheduleDayRunStudentSchema
+    typeof SpecialScheduleDayRunStudentSchema
 >;
 
 // SpecialScheduleDayRunStudent Query Schema
 export const SpecialScheduleDayRunStudentQuerySchema = BaseQuerySchema.extend({
-  special_schedule_day_run_student_ids: multi_select_optional(
-    'SpecialScheduleDayRunStudent',
-  ),
+    special_schedule_day_run_student_ids: multi_select_optional(
+        'SpecialScheduleDayRunStudent',
+    ),
 
-  organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
-  route_ids: multi_select_optional('MasterRoute'),
-  special_schedule_ids: multi_select_optional('MasterSpecialSchedule'),
-  special_schedule_day_run_ids: multi_select_optional('SpecialScheduleDayRun'),
-  planned_special_schedule_day_run_stop_ids: multi_select_optional(
-    'Planned_SpecialScheduleDayRunStop',
-  ),
-  actual_special_schedule_day_run_stop_ids: multi_select_optional(
-    'Actual_SpecialScheduleDayRunStop',
-  ),
-  student_ids: multi_select_optional('Student'),
+    route_ids: multi_select_optional('MasterRoute'),
+    special_schedule_ids: multi_select_optional('MasterSpecialSchedule'),
+    special_schedule_day_run_ids: multi_select_optional('SpecialScheduleDayRun'),
+    planned_special_schedule_day_run_stop_ids: multi_select_optional(
+        'Planned_SpecialScheduleDayRunStop',
+    ),
+    actual_special_schedule_day_run_stop_ids: multi_select_optional(
+        'Actual_SpecialScheduleDayRunStop',
+    ),
+    student_ids: multi_select_optional('Student'),
 
-  student_boarding_status: enumArrayOptional(
-    'Student Boarding Status',
-    StudentLegStatus,
-    getAllEnums(StudentLegStatus),
-  ),
-  method: enumArrayOptional(
-    'Attendance Method',
-    AttendanceMethod,
-    getAllEnums(AttendanceMethod),
-  ),
+    student_boarding_status: enumArrayOptional(
+        'Student Boarding Status',
+        StudentLegStatus,
+        getAllEnums(StudentLegStatus),
+    ),
+    method: enumArrayOptional(
+        'Attendance Method',
+        AttendanceMethod,
+        getAllEnums(AttendanceMethod),
+    ),
 });
 export type SpecialScheduleDayRunStudentQueryDTO = z.infer<
-  typeof SpecialScheduleDayRunStudentQuerySchema
+    typeof SpecialScheduleDayRunStudentQuerySchema
 >;
 
 // Action Schemas
 export const GenerateDayRunSchema = z.object({
-  special_schedule_id: single_select_mandatory('MasterSpecialSchedule'),
-  run_date: dateMandatory('Run Date'),
-  time_zone_id: single_select_mandatory('MasterMainTimeZone'),
+    special_schedule_id: single_select_mandatory('MasterSpecialSchedule'),
+    run_date: dateMandatory('Run Date'),
+    time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type GenerateDayRunDTO = z.infer<typeof GenerateDayRunSchema>;
 
 export const DayRunIdSchema = z.object({
-  special_schedule_day_run_id: single_select_mandatory('SpecialScheduleDayRun'),
-  time_zone_id: single_select_optional('MasterMainTimeZone'),
+    special_schedule_day_run_id: single_select_mandatory('SpecialScheduleDayRun'),
+    time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
 export type DayRunIdDTO = z.infer<typeof DayRunIdSchema>;
 
 export const CancelDayRunSchema = z.object({
-  special_schedule_day_run_id: single_select_mandatory('SpecialScheduleDayRun'),
-  cancel_reason: stringOptional('Cancel Reason', 0, 500),
-  time_zone_id: single_select_optional('MasterMainTimeZone'),
+    special_schedule_day_run_id: single_select_mandatory('SpecialScheduleDayRun'),
+    cancel_reason: stringOptional('Cancel Reason', 0, 500),
+    time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
 export type CancelDayRunDTO = z.infer<typeof CancelDayRunSchema>;
 
 export const DayRunStopIdSchema = z.object({
-  special_schedule_day_run_stop_id: single_select_mandatory(
-    'SpecialScheduleDayRunStop',
-  ),
-  actual_time: stringOptional('Actual Time'),
-  time_zone_id: single_select_optional('MasterMainTimeZone'),
+    special_schedule_day_run_stop_id: single_select_mandatory(
+        'SpecialScheduleDayRunStop',
+    ),
+    actual_time: stringOptional('Actual Time'),
+    time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
 export type DayRunStopIdDTO = z.infer<typeof DayRunStopIdSchema>;
 
 export const MarkStudentSchema = z.object({
-  special_schedule_day_run_student_id: single_select_mandatory(
-    'SpecialScheduleDayRunStudent',
-  ),
-  student_boarding_status: enumMandatory(
-    'Student Boarding Status',
-    StudentLegStatus,
-    StudentLegStatus.Boarded,
-  ),
-  method: enumMandatory(
-    'Attendance Method',
-    AttendanceMethod,
-    AttendanceMethod.Manual,
-  ),
-  actual_special_schedule_day_run_stop_id: single_select_optional(
-    'Actual_SpecialScheduleDayRunStop',
-  ),
-  mark_time: stringOptional('Mark Time'),
-  note: stringOptional('Note', 0, 500),
-  student_attendance_image_url: stringOptional(
-    'Student Attendance Image URL',
-    0,
-    300,
-  ),
-  student_attendance_image_key: stringOptional(
-    'Student Attendance Image Key',
-    0,
-    300,
-  ),
-  student_attendance_image_name: stringOptional(
-    'Student Attendance Image Name',
-    0,
-    300,
-  ),
-  time_zone_id: single_select_optional('MasterMainTimeZone'),
+    special_schedule_day_run_student_id: single_select_mandatory(
+        'SpecialScheduleDayRunStudent',
+    ),
+    student_boarding_status: enumMandatory(
+        'Student Boarding Status',
+        StudentLegStatus,
+        StudentLegStatus.Boarded,
+    ),
+    method: enumMandatory(
+        'Attendance Method',
+        AttendanceMethod,
+        AttendanceMethod.Manual,
+    ),
+    actual_special_schedule_day_run_stop_id: single_select_optional(
+        'Actual_SpecialScheduleDayRunStop',
+    ),
+    mark_time: stringOptional('Mark Time'),
+    note: stringOptional('Note', 0, 500),
+    student_attendance_image_url: stringOptional(
+        'Student Attendance Image URL',
+        0,
+        300,
+    ),
+    student_attendance_image_key: stringOptional(
+        'Student Attendance Image Key',
+        0,
+        300,
+    ),
+    student_attendance_image_name: stringOptional(
+        'Student Attendance Image Name',
+        0,
+        300,
+    ),
+    time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
 export type MarkStudentDTO = z.infer<typeof MarkStudentSchema>;
 

@@ -168,7 +168,7 @@ export interface Student extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -260,7 +260,7 @@ export interface StudentAddress extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -306,7 +306,7 @@ export interface StudentGuardian extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -339,7 +339,7 @@ export interface StudentGuardianLink extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -385,7 +385,7 @@ export interface StudentLeaveRequest extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -429,7 +429,7 @@ export interface StudentStopChangeRequest extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
@@ -468,7 +468,7 @@ export interface StudentTransportPlanTypeChangeHistory extends Record<string, un
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    institution_branch_id?: string;
+    institution_branch_id: string;
     InstitutionBranch?: InstitutionBranch;
     branch?: string;
     city?: string;
