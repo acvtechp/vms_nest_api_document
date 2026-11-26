@@ -37,7 +37,7 @@ import {
 
 // Other Models
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
-import { OrganisationBranch } from '../../../master/organisation/organisation_branch_service';
+import { InstitutionBranch } from './institution_branch_service';
 import { MasterClass } from 'src/services/master/bus/master_class_service';
 import { MasterProgram } from 'src/services/master/bus/master_program_service';
 import { MasterSection } from 'src/services/master/bus/master_section_service';
@@ -168,10 +168,10 @@ export interface Student extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     program_id?: string;
     MasterProgram?: MasterProgram;
@@ -260,10 +260,10 @@ export interface StudentAddress extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     student_id: string;
     Student?: Student;
@@ -306,10 +306,10 @@ export interface StudentGuardian extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     // Relations - Child
     StudentGuardianLink?: StudentGuardianLink[];
@@ -339,10 +339,10 @@ export interface StudentGuardianLink extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     student_id: string;
     Student?: Student;
@@ -385,10 +385,10 @@ export interface StudentLeaveRequest extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     student_id: string;
     Student?: Student;
@@ -429,10 +429,10 @@ export interface StudentStopChangeRequest extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     student_id: string;
     Student?: Student;
@@ -468,10 +468,10 @@ export interface StudentTransportPlanTypeChangeHistory extends Record<string, un
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     student_id: string;
     Student?: Student;
@@ -561,7 +561,7 @@ export interface StudentGuardianLoginPush extends Record<string, unknown> {
 // Student Create/Update Schema
 export const StudentSchema = z.object({
     organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 
     program_id: single_select_optional('MasterProgram'), // Single-Selection -> MasterProgram
     stream_id: single_select_optional('MasterStream'), // Single-Selection -> MasterStream
@@ -619,7 +619,7 @@ export const StudentQuerySchema = BaseQuerySchema.extend({
     student_ids: multi_select_optional('Student'), // Multi-selection -> Student
 
     organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
     program_ids: multi_select_optional('MasterProgram'), // Multi-selection -> MasterProgram
     stream_ids: multi_select_optional('MasterStream'), // Multi-selection -> MasterStream
@@ -646,7 +646,7 @@ export type StudentQueryDTO = z.infer<typeof StudentQuerySchema>;
 // Student NoFixedSchedule Query Schema
 export const StudentNoFixedScheduleQuerySchema = BaseQuerySchema.extend({
     organisation_id: single_select_mandatory('UserOrganisation'), // Multi-selection -> UserOrganisation
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 });
 export type StudentNoFixedScheduleQueryDTO = z.infer<
     typeof StudentNoFixedScheduleQuerySchema
@@ -655,7 +655,7 @@ export type StudentNoFixedScheduleQueryDTO = z.infer<
 // StudentAddress Create/Update Schema
 export const StudentAddressSchema = z.object({
     organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
     student_id: single_select_mandatory('Student'), // Single-Selection -> Student
 
     // Address
@@ -687,7 +687,7 @@ export const StudentAddressQuerySchema = BaseQuerySchema.extend({
     student_address_ids: multi_select_optional('StudentAddress'), // Multi-selection -> StudentAddress
 
     organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
     student_ids: multi_select_optional('Student'), // Multi-selection -> Student
 
     is_default: enumArrayOptional('Is Active', YesNo, getAllEnums(YesNo)),
@@ -698,7 +698,7 @@ export type StudentAddressQueryDTO = z.infer<typeof StudentAddressQuerySchema>;
 export const StudentGuardianLinkSchema = z.object({
     // Relations - Parent
     organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
     student_id: single_select_mandatory('Student'), // Single-Selection -> Student
     guardian_relationship_id: single_select_mandatory(
         'MasterGuardianRelationship',
@@ -746,7 +746,7 @@ export type GuardianDetailsDTO = z.infer<typeof GuardianDetailsSchema>;
 // GuardianMobileNumber Update Schema
 export const GuardianMobileNumberSchema = z.object({
     organisation_id: single_select_mandatory('UserOrganisation'),
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
     old_mobile: stringMandatory('Mobile', 8, 15),
     new_mobile: stringMandatory('Mobile', 8, 15),
 });
@@ -757,7 +757,7 @@ export type GuardianMobileNumberDTO = z.infer<
 // StudentGuardian Query Schema
 export const StudentGuardianLinkQuerySchema = BaseQuerySchema.extend({
     organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
     student_ids: multi_select_optional('Student'), // Multi-selection -> Student
     guardian_ids: multi_select_optional('StudentGuardian'), // Multi-selection -> StudentGuardian
 });
@@ -768,7 +768,7 @@ export type StudentGuardianLinkQueryDTO = z.infer<
 // StudentGuardianAutofill Query Schema
 export const StudentGuardianAutofillQuerySchema = BaseQuerySchema.extend({
     organisation_id: single_select_mandatory('UserOrganisation'),
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
     mobile: stringMandatory('Mobile', 8, 15),
 });
 export type StudentGuardianAutofillQueryDTO = z.infer<
@@ -778,7 +778,7 @@ export type StudentGuardianAutofillQueryDTO = z.infer<
 // StudentLeaveRequest Create/Update Schema
 export const StudentLeaveRequestSchema = z.object({
     organisation_id: single_select_mandatory('UserOrganisation'),
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
     student_id: single_select_mandatory('Student'),
 
     // Leave details
@@ -799,7 +799,7 @@ export type StudentLeaveRequestDTO = z.infer<typeof StudentLeaveRequestSchema>;
 // StudentLeaveRequest Query Schema
 export const StudentLeaveRequestQuerySchema = BaseQuerySchema.extend({
     organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
     student_ids: multi_select_optional('Student'), // Multi-selection -> Student
     student_leave_request_ids: multi_select_optional('StudentLeaveRequest'), // Multi-selection -> StudentLeaveRequest
 });
@@ -810,7 +810,7 @@ export type StudentLeaveRequestQueryDTO = z.infer<
 // StudentStopChangeRequest Create/Update Schema
 export const StudentStopChangeRequestSchema = z.object({
     organisation_id: single_select_mandatory('UserOrganisation'),
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
     student_id: single_select_mandatory('Student'),
     student_address_id: single_select_mandatory('StudentAddress'),
 
@@ -849,7 +849,7 @@ export type StudentStopChangeRequestApprovalDTO = z.infer<
 // StudentStopChangeRequest Query Schema
 export const StudentStopChangeRequestQuerySchema = BaseQuerySchema.extend({
     organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
     student_ids: multi_select_optional('Student'), // Multi-selection -> Student
     student_address_ids: multi_select_optional('StudentAddress'), // Multi-selection -> StudentAddress
     student_stop_change_request_ids: multi_select_optional(
@@ -874,7 +874,7 @@ export const StudentTransportPlanTypeChangeHistoryQuerySchema =
         ), // Multi-selection -> StudentTransportPlanTypeChangeHistory
 
         organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-        organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+        institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
         student_ids: multi_select_optional('Student'), // Multi-selection -> Student
     });
 export type StudentTransportPlanTypeChangeHistoryQueryDTO = z.infer<
@@ -884,7 +884,7 @@ export type StudentTransportPlanTypeChangeHistoryQueryDTO = z.infer<
 // Convert Student Data to API Payload
 export const toStudentPayload = (row: Student): StudentDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
 
     program_id: row.program_id || '',
     stream_id: row.stream_id || '',
@@ -919,7 +919,7 @@ export const toStudentPayload = (row: Student): StudentDTO => ({
 
 export const newStudentPayload = (): StudentDTO => ({
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
 
     program_id: '',
     stream_id: '',
@@ -955,7 +955,7 @@ export const newStudentPayload = (): StudentDTO => ({
 // Convert Student Data to API Payload
 export const toStudentAddressPayload = (row: StudentAddress): StudentAddressDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
     student_id: row.student_id || '',
 
     // Address
@@ -985,7 +985,7 @@ export const toStudentAddressPayload = (row: StudentAddress): StudentAddressDTO 
 export const newStudentAddressPayload = (): StudentAddressDTO => ({
     student_id: '',
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
 
     address_line1: '',
     address_line2: '',
@@ -1011,7 +1011,7 @@ export const newStudentAddressPayload = (): StudentAddressDTO => ({
 // Convert StudentLeaveRequest Data to API Payload
 export const toStudentLeaveRequestPayload = (row: StudentLeaveRequest): StudentLeaveRequestDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
     student_id: row.student_id || '',
 
     // Leave details
@@ -1027,7 +1027,7 @@ export const toStudentLeaveRequestPayload = (row: StudentLeaveRequest): StudentL
 export const newStudentLeaveRequestPayload = (): StudentLeaveRequestDTO => ({
     student_id: '',
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
 
     date_from: '',
     date_to: '',
@@ -1040,7 +1040,7 @@ export const newStudentLeaveRequestPayload = (): StudentLeaveRequestDTO => ({
 // Convert StudentStopChangeRequest Data to API Payload
 export const toStudentStopChangeRequestPayload = (row: StudentStopChangeRequest): StudentStopChangeRequestDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
     student_id: row.student_id || '',
     student_address_id: row.student_address_id || '',
 
@@ -1060,7 +1060,7 @@ export const toStudentStopChangeRequestPayload = (row: StudentStopChangeRequest)
 export const newStudentStopChangeRequestPayload = (): StudentStopChangeRequestDTO => ({
     student_id: '',
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
     student_address_id: '',
 
     change_pickup: YesNo.Yes,
@@ -1078,7 +1078,7 @@ export const newStudentStopChangeRequestPayload = (): StudentStopChangeRequestDT
 // Convert StudentGuardianLink Data to API Payload
 export const toStudentGuardianLinkPayload = (row: StudentGuardianLink): StudentGuardianLinkDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
     student_id: row.student_id || '',
     guardian_relationship_id: row.guardian_relationship_id || '',
 
@@ -1101,7 +1101,7 @@ export const toStudentGuardianLinkPayload = (row: StudentGuardianLink): StudentG
 export const newStudentGuardianLinkPayload = (): StudentGuardianLinkDTO => ({
     student_id: '',
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
     guardian_relationship_id: '',
 
     is_primary: YesNo.No,

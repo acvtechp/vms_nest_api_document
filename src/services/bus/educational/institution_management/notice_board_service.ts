@@ -20,7 +20,7 @@ import { Status } from '../../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
-import { OrganisationBranch } from '../../../master/organisation/organisation_branch_service';
+import { InstitutionBranch } from './institution_branch_service';
 
 const URL = 'bus/educational/institution_management/notice_board';
 
@@ -55,10 +55,10 @@ export interface OrganisationNoticeBoard extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id?: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     // Relations - Child Count
     _count?: {};
@@ -67,15 +67,17 @@ export interface OrganisationNoticeBoard extends Record<string, unknown> {
 // OrganisationNoticeBoard Create/Update Schema
 export const OrganisationNoticeBoardSchema = z.object({
     organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-    organisation_branch_id: single_select_optional('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 
     notice_date_time: dateTimeMandatory('Notice Date Time'),
 
     notice_subject: stringMandatory('Notice Subject', 3, 100),
     notice_description: stringOptional('Notice Description', 0, 500),
 
-    // Other
+    // Metadata
     status: enumMandatory('Status', Status, Status.Active),
+
+    // Other
     time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type OrganisationNoticeBoardDTO = z.infer<
@@ -84,10 +86,10 @@ export type OrganisationNoticeBoardDTO = z.infer<
 
 // OrganisationNoticeBoard Query Schema
 export const OrganisationNoticeBoardQuerySchema = BaseQuerySchema.extend({
-    notice_ids: multi_select_optional('OrganisationNoticeBoard'), // ✅ Multi-selection -> OrganisationNoticeBoard
+    notice_ids: multi_select_optional('OrganisationNoticeBoard'), // Multi-selection -> OrganisationNoticeBoard
 
-    organisation_ids: multi_select_optional('UserOrganisation'), // ✅ Multi-selection -> UserOrganisation
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'), // ✅ Multi-selection -> OrganisationBranch
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 });
 export type OrganisationNoticeBoardQueryDTO = z.infer<
     typeof OrganisationNoticeBoardQuerySchema
@@ -96,7 +98,7 @@ export type OrganisationNoticeBoardQueryDTO = z.infer<
 // Convert OrganisationNoticeBoard Data to API Payload
 export const toOrganisationNoticeBoardPayload = (row: OrganisationNoticeBoard): OrganisationNoticeBoardDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
 
     notice_date_time: row.notice_date_time || '',
     notice_subject: row.notice_subject || '',
@@ -109,7 +111,7 @@ export const toOrganisationNoticeBoardPayload = (row: OrganisationNoticeBoard): 
 // Create New OrganisationNoticeBoard Payload
 export const newOrganisationNoticeBoardPayload = (): OrganisationNoticeBoardDTO => ({
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
 
     notice_date_time: '',
     notice_subject: '',

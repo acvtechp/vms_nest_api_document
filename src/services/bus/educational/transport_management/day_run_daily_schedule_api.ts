@@ -32,7 +32,7 @@ import {
 
 // Other Models
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
-import { OrganisationBranch } from 'src/services/master/organisation/organisation_branch_service';
+import { InstitutionBranch } from '../institution_management/institution_branch_service';
 import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
 import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
 import { Student } from '../institution_management/student_service';
@@ -118,10 +118,10 @@ export interface DailyScheduleDayRun extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     route_id: string;
     MasterRoute?: MasterRoute;
@@ -191,10 +191,10 @@ export interface DailyScheduleDayRunStop extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     route_id: string;
     MasterRoute?: MasterRoute;
@@ -250,10 +250,10 @@ export interface DailyScheduleDayRunStudent extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     route_id: string;
     MasterRoute?: MasterRoute;
@@ -295,14 +295,22 @@ export const DailyScheduleDayRunSchema = z.object({
     planned_student_count: numberOptional('Planned Student Count'),
     marked_student_count: numberOptional('Marked Student Count'),
 
-    day_run_status: enumMandatory('Day Run Status', DayRunStatus, DayRunStatus.Planned),
-    running_status: enumMandatory('Running Status', DayRunRunningStatus, DayRunRunningStatus.OnTime),
+    day_run_status: enumMandatory(
+        'Day Run Status',
+        DayRunStatus,
+        DayRunStatus.Planned,
+    ),
+    running_status: enumMandatory(
+        'Running Status',
+        DayRunRunningStatus,
+        DayRunRunningStatus.OnTime,
+    ),
     running_delay_seconds: numberOptional('Running Delay Seconds'),
     notes: stringOptional('Notes', 0, 500),
     cancel_reason: stringOptional('Cancel Reason', 0, 500),
 
-    organisation_id: single_select_mandatory('UserOrganisation'),
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'),
+    organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
     route_id: single_select_mandatory('MasterRoute'),
     daily_schedule_id: single_select_mandatory('MasterDailySchedule'),
     vehicle_id: single_select_mandatory('MasterVehicle'),
@@ -318,8 +326,8 @@ export type DailyScheduleDayRunDTO = z.infer<typeof DailyScheduleDayRunSchema>;
 export const DailyScheduleDayRunQuerySchema = BaseQuerySchema.extend({
     daily_schedule_day_run_ids: multi_select_optional('DailyScheduleDayRun'),
 
-    organisation_ids: multi_select_optional('UserOrganisation'),
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'),
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
     route_ids: multi_select_optional('MasterRoute'),
     daily_schedule_ids: multi_select_optional('MasterDailySchedule'),
@@ -327,14 +335,28 @@ export const DailyScheduleDayRunQuerySchema = BaseQuerySchema.extend({
     driver_ids: multi_select_optional('Driver'),
     attendant_ids: multi_select_optional('Attendant'),
 
-    schedule_type: enumArrayOptional('Schedule Type', BusLeg, getAllEnums(BusLeg)),
-    day_run_status: enumArrayOptional('Day Run Status', DayRunStatus, getAllEnums(DayRunStatus)),
-    running_status: enumArrayOptional('Running Status', DayRunRunningStatus, getAllEnums(DayRunRunningStatus)),
+    schedule_type: enumArrayOptional(
+        'Schedule Type',
+        BusLeg,
+        getAllEnums(BusLeg),
+    ),
+    day_run_status: enumArrayOptional(
+        'Day Run Status',
+        DayRunStatus,
+        getAllEnums(DayRunStatus),
+    ),
+    running_status: enumArrayOptional(
+        'Running Status',
+        DayRunRunningStatus,
+        getAllEnums(DayRunRunningStatus),
+    ),
 
     run_date_from: dateOptional('Run Date From'),
     run_date_to: dateOptional('Run Date To'),
 });
-export type DailyScheduleDayRunQueryDTO = z.infer<typeof DailyScheduleDayRunQuerySchema>;
+export type DailyScheduleDayRunQueryDTO = z.infer<
+    typeof DailyScheduleDayRunQuerySchema
+>;
 
 // DailyScheduleDayRunStop Create/Update Schema
 export const DailyScheduleDayRunStopSchema = z.object({
@@ -345,119 +367,205 @@ export const DailyScheduleDayRunStopSchema = z.object({
 
     planned_arrival_time: stringOptional('Planned Arrival Time'),
     planned_departure_time: stringOptional('Planned Departure Time'),
-    planned_stop_duration_seconds: numberOptional('Planned Stop Duration Seconds'),
+    planned_stop_duration_seconds: numberOptional(
+        'Planned Stop Duration Seconds',
+    ),
 
     actual_arrival_time: stringOptional('Actual Arrival Time'),
     actual_departure_time: stringOptional('Actual Departure Time'),
     actual_stop_duration_seconds: numberOptional('Actual Stop Duration Seconds'),
 
-    stop_status: enumMandatory('Stop Status', DayRunStopStatus, DayRunStopStatus.Pending),
+    stop_status: enumMandatory(
+        'Stop Status',
+        DayRunStopStatus,
+        DayRunStopStatus.Pending,
+    ),
     planned_student_count: numberOptional('Planned Student Count'),
     marked_student_count: numberOptional('Marked Student Count'),
 
     status: enumMandatory('Status', Status, Status.Active),
+
     time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
-export type DailyScheduleDayRunStopDTO = z.infer<typeof DailyScheduleDayRunStopSchema>;
+export type DailyScheduleDayRunStopDTO = z.infer<
+    typeof DailyScheduleDayRunStopSchema
+>;
 
 // DailyScheduleDayRunStop Query Schema
 export const DailyScheduleDayRunStopQuerySchema = BaseQuerySchema.extend({
-    daily_schedule_day_run_stop_ids: multi_select_optional('DailyScheduleDayRunStop'),
+    daily_schedule_day_run_stop_ids: multi_select_optional(
+        'DailyScheduleDayRunStop',
+    ),
 
-    organisation_ids: multi_select_optional('UserOrganisation'),
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'),
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
     route_ids: multi_select_optional('MasterRoute'),
     daily_schedule_ids: multi_select_optional('MasterDailySchedule'),
     daily_schedule_day_run_ids: multi_select_optional('DailyScheduleDayRun'),
     bus_stop_ids: multi_select_optional('BusStop'),
 
-    stop_status: enumArrayOptional('Stop Status', DayRunStopStatus, getAllEnums(DayRunStopStatus)),
+    stop_status: enumArrayOptional(
+        'Stop Status',
+        DayRunStopStatus,
+        getAllEnums(DayRunStopStatus),
+    ),
 });
-export type DailyScheduleDayRunStopQueryDTO = z.infer<typeof DailyScheduleDayRunStopQuerySchema>;
+export type DailyScheduleDayRunStopQueryDTO = z.infer<
+    typeof DailyScheduleDayRunStopQuerySchema
+>;
 
 // DailyScheduleDayRunStudent Create/Update Schema
 export const DailyScheduleDayRunStudentSchema = z.object({
     daily_schedule_day_run_id: single_select_mandatory('DailyScheduleDayRun'),
     student_id: single_select_mandatory('Student'),
 
-    planned_daily_schedule_day_run_stop_id: single_select_optional('Planned_DailyScheduleDayRunStop'),
-    actual_daily_schedule_day_run_stop_id: single_select_optional('Actual_DailyScheduleDayRunStop'),
+    planned_daily_schedule_day_run_stop_id: single_select_optional(
+        'Planned_DailyScheduleDayRunStop',
+    ),
+    actual_daily_schedule_day_run_stop_id: single_select_optional(
+        'Actual_DailyScheduleDayRunStop',
+    ),
 
-    student_boarding_status: enumMandatory('Student Boarding Status', StudentLegStatus, StudentLegStatus.Planned),
-    method: enumMandatory('Attendance Method', AttendanceMethod, AttendanceMethod.None),
+    student_boarding_status: enumMandatory(
+        'Student Boarding Status',
+        StudentLegStatus,
+        StudentLegStatus.Planned,
+    ),
+    method: enumMandatory(
+        'Attendance Method',
+        AttendanceMethod,
+        AttendanceMethod.None,
+    ),
     mark_time: stringOptional('Mark Time'),
     note: stringOptional('Note', 0, 500),
 
-    student_attendance_image_url: stringOptional('Student Attendance Image URL', 0, 300),
-    student_attendance_image_key: stringOptional('Student Attendance Image Key', 0, 300),
-    student_attendance_image_name: stringOptional('Student Attendance Image Name', 0, 300),
+    student_attendance_image_url: stringOptional(
+        'Student Attendance Image URL',
+        0,
+        300,
+    ),
+    student_attendance_image_key: stringOptional(
+        'Student Attendance Image Key',
+        0,
+        300,
+    ),
+    student_attendance_image_name: stringOptional(
+        'Student Attendance Image Name',
+        0,
+        300,
+    ),
 
     status: enumMandatory('Status', Status, Status.Active),
+
     time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
-export type DailyScheduleDayRunStudentDTO = z.infer<typeof DailyScheduleDayRunStudentSchema>;
+export type DailyScheduleDayRunStudentDTO = z.infer<
+    typeof DailyScheduleDayRunStudentSchema
+>;
 
 // DailyScheduleDayRunStudent Query Schema
 export const DailyScheduleDayRunStudentQuerySchema = BaseQuerySchema.extend({
-    daily_schedule_day_run_student_ids: multi_select_optional('DailyScheduleDayRunStudent'),
+    daily_schedule_day_run_student_ids: multi_select_optional(
+        'DailyScheduleDayRunStudent',
+    ),
 
-    organisation_ids: multi_select_optional('UserOrganisation'),
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'),
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
     route_ids: multi_select_optional('MasterRoute'),
     daily_schedule_ids: multi_select_optional('MasterDailySchedule'),
     daily_schedule_day_run_ids: multi_select_optional('DailyScheduleDayRun'),
-    planned_daily_schedule_day_run_stop_ids: multi_select_optional('Planned_DailyScheduleDayRunStop'),
-    actual_daily_schedule_day_run_stop_ids: multi_select_optional('Actual_DailyScheduleDayRunStop'),
+    planned_daily_schedule_day_run_stop_ids: multi_select_optional(
+        'Planned_DailyScheduleDayRunStop',
+    ),
+    actual_daily_schedule_day_run_stop_ids: multi_select_optional(
+        'Actual_DailyScheduleDayRunStop',
+    ),
     student_ids: multi_select_optional('Student'),
 
-    student_boarding_status: enumArrayOptional('Student Boarding Status', StudentLegStatus, getAllEnums(StudentLegStatus)),
-    method: enumArrayOptional('Attendance Method', AttendanceMethod, getAllEnums(AttendanceMethod)),
+    student_boarding_status: enumArrayOptional(
+        'Student Boarding Status',
+        StudentLegStatus,
+        getAllEnums(StudentLegStatus),
+    ),
+    method: enumArrayOptional(
+        'Attendance Method',
+        AttendanceMethod,
+        getAllEnums(AttendanceMethod),
+    ),
 });
-export type DailyScheduleDayRunStudentQueryDTO = z.infer<typeof DailyScheduleDayRunStudentQuerySchema>;
+export type DailyScheduleDayRunStudentQueryDTO = z.infer<
+    typeof DailyScheduleDayRunStudentQuerySchema
+>;
 
 // Action Schemas
-export const GenerateDailyScheduleDayRunSchema = z.object({
+export const GenerateDayRunSchema = z.object({
     daily_schedule_id: single_select_mandatory('MasterDailySchedule'),
     run_date: dateMandatory('Run Date'),
     time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
-export type GenerateDailyScheduleDayRunDTO = z.infer<typeof GenerateDailyScheduleDayRunSchema>;
+export type GenerateDayRunDTO = z.infer<typeof GenerateDayRunSchema>;
 
-export const DailyScheduleDayRunIdSchema = z.object({
+export const DayRunIdSchema = z.object({
     daily_schedule_day_run_id: single_select_mandatory('DailyScheduleDayRun'),
     time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
-export type DailyScheduleDayRunIdDTO = z.infer<typeof DailyScheduleDayRunIdSchema>;
+export type DayRunIdDTO = z.infer<typeof DayRunIdSchema>;
 
-export const CancelDailyScheduleDayRunSchema = z.object({
+export const CancelDayRunSchema = z.object({
     daily_schedule_day_run_id: single_select_mandatory('DailyScheduleDayRun'),
     cancel_reason: stringOptional('Cancel Reason', 0, 500),
     time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
-export type CancelDailyScheduleDayRunDTO = z.infer<typeof CancelDailyScheduleDayRunSchema>;
+export type CancelDayRunDTO = z.infer<typeof CancelDayRunSchema>;
 
-export const DailyScheduleDayRunStopIdSchema = z.object({
-    daily_schedule_day_run_stop_id: single_select_mandatory('DailyScheduleDayRunStop'),
+export const DayRunStopIdSchema = z.object({
+    daily_schedule_day_run_stop_id: single_select_mandatory(
+        'DailyScheduleDayRunStop',
+    ),
     actual_time: stringOptional('Actual Time'),
     time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
-export type DailyScheduleDayRunStopIdDTO = z.infer<typeof DailyScheduleDayRunStopIdSchema>;
+export type DayRunStopIdDTO = z.infer<typeof DayRunStopIdSchema>;
 
-export const MarkDailyScheduleDayRunStudentSchema = z.object({
-    daily_schedule_day_run_student_id: single_select_mandatory('DailyScheduleDayRunStudent'),
-    student_boarding_status: enumMandatory('Student Boarding Status', StudentLegStatus, StudentLegStatus.Boarded),
-    method: enumMandatory('Attendance Method', AttendanceMethod, AttendanceMethod.Manual),
-    actual_daily_schedule_day_run_stop_id: single_select_optional('Actual_DailyScheduleDayRunStop'),
+export const MarkStudentSchema = z.object({
+    daily_schedule_day_run_student_id: single_select_mandatory(
+        'DailyScheduleDayRunStudent',
+    ),
+    student_boarding_status: enumMandatory(
+        'Student Boarding Status',
+        StudentLegStatus,
+        StudentLegStatus.Boarded,
+    ),
+    method: enumMandatory(
+        'Attendance Method',
+        AttendanceMethod,
+        AttendanceMethod.Manual,
+    ),
+    actual_daily_schedule_day_run_stop_id: single_select_optional(
+        'Actual_DailyScheduleDayRunStop',
+    ),
     mark_time: stringOptional('Mark Time'),
     note: stringOptional('Note', 0, 500),
-    student_attendance_image_url: stringOptional('Student Attendance Image URL', 0, 300),
-    student_attendance_image_key: stringOptional('Student Attendance Image Key', 0, 300),
-    student_attendance_image_name: stringOptional('Student Attendance Image Name', 0, 300),
+    student_attendance_image_url: stringOptional(
+        'Student Attendance Image URL',
+        0,
+        300,
+    ),
+    student_attendance_image_key: stringOptional(
+        'Student Attendance Image Key',
+        0,
+        300,
+    ),
+    student_attendance_image_name: stringOptional(
+        'Student Attendance Image Name',
+        0,
+        300,
+    ),
     time_zone_id: single_select_optional('MasterMainTimeZone'),
 });
-export type MarkDailyScheduleDayRunStudentDTO = z.infer<typeof MarkDailyScheduleDayRunStudentSchema>;
+export type MarkStudentDTO = z.infer<typeof MarkStudentSchema>;
 
 // Convert DailyScheduleDayRun Data to API Payload
 export const toDailyScheduleDayRunPayload = (row: DailyScheduleDayRun): DailyScheduleDayRunDTO => ({
@@ -477,7 +585,7 @@ export const toDailyScheduleDayRunPayload = (row: DailyScheduleDayRun): DailySch
     notes: row.notes || '',
     cancel_reason: row.cancel_reason || '',
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
     route_id: row.route_id || '',
     daily_schedule_id: row.daily_schedule_id || '',
     vehicle_id: row.vehicle_id || '',
@@ -504,7 +612,7 @@ export const newDailyScheduleDayRunPayload = (): DailyScheduleDayRunDTO => ({
     notes: '',
     cancel_reason: '',
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
     route_id: '',
     daily_schedule_id: '',
     vehicle_id: '',
@@ -633,42 +741,42 @@ export const deleteDailyScheduleDayRunStudent = async (id: string): Promise<SBR>
     return apiDelete<SBR>(ENDPOINTS.delete_day_run_student(id));
 };
 
-export const generateDailyScheduleDayRun = async (data: GenerateDailyScheduleDayRunDTO): Promise<SBR> => {
-    return apiPost<SBR, GenerateDailyScheduleDayRunDTO>(ENDPOINTS.generate_day_run, data);
+export const generateDailyScheduleDayRun = async (data: GenerateDayRunDTO): Promise<SBR> => {
+    return apiPost<SBR, GenerateDayRunDTO>(ENDPOINTS.generate_day_run, data);
 };
 
-export const startDailyScheduleDayRun = async (data: DailyScheduleDayRunIdDTO): Promise<SBR> => {
-    return apiPost<SBR, DailyScheduleDayRunIdDTO>(ENDPOINTS.start_day_run, data);
+export const startDailyScheduleDayRun = async (data: DayRunIdDTO): Promise<SBR> => {
+    return apiPost<SBR, DayRunIdDTO>(ENDPOINTS.start_day_run, data);
 };
 
-export const endDailyScheduleDayRun = async (data: DailyScheduleDayRunIdDTO): Promise<SBR> => {
-    return apiPost<SBR, DailyScheduleDayRunIdDTO>(ENDPOINTS.end_day_run, data);
+export const endDailyScheduleDayRun = async (data: DayRunIdDTO): Promise<SBR> => {
+    return apiPost<SBR, DayRunIdDTO>(ENDPOINTS.end_day_run, data);
 };
 
-export const cancelDailyScheduleDayRun = async (data: CancelDailyScheduleDayRunDTO): Promise<SBR> => {
-    return apiPost<SBR, CancelDailyScheduleDayRunDTO>(ENDPOINTS.cancel_day_run, data);
+export const cancelDailyScheduleDayRun = async (data: CancelDayRunDTO): Promise<SBR> => {
+    return apiPost<SBR, CancelDayRunDTO>(ENDPOINTS.cancel_day_run, data);
 };
 
-export const updateDailyScheduleDayRunPlannedAbsent = async (data: DailyScheduleDayRunIdDTO): Promise<SBR> => {
-    return apiPost<SBR, DailyScheduleDayRunIdDTO>(ENDPOINTS.update_planned_absent, data);
+export const updateDailyScheduleDayRunPlannedAbsent = async (data: DayRunIdDTO): Promise<SBR> => {
+    return apiPost<SBR, DayRunIdDTO>(ENDPOINTS.update_planned_absent, data);
 };
 
-export const refreshDailyScheduleDayRunCounts = async (data: DailyScheduleDayRunIdDTO): Promise<SBR> => {
-    return apiPost<SBR, DailyScheduleDayRunIdDTO>(ENDPOINTS.refresh_day_run_counts, data);
+export const refreshDailyScheduleDayRunCounts = async (data: DayRunIdDTO): Promise<SBR> => {
+    return apiPost<SBR, DayRunIdDTO>(ENDPOINTS.refresh_day_run_counts, data);
 };
 
-export const arriveDailyScheduleDayRunStop = async (data: DailyScheduleDayRunStopIdDTO): Promise<SBR> => {
-    return apiPost<SBR, DailyScheduleDayRunStopIdDTO>(ENDPOINTS.arrive_stop, data);
+export const arriveDailyScheduleDayRunStop = async (data: DayRunStopIdDTO): Promise<SBR> => {
+    return apiPost<SBR, DayRunStopIdDTO>(ENDPOINTS.arrive_stop, data);
 };
 
-export const departDailyScheduleDayRunStop = async (data: DailyScheduleDayRunStopIdDTO): Promise<SBR> => {
-    return apiPost<SBR, DailyScheduleDayRunStopIdDTO>(ENDPOINTS.depart_stop, data);
+export const departDailyScheduleDayRunStop = async (data: DayRunStopIdDTO): Promise<SBR> => {
+    return apiPost<SBR, DayRunStopIdDTO>(ENDPOINTS.depart_stop, data);
 };
 
-export const skipDailyScheduleDayRunStop = async (data: DailyScheduleDayRunStopIdDTO): Promise<SBR> => {
-    return apiPost<SBR, DailyScheduleDayRunStopIdDTO>(ENDPOINTS.skip_stop, data);
+export const skipDailyScheduleDayRunStop = async (data: DayRunStopIdDTO): Promise<SBR> => {
+    return apiPost<SBR, DayRunStopIdDTO>(ENDPOINTS.skip_stop, data);
 };
 
-export const markDailyScheduleDayRunStudent = async (data: MarkDailyScheduleDayRunStudentDTO): Promise<SBR> => {
-    return apiPost<SBR, MarkDailyScheduleDayRunStudentDTO>(ENDPOINTS.mark_student, data);
+export const markDailyScheduleDayRunStudent = async (data: MarkStudentDTO): Promise<SBR> => {
+    return apiPost<SBR, MarkStudentDTO>(ENDPOINTS.mark_student, data);
 };

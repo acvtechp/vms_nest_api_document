@@ -24,7 +24,7 @@ import { Status, BusLeg, GeofenceType } from '../../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
-import { OrganisationBranch } from 'src/services/master/organisation/organisation_branch_service';
+import { InstitutionBranch } from '../institution_management/institution_branch_service';
 import { BusStop } from './bus_stop';
 import { MasterDailySchedule, MasterDailyScheduleStudent } from './master_daily_schedule';
 import { MasterSpecialSchedule, MasterSpecialScheduleStudent } from './master_special_schedule';
@@ -88,10 +88,10 @@ export interface MasterRoute extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     // Relations - Child
     MasterRouteStop?: MasterRouteStop[];
@@ -149,10 +149,10 @@ export interface MasterRouteStop extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     route_id: string;
     MasterRoute?: MasterRoute;
@@ -176,7 +176,7 @@ export interface MasterRouteStop extends Record<string, unknown> {
 export const MasterRouteSchema = z.object({
     // Relations - Parent
     organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 
     // Main Field Details
     route_name: stringMandatory('Route Name', 3, 100),
@@ -201,7 +201,7 @@ export const MasterRouteQuerySchema = BaseQuerySchema.extend({
 
     // Relations - Parent
     organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
     // Enums
     route_status: enumArrayOptional('Route Status', Status, getAllEnums(Status)),
@@ -230,7 +230,7 @@ export type MasterRouteStopUpdateDTO = z.infer<
 // MasterRouteStop Create Schema
 export const MasterRouteStopCreateSchema = z.object({
     organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
     route_id: single_select_mandatory('MasterRoute'), // Single-Selection -> MasterRoute
     leg: enumMandatory('Leg', BusLeg, BusLeg.Pickup),
     status: enumMandatory('Status', Status, Status.Active),
@@ -295,7 +295,7 @@ export type MasterRouteJourneyTimeDTO = z.infer<
 // Convert MasterRoute Data to API Payload
 export const toMasterRoutePayload = (row: MasterRoute): MasterRouteDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
 
     route_name: row.route_name || '',
     route_notes: row.route_notes || '',
@@ -312,7 +312,7 @@ export const toMasterRoutePayload = (row: MasterRoute): MasterRouteDTO => ({
 // Create New MasterRoute Payload
 export const newMasterRoutePayload = (): MasterRouteDTO => ({
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
 
     route_name: '',
     route_notes: '',

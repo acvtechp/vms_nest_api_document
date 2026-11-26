@@ -24,7 +24,7 @@ import { Status, BusLeg, YesNo } from '../../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
-import { OrganisationBranch } from 'src/services/master/organisation/organisation_branch_service';
+import { InstitutionBranch } from '../institution_management/institution_branch_service';
 import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
 import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
 import { Student } from '../institution_management/student_service';
@@ -82,10 +82,10 @@ export interface MasterDailySchedule extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     route_id: string;
     MasterRoute?: MasterRoute;
@@ -133,10 +133,10 @@ export interface MasterDailyScheduleStudent extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     student_id: string;
     Student?: Student;
@@ -161,13 +161,13 @@ export interface MasterDailyScheduleStudent extends Record<string, unknown> {
 
 // MasterDailySchedule Create/Update Schema
 export const MasterDailyScheduleSchema = z.object({
-    organisation_id: single_select_mandatory('UserOrganisation'),
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'),
+    organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 
-    route_id: single_select_mandatory('MasterRoute'),
-    vehicle_id: single_select_mandatory('MasterVehicle'),
-    driver_id: single_select_optional('Driver'),
-    attendant_id: single_select_optional('Attendant'),
+    route_id: single_select_mandatory('MasterRoute'), // Single-Selection -> MasterRoute
+    vehicle_id: single_select_mandatory('MasterVehicle'), // Single-Selection -> MasterVehicle
+    driver_id: single_select_optional('Driver'), // Single-Selection -> MasterDriver
+    attendant_id: single_select_optional('Attendant'), // Single-Selection -> MasterDriver
 
     schedule_name: stringMandatory('Schedule Name', 3, 100),
     schedule_status: enumMandatory('Schedule Status', Status, Status.Active),
@@ -188,23 +188,29 @@ export const MasterDailyScheduleSchema = z.object({
     friday: enumOptional('Friday', YesNo, YesNo.Yes),
     saturday: enumOptional('Saturday', YesNo, YesNo.Yes),
 
+    // Metadata
     status: enumMandatory('Status', Status, Status.Active),
+
+    // Other
     time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type MasterDailyScheduleDTO = z.infer<typeof MasterDailyScheduleSchema>;
 
 // MasterDailySchedule Query Schema
 export const MasterDailyScheduleQuerySchema = BaseQuerySchema.extend({
-    daily_schedule_ids: multi_select_optional('MasterDailySchedule'),
+    // Self Table
+    daily_schedule_ids: multi_select_optional('MasterDailySchedule'), // Multi-selection -> MasterDailySchedule
 
-    organisation_ids: multi_select_optional('UserOrganisation'),
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'),
+    // Relations - Parent
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
-    route_ids: multi_select_optional('MasterRoute'),
-    vehicle_ids: multi_select_optional('MasterVehicle'),
-    driver_ids: multi_select_optional('Driver'),
-    attendant_ids: multi_select_optional('Attendant'),
+    route_ids: multi_select_optional('MasterRoute'), // Multi-selection -> MasterRoute
+    vehicle_ids: multi_select_optional('MasterVehicle'), // Multi-selection -> MasterVehicle
+    driver_ids: multi_select_optional('Driver'), // Multi-selection -> MasterDriver
+    attendant_ids: multi_select_optional('Attendant'), // Multi-selection -> MasterDriver
 
+    // Enums
     schedule_status: enumArrayOptional(
         'Schedule Status',
         Status,
@@ -222,19 +228,22 @@ export type MasterDailyScheduleQueryDTO = z.infer<
 
 // MasterDailyScheduleStudent Query Schema
 export const MasterDailyScheduleStudentQuerySchema = BaseQuerySchema.extend({
+    // Self Table
     daily_schedule_student_ids: multi_select_optional(
         'MasterDailyScheduleStudent',
-    ),
+    ), // Multi-selection -> MasterDailyScheduleStudent
 
-    organisation_ids: multi_select_optional('UserOrganisation'),
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'),
+    // Relations - Parent
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
-    student_ids: multi_select_optional('Student'),
-    daily_schedule_ids: multi_select_optional('MasterDailySchedule'),
+    student_ids: multi_select_optional('Student'), // Multi-selection -> Student
+    daily_schedule_ids: multi_select_optional('MasterDailySchedule'), // Multi-selection -> MasterDailySchedule
 
-    route_ids: multi_select_optional('MasterRoute'),
-    route_stop_ids: multi_select_optional('MasterRouteStop'),
+    route_ids: multi_select_optional('MasterRoute'), // Multi-selection -> MasterRoute
+    route_stop_ids: multi_select_optional('MasterRouteStop'), // Multi-selection -> MasterRouteStop
 
+    // Enums
     leg: enumArrayOptional('Leg', BusLeg, getAllEnums(BusLeg)),
 });
 export type MasterDailyScheduleStudentQueryDTO = z.infer<
@@ -270,7 +279,7 @@ export type UpdateDailyScheduleStopDTO = z.infer<
 // Convert MasterDailySchedule Data to API Payload
 export const toMasterDailySchedulePayload = (row: MasterDailySchedule): MasterDailyScheduleDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
     route_id: row.route_id || '',
 
     vehicle_id: row.vehicle_id || '',
@@ -303,7 +312,7 @@ export const toMasterDailySchedulePayload = (row: MasterDailySchedule): MasterDa
 // Create New MasterDailySchedule Payload
 export const newMasterDailySchedulePayload = (): MasterDailyScheduleDTO => ({
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
     route_id: '',
 
     vehicle_id: '',

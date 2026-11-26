@@ -25,7 +25,7 @@ import { BusStopType, GeofenceType, Status } from '../../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
-import { OrganisationBranch } from '../../../master/organisation/organisation_branch_service';
+import { InstitutionBranch } from '../institution_management/institution_branch_service';
 import { MasterRouteStop } from './master_route';
 
 const URL = 'fleet/bus_management/bus_stop';
@@ -92,10 +92,10 @@ export interface BusStop extends Record<string, unknown> {
   organisation_code?: string;
   organisation_logo_url?: string;
 
-  organisation_branch_id: string;
-  OrganisationBranch?: OrganisationBranch;
-  branch_name?: string;
-  branch_city?: string;
+  institution_branch_id?: string;
+  InstitutionBranch?: InstitutionBranch;
+  branch?: string;
+  city?: string;
 
   // Relations - Child
   MasterRouteStop?: MasterRouteStop[];
@@ -127,7 +127,7 @@ export type BusStopPolygonDataDTO = z.infer<typeof BusStopPolygonDataSchema>;
 export const BusStopSchema = z.object({
   // Relations - Parent
   organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
-  organisation_branch_id: single_select_mandatory('OrganisationBranch'), // Single-Selection -> OrganisationBranch
+  institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 
   // Basic Info
   stop_name: stringMandatory('Stop Name', 3, 100),
@@ -180,7 +180,7 @@ export const BusStopQuerySchema = BaseQuerySchema.extend({
 
   // Relations - Parent
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-  organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
   // Enums
   stop_type: enumArrayOptional(
@@ -199,14 +199,14 @@ export type BusStopQueryDTO = z.infer<typeof BusStopQuerySchema>;
 // BusDashBoard Query Schema
 export const BusDashBoardQuerySchema = BaseQuerySchema.extend({
   organisation_ids: multi_select_mandatory('UserOrganisation'), // Multi-Selection -> UserOrganisation
-  organisation_branch_ids: multi_select_mandatory('OrganisationBranch'), // Multi-Selection -> OrganisationBranch
+  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 });
 export type BusDashBoardQueryDTO = z.infer<typeof BusDashBoardQuerySchema>;
 
 // Convert BusStop Data to API Payload
 export const toBusStopPayload = (row: BusStop): BusStopDTO => ({
   organisation_id: row.organisation_id || '',
-  organisation_branch_id: row.organisation_branch_id || '',
+  institution_branch_id: row.institution_branch_id || '',
 
   stop_name: row.stop_name || '',
   stop_type: row.stop_type || BusStopType.CommonPickupPoint,
@@ -238,7 +238,7 @@ export const toBusStopPayload = (row: BusStop): BusStopDTO => ({
 // Create New BusStop Payload
 export const newBusStopPayload = (): BusStopDTO => ({
   organisation_id: '',
-  organisation_branch_id: '',
+  institution_branch_id: '',
 
   stop_name: '',
   stop_type: BusStopType.CommonPickupPoint,

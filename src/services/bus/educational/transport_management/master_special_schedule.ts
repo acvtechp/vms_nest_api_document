@@ -24,7 +24,7 @@ import { Status, BusLeg, YesNo } from '../../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
-import { OrganisationBranch } from 'src/services/master/organisation/organisation_branch_service';
+import { InstitutionBranch } from '../institution_management/institution_branch_service';
 import { MasterDriver } from 'src/services/main/drivers/master_driver_service';
 import { MasterVehicle } from 'src/services/main/vehicle/master_vehicle_service';
 import { Student } from '../institution_management/student_service';
@@ -82,10 +82,10 @@ export interface MasterSpecialSchedule extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     route_id: string;
     MasterRoute?: MasterRoute;
@@ -133,10 +133,10 @@ export interface MasterSpecialScheduleStudent extends Record<string, unknown> {
     organisation_code?: string;
     organisation_logo_url?: string;
 
-    organisation_branch_id: string;
-    OrganisationBranch?: OrganisationBranch;
-    branch_name?: string;
-    branch_city?: string;
+    institution_branch_id?: string;
+    InstitutionBranch?: InstitutionBranch;
+    branch?: string;
+    city?: string;
 
     student_id: string;
     Student?: Student;
@@ -161,8 +161,8 @@ export interface MasterSpecialScheduleStudent extends Record<string, unknown> {
 
 // MasterSpecialSchedule Create/Update Schema
 export const MasterSpecialScheduleSchema = z.object({
-    organisation_id: single_select_mandatory('UserOrganisation'),
-    organisation_branch_id: single_select_mandatory('OrganisationBranch'),
+    organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+    institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 
     route_id: single_select_mandatory('MasterRoute'),
     vehicle_id: single_select_mandatory('MasterVehicle'),
@@ -189,6 +189,8 @@ export const MasterSpecialScheduleSchema = z.object({
     saturday: enumOptional('Saturday', YesNo, YesNo.Yes),
 
     status: enumMandatory('Status', Status, Status.Active),
+
+    // Other
     time_zone_id: single_select_mandatory('MasterMainTimeZone'),
 });
 export type MasterSpecialScheduleDTO = z.infer<
@@ -197,16 +199,19 @@ export type MasterSpecialScheduleDTO = z.infer<
 
 // MasterSpecialSchedule Query Schema
 export const MasterSpecialScheduleQuerySchema = BaseQuerySchema.extend({
+    // Self Table
     special_schedule_ids: multi_select_optional('MasterSpecialSchedule'),
 
-    organisation_ids: multi_select_optional('UserOrganisation'),
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'),
+    // Relations - Parent
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
     route_ids: multi_select_optional('MasterRoute'),
     vehicle_ids: multi_select_optional('MasterVehicle'),
     driver_ids: multi_select_optional('Driver'),
     attendant_ids: multi_select_optional('Attendant'),
 
+    // Enums
     schedule_status: enumArrayOptional(
         'Schedule Status',
         Status,
@@ -224,12 +229,14 @@ export type MasterSpecialScheduleQueryDTO = z.infer<
 
 // MasterSpecialScheduleStudent Query Schema
 export const MasterSpecialScheduleStudentQuerySchema = BaseQuerySchema.extend({
+    // Self Table
     special_schedule_student_ids: multi_select_optional(
         'MasterSpecialScheduleStudent',
     ),
 
-    organisation_ids: multi_select_optional('UserOrganisation'),
-    organisation_branch_ids: multi_select_optional('OrganisationBranch'),
+    // Relations - Parent
+    organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
+    institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
     student_ids: multi_select_optional('Student'),
     special_schedule_ids: multi_select_optional('MasterSpecialSchedule'),
@@ -237,6 +244,7 @@ export const MasterSpecialScheduleStudentQuerySchema = BaseQuerySchema.extend({
     route_ids: multi_select_optional('MasterRoute'),
     route_stop_ids: multi_select_optional('MasterRouteStop'),
 
+    // Enums
     leg: enumArrayOptional('Leg', BusLeg, getAllEnums(BusLeg)),
 });
 export type MasterSpecialScheduleStudentQueryDTO = z.infer<
@@ -272,7 +280,7 @@ export type UpdateSpecialScheduleStopDTO = z.infer<
 // Convert MasterSpecialSchedule Data to API Payload
 export const toMasterSpecialSchedulePayload = (row: MasterSpecialSchedule): MasterSpecialScheduleDTO => ({
     organisation_id: row.organisation_id || '',
-    organisation_branch_id: row.organisation_branch_id || '',
+    institution_branch_id: row.institution_branch_id || '',
     route_id: row.route_id || '',
 
     vehicle_id: row.vehicle_id || '',
@@ -305,7 +313,7 @@ export const toMasterSpecialSchedulePayload = (row: MasterSpecialSchedule): Mast
 // Create New MasterSpecialSchedule Payload
 export const newMasterSpecialSchedulePayload = (): MasterSpecialScheduleDTO => ({
     organisation_id: '',
-    organisation_branch_id: '',
+    institution_branch_id: '',
     route_id: '',
 
     vehicle_id: '',

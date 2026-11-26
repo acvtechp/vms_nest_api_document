@@ -8,7 +8,6 @@ import {
   stringMandatory,
   stringOptional,
   single_select_mandatory,
-  single_select_optional,
   multi_select_optional,
   enumMandatory,
   enumArrayOptional,
@@ -22,7 +21,7 @@ import { HolidayType, Status } from '../../../../core/Enums';
 
 // Other Models
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
-import { OrganisationBranch } from '../../../master/organisation/organisation_branch_service';
+import { InstitutionBranch } from './institution_branch_service';
 
 const URL = 'bus/educational/institution_management/calendar';
 
@@ -58,19 +57,19 @@ export interface OrganisationCalendar extends Record<string, unknown> {
   organisation_code?: string;
   organisation_logo_url?: string;
 
-  organisation_branch_id?: string;
-  OrganisationBranch?: OrganisationBranch;
-  branch_name?: string;
-  branch_city?: string;
+  institution_branch_id?: string;
+  InstitutionBranch?: InstitutionBranch;
+  branch?: string;
+  city?: string;
 
-    // Relations - Child Count
+  // Relations - Child Count
   _count?: {};
 }
 
 // OrganisationCalendar Create/Update Schema
 export const OrganisationCalendarSchema = z.object({
-  organisation_id: single_select_mandatory('UserOrganisation'), // ✅ Single-Selection -> UserOrganisation
-  organisation_branch_id: single_select_optional('OrganisationBranch'), // ✅ Single-Selection -> OrganisationBranch
+  organisation_id: single_select_mandatory('UserOrganisation'), // Single-Selection -> UserOrganisation
+  institution_branch_id: single_select_mandatory('InstitutionBranch'), // Single-Selection -> InstitutionBranch
 
   calendar_date: dateMandatory('Calendar Date'),
   holiday_type: enumMandatory('Holiday Type', HolidayType, HolidayType.FullDay),
@@ -93,7 +92,7 @@ export const OrganisationCalendarQuerySchema = BaseQuerySchema.extend({
   calendar_ids: multi_select_optional('OrganisationCalendar'), // Multi-selection -> OrganisationCalendar
 
   organisation_ids: multi_select_optional('UserOrganisation'), // Multi-selection -> UserOrganisation
-  organisation_branch_ids: multi_select_optional('OrganisationBranch'), // Multi-selection -> OrganisationBranch
+  institution_branch_ids: multi_select_optional('InstitutionBranch'), // Multi-selection -> InstitutionBranch
 
   holiday_type: enumArrayOptional(
     'Holiday Type',
@@ -110,7 +109,7 @@ export type OrganisationCalendarQueryDTO = z.infer<
 // Convert OrganisationCalendar Data to API Payload
 export const toOrganisationCalendarPayload = (row: OrganisationCalendar): OrganisationCalendarDTO => ({
   organisation_id: row.organisation_id || '',
-  organisation_branch_id: row.organisation_branch_id || '',
+  institution_branch_id: row.institution_branch_id || '',
 
   calendar_date: row.calendar_date || '',
   holiday_type: row.holiday_type || HolidayType.FullDay,
@@ -124,7 +123,7 @@ export const toOrganisationCalendarPayload = (row: OrganisationCalendar): Organi
 // Create New OrganisationCalendar Payload
 export const newOrganisationCalendarPayload = (): OrganisationCalendarDTO => ({
   organisation_id: '',
-  organisation_branch_id: '',
+  institution_branch_id: '',
 
   calendar_date: '',
   holiday_type: HolidayType.FullDay,
