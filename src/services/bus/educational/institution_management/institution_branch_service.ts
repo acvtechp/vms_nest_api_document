@@ -34,7 +34,7 @@ import { MasterDailySchedule, MasterDailyScheduleStudent } from '../transport_ma
 import { MasterRoute, MasterRouteStop } from '../transport_management/master_route';
 import { MasterSpecialSchedule, MasterSpecialScheduleStudent } from '../transport_management/master_special_schedule';
 
-const URL = 'master/organisation/branch';
+const URL = 'bus/educational/institution_management/branch';
 
 const ENDPOINTS = {
   // InstitutionBranch APIs

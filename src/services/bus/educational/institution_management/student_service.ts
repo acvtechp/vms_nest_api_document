@@ -49,7 +49,7 @@ import { MasterRoute, MasterRouteStop } from '../transport_management/master_rou
 import { MasterMainLandMark } from 'src/services/master/main/master_main_landmark_service';
 import { MasterDailySchedule, MasterDailyScheduleStudent } from '../transport_management/master_daily_schedule';
 
-const URL = 'fleet/school_management/student';
+const URL = 'bus/educational/institution_management/student';
 
 const ENDPOINTS = {
     // AWS S3 PRESIGNED

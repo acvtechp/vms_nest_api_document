@@ -24,7 +24,7 @@ import { HolidayType, Status } from '../../../../core/Enums';
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
 import { OrganisationBranch } from '../../../master/organisation/organisation_branch_service';
 
-const URL = 'fleet/school_management/calendar';
+const URL = 'bus/educational/institution_management/calendar';
 
 const ENDPOINTS = {
   // OrganisationCalendar APIs

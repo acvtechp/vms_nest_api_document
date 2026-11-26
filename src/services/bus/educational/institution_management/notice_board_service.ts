@@ -22,7 +22,7 @@ import { Status } from '../../../../core/Enums';
 import { UserOrganisation } from '../../../main/users/user_organisation_service';
 import { OrganisationBranch } from '../../../master/organisation/organisation_branch_service';
 
-const URL = 'fleet/school_management/notice_board';
+const URL = 'bus/educational/institution_management/notice_board';
 
 const ENDPOINTS = {
     // OrganisationNoticeBoard APIs
